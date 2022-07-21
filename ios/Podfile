@@ -1,5 +1,5 @@
-require_relative '../../node_modules/react-native/scripts/react_native_pods'
-require_relative '../../node_modules/@react-native-community/cli-platform-ios/native_modules'
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '13.0'
 plugin 'cocoapods-art', :sources => ['onegini']
@@ -35,10 +35,9 @@ end
 
 target 'RNExampleApp' do
   config = use_native_modules!
-  use_react_native!(:path => '../../node_modules/react-native')
+  use_react_native!(:path => '../node_modules/react-native')
 
-  pod 'RNCAsyncStorage', :podspec => '../../node_modules/@react-native-async-storage/async-storage'
-  pod 'onewelcome-react-native-sdk', :path => '../..'
+  pod 'RNCAsyncStorage', :podspec => '../node_modules/@react-native-async-storage/async-storage'
   
   target 'RNExampleAppTests' do
     inherit! :complete
