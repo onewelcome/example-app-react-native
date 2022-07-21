@@ -6,12 +6,10 @@
  */
 
  const path = require('path');
- const rnProjectRoot =  path.join(__dirname, '/');
- const nodeModulesRoot =  path.join(__dirname, '/node_modules');
  
  module.exports = {
-   projectRoot: rnProjectRoot,
-   watchFolders: [rnProjectRoot, nodeModulesRoot, __dirname],
+   projectRoot: __dirname,
+   watchFolders: [__dirname],
    transformer: {
      getTransformOptions: async () => ({
        transform: {

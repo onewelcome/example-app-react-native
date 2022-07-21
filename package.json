@@ -1,28 +1,14 @@
 {
   "name": "onewelcome-react-native-example-app",
-  "title": "OneWelcome React Native SDK",
+  "title": "OneWelcome React Native example app",
   "version": "0.6.0",
-  "description": "OneWelcome SDK component for React Native (iOS and Android)",
-  "main": "ts/index.ts",
-  "files": [
-    "README.md",
-    "android/src",
-    "android/build.gradle",
-    "ios/",
-    "ts/",
-    "onewelcome-react-native-sdk.podspec"
-  ],
+  "description": "OneWelcome example app for React Native SDK (iOS and Android)",
   "scripts": {
-    "android": "tsc && react-native run-android",
-    "ios": "tsc && react-native run-ios --project-path './ios' --scheme 'RNExampleApp'",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios --project-path './ios' --scheme 'RNExampleApp'",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/onewelcome/sdk-react-native.git",
-    "baseUrl": "https://www.npmjs.com/package/onewelcome-react-native-sdk"
   },
   "keywords": [
     "react-native",
@@ -35,8 +21,6 @@
     "name": "OneWelcome",
     "email": "contact@onewelcome.com"
   },
-  "license": "MIT",
-  "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
     "react": "^16.13.1",
