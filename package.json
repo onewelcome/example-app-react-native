@@ -1,5 +1,5 @@
 {
-  "name": "onewelcome-react-native-sdk",
+  "name": "onewelcome-react-native-example-app",
   "title": "OneWelcome React Native SDK",
   "version": "0.6.0",
   "description": "OneWelcome SDK component for React Native (iOS and Android)",
@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "android": "tsc && react-native run-android",
-    "ios": "tsc && react-native run-ios --project-path './example/ios' --scheme 'RNExampleApp'",
+    "ios": "tsc && react-native run-ios --project-path './ios' --scheme 'RNExampleApp'",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
