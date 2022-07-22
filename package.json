@@ -5,7 +5,7 @@
   "description": "OneWelcome example app for React Native SDK (iOS and Android)",
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios --project-path './ios' --scheme 'RNExampleApp'",
+    "ios": "react-native run-ios --scheme 'RNExampleApp'",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
@@ -25,8 +25,8 @@
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.17",
     "onewelcome-react-native-sdk": "https://github.com/onewelcome/sdk-react-native#a362ede03c824c1f579b85ec9b672af3d34461f8",
-    "react": "16.13.1",
-    "react-native": "0.63.0"
+    "react": "18.0.0",
+    "react-native": "0.69.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
