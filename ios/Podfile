@@ -1,32 +1,13 @@
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
+source 'https://github.com/CocoaPods/Specs.git'
+
 platform :ios, '13.0'
-install! 'cocoapods', :deterministic_uuids => false
-
 plugin 'cocoapods-art', :sources => ['onegini']
+use_frameworks!
 
-# target 'RNExampleApp' do
-#   config = use_native_modules!
-#   use_react_native!(:path => '../node_modules/react-native')
-
-#   pod 'RNCAsyncStorage', :podspec => '../node_modules/@react-native-async-storage/async-storage'
-  
-#   target 'RNExampleAppTests' do
-#     inherit! :complete
-#   end
-
-#   do_pre_install
-#   do_post_install
-# end
-
-# target 'RNExampleApp-tvOS' do
-#   target 'RNExampleApp-tvOSTests' do
-#     inherit! :search_paths
-#   end
-# end
-
-
+install! 'cocoapods', :deterministic_uuids => false
 
 production = ENV["PRODUCTION"] == "1"
 
@@ -42,7 +23,7 @@ target 'RNExampleApp' do
     :production => production,
     :hermes_enabled => flags[:hermes_enabled],
     :fabric_enabled => flags[:fabric_enabled],
-    :flipper_configuration => FlipperConfiguration.enabled,
+    # :flipper_configuration => FlipperConfiguration.enabled,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )

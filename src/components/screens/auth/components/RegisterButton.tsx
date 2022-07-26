@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, Linking} from 'react-native';
+import {StyleSheet, Text, View, Linking, EmitterSubscription} from 'react-native';
 import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../../../general/Button';
@@ -54,14 +54,18 @@ const RegisterButton: React.FC<Props> = (props) => {
       let uri = await AsyncStorage.getItem('@redirectUri');
       setLinkUri(uri);
     };
-
+    let listener: EmitterSubscription;
     if (linkUri) {
-      Linking.addListener('url', handleOpenURL);
+      listener = Linking.addListener('url', handleOpenURL);
     } else {
       getLinkUri();
     }
 
-    return () => Linking.removeListener('url', handleOpenURL);
+    return () => {
+      if (listener) {
+        listener.remove();        
+      }
+    }
   }, [linkUri]);
 
   return (
