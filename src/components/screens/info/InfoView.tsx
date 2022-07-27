@@ -4,9 +4,9 @@ import Button from '../../general/Button';
 import ContentContainer from '../dashboard/components/ContentContainer';
 import AppColors from '../../constants/AppColors';
 import OneWelcomeSdk, {
-  useResources,
   Types,
 } from 'onewelcome-react-native-sdk';
+import { useResources } from '../../../helpers/useResource';
 
 interface Props {
   onFinished?: () => void;

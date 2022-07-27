@@ -4,7 +4,7 @@ import {Events} from 'onewelcome-react-native-sdk';
 import PinInput from './PinInput';
 import PinKeyboard from './PinKeyboard';
 import Button from '../../general/Button';
-import { usePinFlow } from '../../../helpers/pin-flow';
+import { usePinFlow } from '../../../helpers/usePinFlow';
 
 const getTitle = (flow: Events.PinFlow) => {
   switch (flow) {

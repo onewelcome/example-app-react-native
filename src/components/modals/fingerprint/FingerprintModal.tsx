@@ -3,7 +3,7 @@ import {StyleSheet, View, Modal, Text} from 'react-native';
 import {Events} from 'onewelcome-react-native-sdk';
 import AppColors from '../../constants/AppColors';
 import Button from '../../general/Button';
-import { useFingerprintFlow } from '../../../helpers/fingerprint-flow';
+import { useFingerprintFlow } from '../../../helpers/useFingerprintFlow';
 
 const MESSAGE_BY_STAGE: Map<Events.FingerprintStage, string> = new Map ([
   [Events.FingerprintStage.Idle, 'Waiting for fingerprint flow trigger...'],
