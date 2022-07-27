@@ -1,9 +1,10 @@
 import React from 'react';
 import {Modal, StyleSheet, Text, View} from 'react-native';
-import {Events, usePinFlow} from 'onewelcome-react-native-sdk';
+import {Events} from 'onewelcome-react-native-sdk';
 import PinInput from './PinInput';
 import PinKeyboard from './PinKeyboard';
 import Button from '../../general/Button';
+import { usePinFlow } from '../../../helpers/pin-flow';
 
 const getTitle = (flow: Events.PinFlow) => {
   switch (flow) {
