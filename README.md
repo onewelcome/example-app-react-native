@@ -1,5 +1,4 @@
-# onewelcome-react-native-sdk
-
+# example-app-react-native
 ## Getting started
 
 `npm install onewelcome-react-native-sdk --save`
