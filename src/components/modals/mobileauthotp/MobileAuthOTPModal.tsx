@@ -11,7 +11,7 @@ const MobileAuthOTPModal: React.FC<{}> = () => {
   useEffect(() => {
     const listener = OneWelcomeSdk.addEventListener(
       Events.SdkNotification.MobileAuthOtp,
-      (event: any) => {
+      (event: Events.MobileAuthOtpNotificationEvent) => {
         switch (event.action) {
           case Events.MobileAuthOtpNotification.StartAuthentication:
             setMessage(event.mobileAuthenticationRequest.message);

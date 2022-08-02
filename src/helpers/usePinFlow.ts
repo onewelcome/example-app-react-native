@@ -32,41 +32,43 @@ const usePinFlow = () => {
   }, []);
 
   const handleOpen = useCallback(
-    async (newFlow: Events.PinFlow, profileId: string, pinLength?: number) => {
+    async (event: Events.PinNotificationOpenEvent) => {
       setVisible(true);
-      if (flow !== newFlow) {
-        setFlow(newFlow);
+      if (flow !== event.flow) {
+        setFlow(event.flow);
       }
-      if(pinLength && !isNaN(Number(pinLength))){
-        await setPinProfile(profileId, pinLength);
+      if (event.data && !isNaN(Number(event.data))) {
+        await setPinProfile(event.profileId, event.data);
+        setPinLength(event.data);
       } else {
-        pinLength = await getPinProfile(profileId);
+        setPinLength(await getPinProfile(event.profileId));
       }
-      setPinLength(pinLength);
     },
-    [flow],
+    [flow, getPinProfile, setPinProfile],
   );
 
-  const handleError = useCallback((err: string | null, userInfo?: any) => {
-    setError(err);
-    setConfirmMode(false);
-    setUserInfo(userInfo || null);
-    setPin('');
-  }, []);
+  const handleError = useCallback(
+    (event: Events.PinNotificationErrorEvent) => {
+      setError(event.errorMsg);
+      setConfirmMode(false);
+      setUserInfo(userInfo || null);
+      setPin('');
+    },
+    [userInfo],
+  );
 
   const handleNotification = useCallback(
-    async (event: any) => {
+    async (event: Events.PinNotificationEvent) => {
       console.log('handle PIN notification event: ', event);
-
       switch (event.action) {
         case Events.PinNotification.Open:
-          await handleOpen(event.flow, event.profileId, event.data);
+          await handleOpen(event);
           break;
         case Events.PinNotification.Confirm:
           setConfirmState();
           break;
         case Events.PinNotification.Error:
-          handleError(event.errorMsg, event.userInfo ?? undefined);
+          handleError(event);
           break;
         case Events.PinNotification.Close:
           setInitialState();
