@@ -59,10 +59,11 @@ const AuthButton: React.FC<Props> = (props) => {
   );
 
   useEffect(() => {
-    if (!profiles && !loading) {
+    if (!loading) {
       fetchProfiles();
     }
-  }, [profiles, loading, fetchProfiles]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchProfiles]);
 
   return (
     <View style={styles.container}>
