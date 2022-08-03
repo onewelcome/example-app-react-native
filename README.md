@@ -63,3 +63,32 @@ If there is a need to change the token server configuration within the example a
 the steps as described in: `https://github.com/onewelcome/sdk-configurator`
 
 You will need to set the configuration seperately for iOS and Android.
+
+## Local Development of SDK using the example app
+  
+The [SDK](https://github.com/onewelcome/sdk-react-native) can be developed locally using the [example app](https://github.com/onewelcome/example-app-react-native). 
+React Native does not support symlinking with dependencies in the node_modules folder because of the metro bundler see [issue](https://github.com/facebook/metro/issues/1).
+
+In order to develop the sdk you can link the project in the metro.config.js which can be done in the following way. Make sure to update the `packagePath`.
+
+Make sure to close out of your metro instance and rerun your application. 
+
+
+```
+const packagePath = '<absolute path to folder containing the sdk>/sdk-react-native';
+module.exports = {
+  projectRoot: __dirname,
+  watchFolders: [__dirname, packagePath],
+  transformer: {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: true,
+      },
+    }),
+  },
+  resolver: {
+    nodeModulesPaths: [packagePath],
+  },
+};
+```
