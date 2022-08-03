@@ -5144,10 +5144,9 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-"onewelcome-react-native-sdk@https://github.com/onewelcome/sdk-react-native#a362ede03c824c1f579b85ec9b672af3d34461f8":
+"onewelcome-react-native-sdk@https://github.com/onewelcome/sdk-react-native#60d12c656ddd7362437cbce3b42ce1a2e4d63b32":
   version "0.6.0"
-  resolved "git+ssh://git@github.com/onewelcome/sdk-react-native.git#a362ede03c824c1f579b85ec9b672af3d34461f8"
-  integrity sha512-MDkeaOHnFcuf8q4ZgAFiJfJqea4Qs13KJdGrn5FQ4NgsjlauEqcja0J/48dPHNxrnTDOvRYjC3Kf/fZbxOyjXw==
+  resolved "https://github.com/onewelcome/sdk-react-native#60d12c656ddd7362437cbce3b42ce1a2e4d63b32"
 
 open@^6.2.0:
   version "6.4.0"

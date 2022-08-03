@@ -325,7 +325,7 @@ DEPENDENCIES:
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - onewelcome-react-native-sdk (from `../.yalc/onewelcome-react-native-sdk`)
+  - onewelcome-react-native-sdk (from `../../sdk-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -376,7 +376,7 @@ EXTERNAL SOURCES:
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   onewelcome-react-native-sdk:
-    :path: "../.yalc/onewelcome-react-native-sdk"
+    :path: "../../sdk-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTRequired:
@@ -474,6 +474,6 @@ SPEC CHECKSUMS:
   Typhoon: 1973c93ecfb3edb963d78b10e715bc2911475bd2
   Yoga: 236056dd74cda4d9d76c20306fd8c20bb087614d
 
-PODFILE CHECKSUM: 0c580f357b49f75ae648a3308e7e468af8d7d970
+PODFILE CHECKSUM: c51722baacbb6e475cbe0dabded759aa81d32231
 
 COCOAPODS: 1.11.3
