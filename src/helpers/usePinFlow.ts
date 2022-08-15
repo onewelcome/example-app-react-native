@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import OnewelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
-import {useProfileStorage} from "./useProfileStorage";
+import {useProfileStorage} from './useProfileStorage';
 
 const usePinFlow = () => {
   const [flow, setFlow] = useState<Events.PinFlow>(Events.PinFlow.Create);
@@ -32,7 +32,7 @@ const usePinFlow = () => {
   }, []);
 
   const handleOpen = useCallback(
-    async (event: Events.PinNotificationOpenEvent) => {
+    async (event: Events.PinOpenEvent) => {
       setVisible(true);
       if (flow !== event.flow) {
         setFlow(event.flow);
@@ -48,7 +48,7 @@ const usePinFlow = () => {
   );
 
   const handleError = useCallback(
-    (event: Events.PinNotificationErrorEvent) => {
+    (event: Events.PinErrorEvent) => {
       setError(event.errorMsg);
       setConfirmMode(false);
       setUserInfo(userInfo || null);
@@ -58,19 +58,19 @@ const usePinFlow = () => {
   );
 
   const handleNotification = useCallback(
-    async (event: Events.PinNotificationEvent) => {
+    async (event: Events.PinEvent) => {
       console.log('handle PIN notification event: ', event);
       switch (event.action) {
-        case Events.PinNotification.Open:
+        case Events.Pin.Open:
           await handleOpen(event);
           break;
-        case Events.PinNotification.Confirm:
+        case Events.Pin.Confirm:
           setConfirmState();
           break;
-        case Events.PinNotification.Error:
+        case Events.Pin.Error:
           handleError(event);
           break;
-        case Events.PinNotification.Close:
+        case Events.Pin.Close:
           setInitialState();
           break;
       }
@@ -120,7 +120,11 @@ const onNewPinKey = (
     const newValue = pin + newKey;
     setPin(newValue);
     if (newValue.length === requiredPinLength) {
-      OnewelcomeSdk.submitPinAction(flow, Events.PinAction.ProvidePin, newValue);
+      OnewelcomeSdk.submitPinAction(
+        flow,
+        Events.PinAction.ProvidePin,
+        newValue,
+      );
     }
   }
 };

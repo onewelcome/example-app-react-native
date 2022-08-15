@@ -24,7 +24,7 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.15.17",
-    "onewelcome-react-native-sdk": "https://github.com/onewelcome/sdk-react-native#a362ede03c824c1f579b85ec9b672af3d34461f8",
+    "onewelcome-react-native-sdk": "https://github.com/onewelcome/sdk-react-native#117c02dc5a8b9ba6739c665e1fd8562437fa4719",
     "react": "18.0.0",
     "react-native": "0.69.2"
   },

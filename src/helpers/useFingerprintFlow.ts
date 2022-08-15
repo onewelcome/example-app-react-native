@@ -37,20 +37,19 @@ const useFingerprintFlow = () => {
   const onCaptured = () => setStage(Events.FingerprintStage.Captured);
 
   const handleNotification = useCallback(
-    (event: Events.FingerprintNotificationEvent) => {
+    (event: Events.FingerprintEvent) => {
       console.log('handle FINGERPRINT notification event: ', event);
-
       switch (event.action) {
-        case Events.FingerprintNotification.StartAuthentication:
+        case Events.Fingerprint.StartAuthentication:
           onStart();
           break;
-        case Events.FingerprintNotification.OnNextAuthenticationAttempt:
+        case Events.Fingerprint.OnNextAuthenticationAttempt:
           onNextAuthAttempt();
           break;
-        case Events.FingerprintNotification.OnFingerprintCaptured:
+        case Events.Fingerprint.OnFingerprintCaptured:
           onCaptured();
           break;
-        case Events.FingerprintNotification.FinishAuthentication:
+        case Events.Fingerprint.FinishAuthentication:
           onFinish();
           break;
       }

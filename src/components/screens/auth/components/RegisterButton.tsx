@@ -6,7 +6,6 @@ import {
   Linking,
   EmitterSubscription,
 } from 'react-native';
-import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../../../general/Button';
 import Switch from '../../../general/Switch';
@@ -31,7 +30,7 @@ const RegisterButton: React.FC<Props> = props => {
   );
 
   const handleCustomRegistration = useCallback(
-    async (event: Events.CustomRegistrationNotificationEvent) => {
+    async (event: Events.CustomRegistrationEvent) => {
       switch (event.identityProviderId) {
         case 'qr_registration':
           OneWelcomeSdk.submitCustomRegistrationAction(
