@@ -69,26 +69,13 @@ You will need to set the configuration seperately for iOS and Android.
 The [SDK](https://github.com/onewelcome/sdk-react-native) can be developed locally using the [example app](https://github.com/onewelcome/example-app-react-native). 
 React Native does not support symlinking with dependencies in the node_modules folder because of the metro bundler see [issue](https://github.com/facebook/metro/issues/1).
 
-In order to develop the sdk you can link the project in the metro.config.js which can be done in the following way. Make sure to update the `packagePath`.
+In order to develop the sdk you can use an npm package called [yalc](https://www.npmjs.com/package/yalc)
 
-Make sure to close out of your metro instance and rerun your application. 
+This package allows us to set up a local npm repository to publish our SDK to.
+To get started, install yalc following their instructions.
 
+In the SDK folder run: `yalc publish`
 
-```
-const packagePath = '<absolute path to folder containing the sdk>/sdk-react-native';
-module.exports = {
-  projectRoot: __dirname,
-  watchFolders: [__dirname, packagePath],
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: true,
-      },
-    }),
-  },
-  resolver: {
-    nodeModulesPaths: [packagePath],
-  },
-};
-```
+In the example app folder run `yalc add onewelcome-react-native-sdk`
+
+After making changes to the SDK you can run `yalc publish --push`. This will automatically update the dependency in the example app aswell. 
