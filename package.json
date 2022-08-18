@@ -1,28 +1,14 @@
 {
-  "name": "onewelcome-react-native-sdk",
-  "title": "OneWelcome React Native SDK",
+  "name": "onewelcome-react-native-example-app",
+  "title": "OneWelcome React Native example app",
   "version": "0.6.0",
-  "description": "OneWelcome SDK component for React Native (iOS and Android)",
-  "main": "ts/index.ts",
-  "files": [
-    "README.md",
-    "android/src",
-    "android/build.gradle",
-    "ios/",
-    "ts/",
-    "onewelcome-react-native-sdk.podspec"
-  ],
+  "description": "OneWelcome example app for React Native SDK (iOS and Android)",
   "scripts": {
-    "android": "tsc && react-native run-android",
-    "ios": "tsc && react-native run-ios --project-path './example/ios' --scheme 'RNExampleApp'",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios --scheme 'RNExampleApp'",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/onewelcome/sdk-react-native.git",
-    "baseUrl": "https://www.npmjs.com/package/onewelcome-react-native-sdk"
   },
   "keywords": [
     "react-native",
@@ -35,17 +21,16 @@
     "name": "OneWelcome",
     "email": "contact@onewelcome.com"
   },
-  "license": "MIT",
-  "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
-  "peerDependencies": {
-    "react": "^16.13.1",
-    "react-native": ">=0.63.0"
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.17",
+    "onewelcome-react-native-sdk": "https://github.com/onewelcome/sdk-react-native#fc96182808193b4a8c79fb3fa590e0e2d45ccdc8",
+    "react": "18.0.0",
+    "react-native": "0.69.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
     "@babel/runtime": "^7.12.1",
-    "@react-native-async-storage/async-storage": "^1.15.17",
     "@react-native-community/eslint-config": "^2.0.0",
     "@testing-library/react-hooks": "^5.1.1",
     "@testing-library/react-native": "^7.2.0",
@@ -57,9 +42,7 @@
     "eslint": "^7.11.0",
     "jest": "^26.6.0",
     "metro-react-native-babel-preset": "^0.63.0",
-    "react": "16.13.1",
-    "react-native": "0.63.3",
-    "react-native-modal-selector": "^2.0.3",
+    "react-native-modal-selector": "^2.1.1",
     "react-test-renderer": "16.13.1",
     "typescript": "^4.2.3"
   }
