@@ -44,7 +44,7 @@ const AuthButton: React.FC<Props> = (props) => {
   const authenticateProfile = useCallback(
     async (id: string) => {
       try {
-        const authenticated = await OneWelcomeSdk.authenticateUser(id);
+        const authenticated = await OneWelcomeSdk.authenticateUser(id, null);
         if (!authenticated) {
           return;
         }
