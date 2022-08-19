@@ -1,366 +1,81 @@
-# onewelcome-react-native-sdk
+# example-app-react-native
 
+The React Native Example App is using the [Onewelcome React Native SDK](https://github.com/onewelcome/sdk-react-native) to perform secure authentication and resource calls. 
 ## Getting started
 
-`npm install onewelcome-react-native-sdk --save`
+1. `npm install` OR `yarn`
 
-OR
-
-`yarn add onewelcome-react-native-sdk`
+2. Make sure to folow the SDK Configuration and Resolving dependecies sections.
+3. run `yarn android` or `yarn ios`
+>**Note** iOS currently does not work natively with m1. You can run it under rosetta2 with `arch -x86_64 yarn ios` 
 
 ## SDK Configuration
 
 1. Get access to https://repo.onegini.com/artifactory/onegini-sdk
 2. Use https://github.com/Onegini/onegini-sdk-configurator on your application (instructions can be found there)
 
-## App Configuration
 
-#### Android:
+## Resolving dependencies (android)
 
-1. Modify `android/app/build.gradle`:
+Before you can compile the application it must be able to resolve it's dependencies. The Onegini Android SDK is one of those dependencies.
+We have an Artifactory repository that distributes the required dependencies. Make sure that you have access to the Onegini Artifactory
+repository (https://repo.onegini.com). If you don't have access, no problem just go to
+the [App developer quickstart](https://docs.onegini.com/app-developer-quickstart.html#step1) and perform the first step. Access to
+Artifactory is required to let Gradle download the Onegini Android SDK library.
 
-   1.1. Add to `android` section:
+When you have access you have to make sure that your Artifactory username and password are set in the `gradle.properties` file in your
+Gradle user home
+(e.g. ~/.gradle):
 
-   ```
-   lintOptions {
-       abortOnError false
-   }
-   ```
+Example contents of the `gradle.properties` file in you Gradle user home:
 
-   1.2 Add to `android` -> `defaultConfig` section:
-
-   ```
-   minSdkVersion 23
-   multiDexEnabled true
-   ```
-
-   1.3 Add to `dependencies` section:
-
-   ```
-   implementation 'androidx.multidex:multidex:2.0.1'
-   ```
-
-2. Add to `android/app/proguard-rules.pro`:
-
-   ```
-   -keep class com.onegini.mobile.SecurityController { *; }
-   ```
-
-3. Add to `android/build.gradle`[allprojects.repositories]:
-
-   ```
-   dependencies {
-           classpath("com.android.tools.build:gradle:4.1.1")
-           classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.10")
-       }
-
-   ```
-
-   ```
-   mavenCentral()
-   if (project.hasProperty('onegini_artifactory_user') && project.hasProperty('onegini_artifactory_password')) {
-       maven {
-           /*
-           Before the release please change the url below to: https://repo.onegini.com/artifactory/onegini-sdk
-           Please change it back to https://repo.onegini.com/artifactory/public after the release
-           */
-           url "https://repo.onegini.com/artifactory/onegini-sdk"
-           credentials {
-               username "${onegini_artifactory_user}"
-               password "${onegini_artifactory_password}"
-           }
-       }
-   } else {
-       throw new InvalidUserDataException("You must configure the 'onegini_artifactory_user' and 'onegini_artifactory_password' properties in your project before you can " +
-               "build it.")
-   }
-   ```
-
-4. Set **onegini_artifactory_user** and **onegini_artifactory_password** at `android/gradle.properties` or globaly for gradle
-
-5. Modify `android/app/src/main/AndroidManifest.xml`. Add `<intent-filter>` to your .MainActivity for listening browser redirects. !!! scheme="reactnativeexample" should be changed to your(will be provided by onegini-sdk-configurator) schema:
-
-   ```
-   <intent-filter>
-       <action android:name="android.intent.action.VIEW" />
-
-       <category android:name="android.intent.category.DEFAULT"/>
-       <category android:name="android.intent.category.BROWSABLE"/>
-
-       <data android:scheme="reactnativeexample"/>
-   </intent-filter>
-   ```
-
-6. <a name="android-setup-config"/>Setup the config: Generate a 'OneginiConfigModel' and 'keystore.bks' with [SDK Configurator](https://github.com/Onegini/onegini-sdk-configurator#android).
-
-   Configurator will put `OneginiConfigModel` into `[RN_application_package_classpath.OneginiConfigModel]` (e.g. `com.exampleapp.OneginiConfigModel`) and the `keystore.bks` into '/res/raw'.
-   After configurator used - you have 2 options:
-
-   - Keep it as it is.
-   - If there is a need to move `OneginiConfigModel` to another place - it's **required** to specify custom classpath for OneWelcomeSdk: [Supported Methods:](#supported-methods) setConfigModelClassName(className).
-
-   More information [HERE](https://docs.onegini.com/msp/stable/android-sdk/topics/setting-up-the-project#verifying), section: Running the SDK Configurator.
-
-7. <a name="android-setup-security-controller"/>Setup the SecurityController(<u>not required</u>).
-
-   In order to change security options you should create your own instance SecurityController and handle it to OneWelcomeSdk - See the [Supported Methods:](#supported-methods) setSecurityControllerClassName(className).
-   Example SecurityController implementation you can find inside library source code("com.onegini.mobile.SecurityController").
-   By default security options brought from `com.onegini.mobile.SecurityController`.
-
-   More information [HERE](https://docs.onegini.com/msp/stable/android-sdk/reference/security-controls#examples), section: SecurityController.
-
-#### iOS:
-
-1. The OneWelcome SDK is uploaded to the OneWelcome Artifactory repository. In order to let CocoaPods use an Artifactory repository you need to install a specific plugin.
-   ```
-   gem install cocoapods-art
-   ```
-2. The OneWelcome SDK repository is not a public repository. You must provide credentials in order to access the repo. Create a file named .netrc in your Home folder (~/) and add the following contents to it:
-
-   ```
-   machine repo.onegini.com
-   login <username>
-   password <password>
-   ```
-
-   Replace the <username> and <password> with the credentials that you use to login to support.onegini.com.
-
-3. The OneWelcome CocoaPods repository must be added to your local machine using the following command:
-
-   ```
-   pod repo-art add onegini https://repo.onegini.com/artifactory/api/pods/cocoapods-public
-   ```
-
-4. In order to update the Repository you must manually perform an update:
-
-   ```
-   pod repo-art add onegini https://repo.onegini.com/artifactory/api/pods/cocoapods-public
-   ```
-
-5. Add next to `ios/Podfile`(before app target):
-
-   ```
-   plugin 'cocoapods-art', :sources => [
-   'onegini'
-   ]
-   ```
-
-6. Run `pod install`
-
-7. Add `SecurityController.h` and `SecurityController.m` as described [HERE](https://docs.onegini.com/msp/stable/ios-sdk/reference/security-controls.html)
-
-8. **Optional** In order to support FaceID or ToucID add next to `ios/<project-name>/info.plist:
-   ```
-   <key>NSFaceIDUsageDescription</key>
-   <string>Application needs access to support authentication with Face/Touch ID</string>
-   ```
-   **!!!NOTE**: Biometrics will not work in iOS simulator, only on the real devices
-
-## Linking Native Code
-
-### RN >= 60.0
-
-`cd ios && pod install`
-
-### RN < 60.0
-
-##### Auto linking
-
-`react-native link onewelcome-react-native-sdk`
-
-##### Manual installation
-
-#### iOS
-
-1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `onewelcome-react-native-sdk` and add `RNOneginiSdk.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libRNOneginiSdk.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-4. Run your project (`Cmd+R`)<
-
-#### Android
-
-1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-
-- Add `import com.onegini.mobile.RNOneginiSdkPackage;` to the imports at the top of the file
-- Add `new RNOneginiSdkPackage()` to the list returned by the `getPackages()` method
-
-2. Append the following lines to `android/settings.gradle`:
-   ```
-   include ':onewelcome-react-native-sdk'
-   project(':onewelcome-react-native-sdk').projectDir = new File(rootProject.projectDir,     '../node_modules/onewelcome-react-native-sdk/android')
-   ```
-3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-   ```
-     compile project(':onewelcome-react-native-sdk')
-   ```
-
-# How to run Example App
-
-- `yarn` or `npm install`
-- **iOS**: `yarn ios` or `npm run ios`
-- **Android**: `yarn android` or `npm run android`
-
-# Known RN issues
-
-These are the issues that are not connected to OneWelcome React Native SDK but you may encounter them during integration.
-
-## Xcode 12.5 with Flipper
-
-### Discussion
-
-https://github.com/facebook/flipper/issues/2215
-
-### Solution
-
-In `ios/Podfile` change `use_flipper!` into `use_flipper!({ 'Flipper-Folly' => '2.5.3', 'Flipper' => '0.87.0', 'Flipper-RSocket' => '1.3.1' })`
-
-## Undefined symbols for architecture
-
-### Discussion
-
-https://github.com/facebookarchive/react-native-fbsdk/issues/794
-
-### Solution
-
-Open Xcode project (.xcworkspace) and add empty Swift file (NotUsed.swift). When prompt for creating Create Bridging Header - accept.
-
-## Podfile
-
-### Discussion
-
-### Solution
-
-In iOS/Pofile add at the top
-`add source 'https://github.com/CocoaPods/Specs.git'`
-
-## Codegen / Invalid regular expression
-
-### Discussion
-
-https://github.com/facebook/react-native/issues/31180
-
-### Solution
-
-`yarn add --dev react-native-codegen`
-# Functional scope
-### Milestone 1:
-    - Start
-    - Security Controls and Configuration of the SDK
-    - User registration
-       - Browser
-### Milestone 2:
-    - User registration
-           - Custom
-    - User deregistration
-### Milestone 3:
-    - User authentication with PIN
-    - Fetch user access token
-    - Logout
-### Milestone 4:
-    - Mobile authenticator enrollment
-    - Mobile authentication with OTP
-### Milestone 5:
-    - Fingerprint enrollment
-    - Fingerprint authentication
-### Milestone 6:
-    - Change PIN
-### Milestone 7:
-    - App2Web
-### Milestone 8:
-    - Secure resource access
-
-# Usage
-- import OneginiSdk from 'react-native-sdk-beta';
-
-## Configuration
-### Config structure
-   {
-      customProviders: [],
-      enableMobileAuthenticationOtp: true,
-      enableFingerprint: true
-   }
-   
-   - customProviders - conteins the custom registration providers with app want to support. 
-   - enableMobileAuthenticationOtp - true if you want to use the authentication by Otp. If true then the events MOBILE_AUTH_OTP_NOTIFICATION are triggered.
-   - enableFingerprint - true if you want to use the fingerprint in-app as the Authentication method. If true then the events ONEGINI_FINGERPRINT_NOTIFICATION are triggered.
-
-### CustomProviders structure
-   [{id:"id1", isTwoStep: true}, ...]
-
-   - id - this is identity provider id. if the id provider is supported, then the events ONEGINI_CUSTOM_REGISTRATION_NOTIFICATION are triggered.
-   - isTwoStep:
-      - true - possible actions initRegistration, initRegistration are sent by ONEGINI_CUSTOM_REGISTRATION_NOTIFICATION
-      - false - possible actions finishRegistration are sent by ONEGINI_CUSTOM_REGISTRATION_NOTIFICATION
-      
-
-## Hooks
-### `usePinFlow`. For easiest PIN flow implementation. Example:
 ```
-import { usePinFlow, ONEGINI_PIN_FLOW } from "react-native-sdk-beta/pin";
-const [ flow, pin, visible, isConfirmMode, error, provideNewPinKey, cancelPinFlow] = usePinFlow();
+artifactory_user=<username>
+artifactory_password=<password>
 ```
-Where:
-- **flow**: ONEGINI_PIN_FLOW(On of ['authentication', 'create', 'change']).
-- **pin**: string. Current pin value.
-- **visible**: boolean. Defines wheather show PIN flow or not.
-- **isConfirmMode**: boolean. For `create` and `change` user should confirm inserted PIN, this boolean helps to know current state.
-- **error**: string || null. Contains error or empty if no error.
-- **provideNewPinKey**: func. Function to supply next PIN char. Supply '<' key to remove last PIN char.
-- **cancelPinFlow**: func. Helper function to set error to `null`.
+
+See the documentation below for instructions on setting Gradle properties:
+[https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_properties_and_system_properties](https://docs.gradle.org/current/userguide/build_environment.html#sec:gradle_properties_and_system_properties)
 
 
-## Supported Methods
 
-| Methods                     | Description                                                                                                                                                                               |
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`setConfigModelClassName(className)`**                  |  (Android only) Sets the path to OneginiConfigModel class(e.g. `com.exampleapp.OneginiConfigModel`). By default SDK looking for config at `[RN_application_package_classpath].OneginiConfigModel`. This has to be set **before** startClient(). More information [HERE](#android-setup-config)                                                |
-| **`setSecurityControllerClassName(className)`**           |  (Android only) Sets the path to SecurityController class(e.g. `com.exampleapp.SecurityController`). By default controller brought from `com.onegini.mobile.SecurityController`. This has to be set **before** startClient(). More information [HERE](#android-setup-security-controller)
-| **`startClient(config):Promise`**                         |  Method init the OriginiSDK. Config is optional. Example object is in "js/config.js". See structure [HERE](#config-structure). If the config is not set the app uses the "js/config.js" as the default.                                                             |                                      |
-| **`addEventListener(eventType, cb)`**                     |  Adds listener for certain event type(ONEGINI_PIN_NOTIFICATION, ONEGINI_CUSTOM_REGISTRATION_NOTIFICATION).        |
-| **`removeEventListener(eventType, cb)`**                  |  Removes listener for certain event type(ONEGINI_PIN_NOTIFICATION, ONEGINI_CUSTOM_REGISTRATION_NOTIFICATION)       |
-|                                                           |
-| **=== Data getters ===**                                  |
-| **`getIdentityProviders()`**                              |  Returns the identity Providers with are registered int the lib.  |
-| **`getAccessToken()`**                                    |  Returns the access token if exist. |
-| **`getRedirectUri():Promise`**                            |  Returns an object with the redirect Uri field. |
-| **`getUserProfiles():Promise`**                           |  Returns all registered profiles id. |
-| **`getAuthenticatedUserProfile()`**                       |  Returns user who is logged in. |
-|                                                           |
-| **=== Resource getters ===**                              |
-| **`getAppDetailsResource()`**                             |  Returns an object with app details(fetched from the server).  |
-| **`getDeviceListResource()`**                             |  Returns an array with device objects witch registered by this user(fetched from the server).  |
-|                                                           |
-| **=== User register/deregister ===**                      |
-| **`registerUser(identityProviderId):Promise`**            |  Starts the process of registration user. If success then the response contain the success = true if not then contain success = false. |
-| **`deregisterUser(profileId):Promise`**                   |  Starts the process of deregistration user. If success then the response contain the success = true if not then contain success = false. |
-| **`handleRegistrationCallback(uri)`**                     |  Pass a url for the registration process which obtained from browser redirect action. |
-| **`cancelRegistration():Promise`**                        |  Interrupts process of registration. |
-|                                                           |
-| **=== Authentication ===**                                |
-| **`authenticateUser(profileId):Promise`**                 |  Starts the process of authentication user.  |
-| **`logout():Promise`**                                    |  Starts the process of logout user.  |
-| **`getAllAuthenticators():Promise`**                      |  Returns all supported authenticators.  |
-| **`getRegisteredAuthenticators():Promise`**               |  Returns all authenticators which are registered. One of the authenticators can be set as preferred authenticator.|
-| **`setPreferredAuthenticator(profileId, idOneginiAuthenticator):Promise`** |  Sets an authenticator that is used at the process of user authentication |
-|                                                           |
-| **=== PIN ===**                                           |
-| **`submitPinAction(flow, action, pin):Promise`**          |  Triggers the process of the pin. A callback can be return by event("ONEGINI_PIN_NOTIFICATION"). |
-| **`changePin():Promise`**                                 |  Starts the process of changin PIN for currently authenticated user.  |
-|                                                           |
-| **=== Fingerprint ===**                                   |
-| **`registerFingerprintAuthenticator(profileId):Promise`**     | Starts the process of registration a fingerprint |
-| **`deregisterFingerprintAuthenticator(profileId):Promise`**   | Starts the process of deregistration a fingerprint |
-| **`isFingerprintAuthenticatorRegistered(profileId):Promise`** | Returns boolean value which defines weather fingerprint authenticator already registered |
-| **`submitFingerprintAcceptAuthenticationRequest():Promise`**  | (Android only) User can return  accept authentication request |
-| **`submitFingerprintDenyAuthenticationRequest():Promise`**    | (Android only) User can return  deny authentication request |
-| **`submitFingerprintFallbackToPin():Promise`**                | (Android only) User can return  fallback to authentication by pin |
-|                                                           |
-| **=== OTP ===**                                           |
-| **`enrollMobileAuthentication()`**                        |  The first enrollment step. |
-| **`acceptMobileAuthConfirmation()`**                      |  User can return accept authentication request. |
-| **`denyMobileAuthConfirmation()`**                        |  User can return deny authentication request. |
-| **`handleMobileAuthWithOtp()`**                           |  User can return otpCode. |
-| **`submitCustomRegistrationAction(action, identityProviderId, token)`**|  Triggers the process of the custom registration. Where **action** = CUSTOM_REGISTRATION_ACTIONS and **token** = obtained from the server. If the identityProviderId does not exist then an error occurs. |
-|                                                           |
-| **=== App2Web ===**                                       |
-| **`startSingleSignOn()`**                                 |  Redirects user to Web app with loggin in user. |
+## Resolving dependencies (iOS)
+### Setup access to the Onegini Cocoapods repository
+The Example app includes the Onegini SDK as a Cocoapod. In order to let Cocoapods download it you need to setup your account details so the SDK can be
+automatically downloaded:
+1. Make sure that you have access to the Onegini Artifactory repository (https://repo.onegini.com). If not please follow first step of [App developer quickstart](https://docs.onegini.com/app-developer-quickstart.html).
+2. Follow [Setting up the project guide](https://docs.onegini.com/ios-sdk/topics/setting-up-the-project.html#cocoapods) in the Onegini SDK documentation for
+instructions on configuring access to the Onegini Cocoapods repository.
+
+>**Note** Don't forget to update the Onegini Cocoapods repository with the following command: `pod repo-art update onegini`. If you don't update the repo it may
+be that the SDK dependency cannot be found. If that is the case be sure to execute the command above.
+
+### Setup the Cocoapods dependencies
+1. Run `pod install` to correctly setup the Cocoapods dependencies
+2. Make sure that you open the project referring to `RNExampleApp.xcworkspace` in Xcode or AppCode.
+
+## Providing token server configuration
+The example app is already configured with the token server out of the box for both Android and iOS. 
+
+
+### Changing the configuration
+If there is a need to change the token server configuration within the example app it is going to be best to do it using the Onegini SDK Configurator. Follow
+the steps as described in: `https://github.com/onewelcome/sdk-configurator`
+
+You will need to set the configuration seperately for iOS and Android.
+
+## Local Development of SDK using the example app
+  
+The [SDK](https://github.com/onewelcome/sdk-react-native) can be developed locally using the [example app](https://github.com/onewelcome/example-app-react-native). 
+React Native does not support symlinking with dependencies in the node_modules folder because of the metro bundler see [issue](https://github.com/facebook/metro/issues/1).
+
+In order to develop the sdk you can use an npm package called [yalc](https://www.npmjs.com/package/yalc)
+
+This package allows us to set up a local npm repository to publish our SDK to.
+To get started, install yalc following their instructions.
+
+In the SDK folder run: `yalc publish`
+
+In the example app folder run `yalc add onewelcome-react-native-sdk`
+
+After making changes to the SDK you can run `yalc publish --push`. This will automatically update the dependency in the example app aswell. 
