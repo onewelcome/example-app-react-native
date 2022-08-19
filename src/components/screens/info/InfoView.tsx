@@ -1,12 +1,10 @@
-import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Button from '../../general/Button';
 import ContentContainer from '../dashboard/components/ContentContainer';
 import AppColors from '../../constants/AppColors';
-import OneWelcomeSdk, {
-  Types,
-} from 'onewelcome-react-native-sdk';
-import { useResources } from '../../../helpers/useResource';
+import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
+import {useResources} from '../../../helpers/useResource';
 
 interface Props {
   onFinished?: () => void;
@@ -31,7 +29,7 @@ const getProfileData = async (
 
 //@todo resolve this with more types for resources
 const getData = (data: any, key: string) => {
-  if(typeof data === 'string' || data instanceof String){
+  if (typeof data === 'string' || data instanceof String) {
     data = JSON.parse(data as string);
   }
   if (data[key]) {
@@ -41,22 +39,22 @@ const getData = (data: any, key: string) => {
   }
 };
 
-const InfoView: React.FC<Props> = (props) => {
+const InfoView: React.FC<Props> = props => {
   const [profileError, setProfileError] = useState<string | null>(null);
   const [profileId, setProfileId] = useState<string | null>(null);
 
   const implicitResource = useResources(
-      Types.ResourceRequestType.Implicit,
-      {
-        method: 'GET',
-        parameters: {'custom-param1': 'p1', 'custom-param2': 'p2'},
-        encoding: 'application/json',
-        headers: {'custom-header1': 'val1', 'custom-header2': 'val2'},
-        path: 'user-id-decorated',
-      },
-      true,
-      [],
-      profileId,
+    Types.ResourceRequestType.Implicit,
+    {
+      method: 'GET',
+      parameters: {'custom-param1': 'p1', 'custom-param2': 'p2'},
+      encoding: 'application/json',
+      headers: {'custom-header1': 'val1', 'custom-header2': 'val2'},
+      path: 'user-id-decorated',
+    },
+    true,
+    [],
+    profileId,
   );
 
   const resource = useResources(
@@ -69,7 +67,7 @@ const InfoView: React.FC<Props> = (props) => {
       path: 'application-details',
     },
     true,
-    ['application-details']
+    ['application-details'],
   );
 
   // get profileId at start

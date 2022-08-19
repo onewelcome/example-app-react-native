@@ -44,7 +44,7 @@ const AuthButton: React.FC<Props> = (props) => {
   const authenticateProfile = useCallback(
     async (id: string) => {
       try {
-        const authenticated = await OneWelcomeSdk.authenticateUser(id);
+        const authenticated = await OneWelcomeSdk.authenticateUser(id, null);
         if (!authenticated) {
           return;
         }
@@ -59,10 +59,11 @@ const AuthButton: React.FC<Props> = (props) => {
   );
 
   useEffect(() => {
-    if (!profiles && !loading) {
+    if (!loading) {
       fetchProfiles();
     }
-  }, [profiles, loading, fetchProfiles]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <View style={styles.container}>
