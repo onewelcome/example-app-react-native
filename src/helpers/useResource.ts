@@ -73,7 +73,8 @@ function useResources(
       scopes,
       profileId,
     );
-  }, [type, shouldAuthenticate, profileId, currentDetails, scopes]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type, shouldAuthenticate, profileId, currentDetails]);
 
   return {
     loading,
