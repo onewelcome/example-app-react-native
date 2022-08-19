@@ -73,7 +73,7 @@ function useResources(
       scopes,
       profileId,
     );
-  }, [type, shouldAuthenticate, profileId, currentDetails]);
+  }, [type, shouldAuthenticate, profileId, currentDetails, scopes]);
 
   return {
     loading,
