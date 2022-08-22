@@ -160,8 +160,15 @@ const onNewPinKey = (
   function handleFirstPin() {
     setFirstPin(newValue);
     if (newValue.length === requiredPinLength) {
-      setConfirmMode(true);
-      setPin('');
+      OnewelcomeSdk.validatePinWithPolicy(newValue)
+        .then(() => {
+          setConfirmMode(true);
+          setPin('');
+        })
+        .catch(err => {
+          setError(err.message);
+          setPin('');
+        });
     }
   }
 };
