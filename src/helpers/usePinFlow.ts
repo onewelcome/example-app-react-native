@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import OnewelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
-import {useProfileStorage} from "./useProfileStorage";
+import {useProfileStorage} from './useProfileStorage';
 
 const usePinFlow = () => {
   const [flow, setFlow] = useState<Events.PinFlow>(Events.PinFlow.Create);
@@ -14,7 +14,18 @@ const usePinFlow = () => {
   const {getPinProfile, setPinProfile} = useProfileStorage();
 
   const provideNewPinKey = (newKey: string) =>
-    onNewPinKey(newKey, pin, setPin, flow, setError, pinLength || 5, isConfirmMode, setConfirmMode, firstPin, setFirstPin);
+    onNewPinKey(
+      newKey,
+      pin,
+      setPin,
+      flow,
+      setError,
+      pinLength || 5,
+      isConfirmMode,
+      setConfirmMode,
+      firstPin,
+      setFirstPin,
+    );
 
   const cancelPinFlow = () => onCancelPinFlow(flow);
 
@@ -27,31 +38,26 @@ const usePinFlow = () => {
     setPin('');
   }, []);
 
-  const setConfirmState = useCallback(() => {
-    setConfirmMode(true);
-    setPin('');
-  }, []);
-
   const handleOpen = useCallback(
-    async (newFlow: Events.PinFlow, profileId: string, pinLength?: number) => {
+    async (newFlow: Events.PinFlow, profileId: string, pinLength_?: number) => {
       setVisible(true);
       if (flow !== newFlow) {
         setFlow(newFlow);
       }
-      if(pinLength && !isNaN(Number(pinLength))){
-        await setPinProfile(profileId, pinLength);
+      if (pinLength_ && !isNaN(Number(pinLength_))) {
+        await setPinProfile(profileId, pinLength_);
       } else {
-        pinLength = await getPinProfile(profileId);
+        pinLength_ = await getPinProfile(profileId);
       }
-      setPinLength(pinLength);
+      setPinLength(pinLength_);
     },
-    [flow],
+    [flow, getPinProfile, setPinProfile],
   );
 
-  const handleError = useCallback((err: string | null, userInfo?: any) => {
+  const handleError = useCallback((err: string | null, userInfo_?: any) => {
     setError(err);
     setConfirmMode(false);
-    setUserInfo(userInfo || null);
+    setUserInfo(userInfo_ || null);
     setPin('');
   }, []);
 
@@ -71,7 +77,7 @@ const usePinFlow = () => {
           break;
       }
     },
-    [handleOpen, setConfirmState, handleError, setInitialState],
+    [handleOpen, handleError, setInitialState],
   );
 
   useEffect(() => {
@@ -108,7 +114,7 @@ const onNewPinKey = (
   isConfirmMode: boolean,
   setConfirmMode: (mode: boolean) => void,
   firstPin: string,
-  setFirstPin: (pin: string) => void
+  setFirstPin: (pin: string) => void,
 ) => {
   setError(null);
   if (newKey === '<' && pin.length > 0) {
@@ -120,7 +126,11 @@ const onNewPinKey = (
   switch (flow) {
     case Events.PinFlow.Authentication:
       if (newValue.length === requiredPinLength) {
-          OnewelcomeSdk.submitPinAction(flow, Events.PinAction.ProvidePin, newValue);
+        OnewelcomeSdk.submitPinAction(
+          flow,
+          Events.PinAction.ProvidePin,
+          newValue,
+        );
       }
       break;
     case Events.PinFlow.Create:
@@ -135,7 +145,11 @@ const onNewPinKey = (
   function handleConfirmPin() {
     if (newValue.length === requiredPinLength) {
       if (firstPin === newValue) {
-        OnewelcomeSdk.submitPinAction(flow, Events.PinAction.ProvidePin, newValue);
+        OnewelcomeSdk.submitPinAction(
+          flow,
+          Events.PinAction.ProvidePin,
+          newValue,
+        );
       } else {
         setError('Pins do not match');
         setConfirmMode(false);
