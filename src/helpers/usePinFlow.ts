@@ -38,7 +38,7 @@ const usePinFlow = () => {
       if (flow !== event.flow) {
         setFlow(event.flow);
       }
-      if (event.data && !isNaN(Number(event.data))) {
+      if (event.flow === Events.PinFlow.Create) {
         await setPinProfile(event.profileId, event.data);
         setPinLength(event.data);
       } else {
