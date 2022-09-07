@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import OnewelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
+import OnewelcomeSdk, {Events, Types} from 'onewelcome-react-native-sdk';
 import {useProfileStorage} from './useProfileStorage';
 
 const usePinFlow = () => {
@@ -7,7 +7,7 @@ const usePinFlow = () => {
   const [pin, setPin] = useState('');
   const [firstPin, setFirstPin] = useState('');
   const [visible, setVisible] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState<Types.userInfo>();
   const [error, setError] = useState<string | null>(null);
   const [isConfirmMode, setConfirmMode] = useState(false);
   const [pinLength, setPinLength] = useState<number | null>(null);
@@ -48,15 +48,12 @@ const usePinFlow = () => {
     [flow, getPinProfile, setPinProfile],
   );
 
-  const handleError = useCallback(
-    (event: Events.PinErrorEvent) => {
-      setError(event.errorMsg);
-      setConfirmMode(false);
-      setUserInfo(userInfo || null);
-      setPin('');
-    },
-    [userInfo],
-  );
+  const handleError = useCallback((event: Events.PinErrorEvent) => {
+    setError(event.errorMsg);
+    setConfirmMode(false);
+    setUserInfo(event.userInfo || undefined);
+    setPin('');
+  }, []);
 
   const handleNotification = useCallback(
     async (event: Events.PinEvent) => {
