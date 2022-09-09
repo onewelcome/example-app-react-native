@@ -1,6 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View, Linking, EmitterSubscription} from 'react-native';
-import PropTypes from 'prop-types';
+import React, {useState, useEffect, useCallback} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Linking,
+  EmitterSubscription,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../../../general/Button';
 import Switch from '../../../general/Switch';
@@ -15,7 +20,7 @@ interface Props {
 }
 
 //@todo add providers selector
-const RegisterButton: React.FC<Props> = (props) => {
+const RegisterButton: React.FC<Props> = props => {
   const [isDefaultProvider, setIsDefaultProvider] = useState(true);
   const [isRegistering, setRegistering] = useState(false);
   const [linkUri, setLinkUri] = useState<string | null>(null);
@@ -24,24 +29,33 @@ const RegisterButton: React.FC<Props> = (props) => {
     false,
   );
 
-  const handleCustomRegistrationCallback = (event: any) => {
-    switch(event["identityProviderId"]) {
-      case "qr_registration":
-        OneWelcomeSdk.submitCustomRegistrationAction(Events.CustomRegistrationAction.ProvideToken, event.identifyProviderId, "Onegini");
-        break;
-      default:
-        return;
-    }
-  }
+  const handleCustomRegistration = useCallback(
+    async (event: Events.CustomRegistrationEvent) => {
+      switch (event.identityProviderId) {
+        case 'qr_registration':
+          OneWelcomeSdk.submitCustomRegistrationAction(
+            Events.CustomRegistrationAction.ProvideToken,
+            event.identityProviderId,
+            'Onegini',
+          );
+          break;
+        default:
+          return;
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     const listener = OneWelcomeSdk.addEventListener(
       Events.SdkNotification.CustomRegistration,
-      handleCustomRegistrationCallback,
+      handleCustomRegistration,
     );
 
-    return () => {listener.remove();};
-  }, [handleCustomRegistrationCallback]);
+    return () => {
+      listener.remove();
+    };
+  }, [handleCustomRegistration]);
 
   useEffect(() => {
     const handleOpenURL = (event: any) => {
@@ -63,16 +77,16 @@ const RegisterButton: React.FC<Props> = (props) => {
 
     return () => {
       if (listener) {
-        listener.remove();        
+        listener.remove();
       }
-    }
+    };
   }, [linkUri]);
 
   return (
     <View style={styles.container}>
       {isShownCustomRegistration && !isRegistering ? (
         <CustomRegistrationChooserView
-          onProviderSelected={(idProvider) =>
+          onProviderSelected={idProvider =>
             startRegister(
               idProvider,
               setRegistering,
@@ -105,7 +119,7 @@ const RegisterButton: React.FC<Props> = (props) => {
         containerStyle={styles.switch}
         label={'USE DEFAULT IDENTITY PROVIDER'}
         onSwitch={() =>
-          setIsDefaultProvider((previousState) => {
+          setIsDefaultProvider(previousState => {
             if (!previousState) {
               setShowCustomRegistration(false);
             }

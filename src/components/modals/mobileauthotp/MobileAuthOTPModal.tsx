@@ -11,13 +11,13 @@ const MobileAuthOTPModal: React.FC<{}> = () => {
   useEffect(() => {
     const listener = OneWelcomeSdk.addEventListener(
       Events.SdkNotification.MobileAuthOtp,
-      (event: any) => {
+      (event: Events.MobileAuthOtpEvent) => {
         switch (event.action) {
-          case Events.MobileAuthOtpNotification.StartAuthentication:
+          case Events.MobileAuthOtp.StartAuthentication:
             setMessage(event.mobileAuthenticationRequest.message);
             setVisible(true);
             break;
-          case Events.MobileAuthOtpNotification.FinishAuthentication:
+          case Events.MobileAuthOtp.FinishAuthentication:
             setVisible(false);
             break;
         }
@@ -34,7 +34,8 @@ const MobileAuthOTPModal: React.FC<{}> = () => {
       transparent={false}
       animationType="fade"
       visible={visible}
-      onRequestClose={() => setVisible(false)}>
+      onRequestClose={() => setVisible(false)}
+    >
       <View style={styles.container}>
         <Text style={styles.title}>{'Mobile Auth OTP'}</Text>
         <Text style={styles.message}>{message}</Text>
