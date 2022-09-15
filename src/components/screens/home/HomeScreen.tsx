@@ -16,7 +16,7 @@ const HomeScreen: React.FC<{}> = () => {
   const [isBuilt, setBuilt] = useState(false);
   const [isSdkError, setSdkError] = useState(false);
 
-  return isBuilt || isSdkError ? (
+  return isBuilt && !isSdkError ? (
     isAuthorized ? (
       <DashboardScreen onLogout={() => dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: false})} />
     ) : (

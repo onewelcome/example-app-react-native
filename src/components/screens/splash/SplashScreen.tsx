@@ -47,8 +47,11 @@ const startSdk = async (onStarted?: Props['onSdkStarted'], onError?: Props['onSd
       ),
     );
     onStarted?.();
-  } catch (e) {
-    Alert.alert('Error when starting SDK', JSON.stringify(e));
+  } catch (e: any) {
+    Alert.alert(
+      `Error when starting SDK. Code: ${e.code}`,
+      JSON.stringify(e.message),
+    );
     onError?.();
   }
 };
