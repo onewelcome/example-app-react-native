@@ -48,13 +48,7 @@ const AuthContainer: React.FC<Props> = props => {
   const authenticateProfile = useCallback(
     async (id: string, authenticatorId?: string) => {
       try {
-        const authenticated = await OneWelcomeSdk.authenticateUser(
-          id,
-          authenticatorId ?? null,
-        );
-        if (!authenticated) {
-          return;
-        }
+        await OneWelcomeSdk.authenticateUser(id, authenticatorId ?? null);
         CurrentUser.id = id;
         props.onAuthorized?.(true);
       } catch (e: any) {
