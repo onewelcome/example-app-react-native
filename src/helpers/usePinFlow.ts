@@ -75,57 +75,62 @@ const usePinFlow = () => {
     };
   }, [handleNotification]);
 
-  const provideNewPinKey = (newKey: string) => {
-    const handleConfirmPin = () => {
-      if (newValue.length === pinLength) {
-        if (firstPin === newValue) {
-          OnewelcomeSdk.submitPinAction(
-            flow,
-            Events.PinAction.ProvidePin,
-            newValue,
-          );
-        } else {
-          handleError('Pins do not match');
-        }
+  const handleCreateConfirmPin = (newPinValue: string) => {
+    if (newPinValue.length === pinLength) {
+      if (firstPin === newPinValue) {
+        OnewelcomeSdk.submitPinAction(
+          flow,
+          Events.PinAction.ProvidePin,
+          newPinValue,
+        );
+      } else {
+        handleError('Pins do not match');
       }
-    };
-    const handleFirstPin = () => {
-      setFirstPin(newValue);
-      if (newValue.length === pinLength) {
-        OnewelcomeSdk.validatePinWithPolicy(newValue)
-          .then(() => {
-            setConfirmMode(true);
-            setPin('');
-          })
-          .catch(err => {
-            handleError(err.message);
-          });
-      }
-    };
+    }
+  };
 
+  const handleFirstCreatePin = (newPinValue: string) => {
+    setFirstPin(newPinValue);
+    if (newPinValue.length === pinLength) {
+      OnewelcomeSdk.validatePinWithPolicy(newPinValue)
+        .then(() => {
+          setConfirmMode(true);
+          setPin('');
+        })
+        .catch(err => {
+          handleError(err.message);
+        });
+    }
+  };
+
+  const handleAuthenticatePin = (newPinValue: string) => {
+    if (newPinValue.length === pinLength) {
+      OnewelcomeSdk.submitPinAction(
+        flow,
+        Events.PinAction.ProvidePin,
+        newPinValue,
+      );
+    }
+  };
+
+  const provideNewPinKey = (newKey: string) => {
     setError(null);
     if (newKey === '<' && pin.length > 0) {
       setPin(pin.substring(0, pin.length - 1));
       return;
     }
-    const newValue = pin + newKey;
-    setPin(newValue);
+    const newPinValue = pin + newKey;
+    setPin(newPinValue);
     switch (flow) {
       case Events.PinFlow.Authentication:
-        if (newValue.length === pinLength) {
-          OnewelcomeSdk.submitPinAction(
-            flow,
-            Events.PinAction.ProvidePin,
-            newValue,
-          );
-        }
+        handleAuthenticatePin(newPinValue);
         break;
       case Events.PinFlow.Create:
       case Events.PinFlow.Change:
         if (isConfirmMode) {
-          handleConfirmPin();
+          handleCreateConfirmPin(newPinValue);
         } else {
-          handleFirstPin();
+          handleFirstCreatePin(newPinValue);
         }
         break;
     }
