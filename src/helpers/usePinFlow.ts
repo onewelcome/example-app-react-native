@@ -23,17 +23,17 @@ const usePinFlow = () => {
   }, []);
 
   const handleOpen = useCallback(
-    async (newFlow: Events.PinFlow, profileId: string, pinLength_?: number) => {
+    async (event: Events.PinOpenEvent) => {
       setVisible(true);
-      if (flow !== newFlow) {
-        setFlow(newFlow);
+      if (flow !== event.flow) {
+        setFlow(event.flow);
       }
-      if (pinLength_ && !isNaN(Number(pinLength_))) {
-        await setPinProfile(profileId, pinLength_);
+      if (event.data && !isNaN(Number(event.data))) {
+        await setPinProfile(event.profileId, event.data);
+        setPinLength(event.data);
       } else {
-        pinLength_ = await getPinProfile(profileId);
+        setPinLength(await getPinProfile(event.profileId));
       }
-      setPinLength(pinLength_);
     },
     [flow, getPinProfile, setPinProfile],
   );
@@ -46,17 +46,16 @@ const usePinFlow = () => {
   }, []);
 
   const handleNotification = useCallback(
-    async (event: any) => {
+    async (event: Events.PinEvent) => {
       console.log('handle PIN notification event: ', event);
-
       switch (event.action) {
-        case Events.PinNotification.Open:
-          await handleOpen(event.flow, event.profileId, event.data);
+        case Events.Pin.Open:
+          await handleOpen(event);
           break;
-        case Events.PinNotification.Error:
-          handleError(event.errorMsg, event.userInfo ?? undefined);
+        case Events.Pin.Error:
+          handleError(event.errorMsg, event.userInfo);
           break;
-        case Events.PinNotification.Close:
+        case Events.Pin.Close:
           setInitialState();
           break;
       }

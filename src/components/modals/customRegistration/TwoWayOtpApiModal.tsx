@@ -12,23 +12,28 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const listener = OneWelcomeSdk.addEventListener(Events.SdkNotification.CustomRegistration, (event: any) => {
-      if (event.identityProviderId === IdProvider) {
-        switch (event.action) {
-          case Events.CustomRegistrationNotification.InitRegistration:
-            OneWelcomeSdk.submitCustomRegistrationAction(
-              Events.CustomRegistrationAction.ProvideToken,
-              event.identityProviderId,
-              null,
-            );
-            break;
-          case Events.CustomRegistrationNotification.FinishRegistration:
-            setCodeFromOnegini(event.customInfo.data);
-            setVisible(true);
-            break;
+    const listener = OneWelcomeSdk.addEventListener(
+      Events.SdkNotification.CustomRegistration,
+      (event: Events.CustomRegistrationEvent) => {
+        if (event.identityProviderId === IdProvider) {
+          switch (event.action) {
+            case Events.CustomRegistration.InitRegistration:
+              OneWelcomeSdk.submitCustomRegistrationAction(
+                Events.CustomRegistrationAction.ProvideToken,
+                event.identityProviderId,
+                null,
+              );
+              break;
+            case Events.CustomRegistration.FinishRegistration:
+              if (event.customInfo) {
+                setCodeFromOnegini(event.customInfo.data);
+              }
+              setVisible(true);
+              break;
+          }
         }
-      }
-    });
+      },
+    );
 
     return () => {
       listener.remove();

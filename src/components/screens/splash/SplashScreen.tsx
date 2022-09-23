@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Image, Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import OneWelcomeSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
 import {Assets} from '../../../../assets';
 
 interface Props {
@@ -21,9 +21,21 @@ const SplashScreen: React.FC<Props> = (props) => {
   );
 };
 
+const config: Types.Config = {
+  enableFingerprint: true,
+  securityControllerClassName:
+    'com.onegini.mobile.rnexampleapp.SecurityController',
+  enableMobileAuthenticationOtp: true,
+  customProviders: [
+    {id: '2-way-otp-api', isTwoStep: true},
+    {id: 'qr_registration', isTwoStep: false},
+  ],
+  configModelClassName: null,
+};
+
 const startSdk = async (onStarted?: Props['onSdkStarted'], onError?: Props['onSdkError']) => {
   try {
-    await OneWelcomeSdk.startClient();
+    await OneWelcomeSdk.startClient(config);
 
     const linkUriResult = await OneWelcomeSdk.getRedirectUri();
 
