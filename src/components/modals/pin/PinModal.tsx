@@ -4,7 +4,7 @@ import {Events} from 'onewelcome-react-native-sdk';
 import PinInput from './PinInput';
 import PinKeyboard from './PinKeyboard';
 import Button from '../../general/Button';
-import { usePinFlow } from '../../../helpers/usePinFlow';
+import {usePinFlow} from '../../../helpers/usePinFlow';
 
 const getTitle = (flow: Events.PinFlow) => {
   switch (flow) {
@@ -29,7 +29,6 @@ const PinModal: React.FC<{}> = () => {
     provideNewPinKey,
     cancelPinFlow,
     pinLength,
-    userInfo,
   } = usePinFlow();
 
   const title = isConfirmMode ? 'Confirm Pin' : getTitle(flow);
@@ -42,17 +41,26 @@ const PinModal: React.FC<{}> = () => {
       onRequestClose={() => {
         console.log('PIN MODAL: ON REQUEST CLOSE');
         cancelPinFlow();
-      }}>
+      }}
+    >
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <Text style={styles.title}>{title}</Text>
-          <PinInput currentPinLength={pin.length} requiredPinLength={pinLength || 5}/>
-          {error && <Text style={styles.error}>{`${userInfo && userInfo?.['remainingFailureCount'] ? `Pin is incorrect, you have ${userInfo?.['remainingFailureCount']} attempts remaining` : `${error}`}`}</Text>}
+          <PinInput
+            currentPinLength={pin.length}
+            requiredPinLength={pinLength || 5}
+          />
+          {remainingFailureCount && (
+            <Text style={styles.error}>
+              {`Pin is incorrect, you have ${remainingFailureCount} attempts remaining`}
+            </Text>
+          )}
+          {error && <Text style={styles.error}>{error}</Text>}
         </View>
         <View style={styles.bottomContainer}>
           <PinKeyboard
             pinLength={pin.length}
-            onPress={(newKey) => provideNewPinKey(newKey)}
+            onPress={newKey => provideNewPinKey(newKey)}
           />
           <Button
             name={'Cancel'}

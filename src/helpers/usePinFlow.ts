@@ -7,7 +7,6 @@ const usePinFlow = () => {
   const [pin, setPin] = useState('');
   const [firstPin, setFirstPin] = useState('');
   const [visible, setVisible] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
   const [error, setError] = useState<string | null>(null);
   const [isConfirmMode, setConfirmMode] = useState(false);
   const [pinLength, setPinLength] = useState<number | null>(null);
@@ -38,12 +37,26 @@ const usePinFlow = () => {
     [flow, getPinProfile, setPinProfile],
   );
 
-  const handleError = useCallback((err: string | null, userInfo_?: any) => {
+  const handleError = useCallback((err: string) => {
     setError(err);
     setConfirmMode(false);
-    setUserInfo(userInfo_ || null);
     setPin('');
   }, []);
+
+  const handleIncorrectPin = useCallback((event: Events.IncorrectPinEvent) => {
+    setRemainingFailureCount(event.remainingFailureCount);
+    setPin('');
+    setConfirmMode(false);
+  }, []);
+
+  const handlePinNotAllowed = useCallback(
+    (event: Events.PinNotAllowedEvent) => {
+      setError(event.errorMsg);
+      setConfirmMode(false);
+      setPin('');
+    },
+    [],
+  );
 
   const handleNotification = useCallback(
     async (event: Events.PinEvent) => {
@@ -52,15 +65,18 @@ const usePinFlow = () => {
         case Events.Pin.Open:
           await handleOpen(event);
           break;
-        case Events.Pin.Error:
-          handleError(event.errorMsg, event.userInfo);
-          break;
         case Events.Pin.Close:
           setInitialState();
           break;
+        case Events.Pin.IncorrectPin:
+          handleIncorrectPin(event);
+          break;
+        case Events.Pin.PinNotAllowed:
+          handlePinNotAllowed(event);
+          break;
       }
     },
-    [handleOpen, handleError, setInitialState],
+    [handleOpen, setInitialState, handleIncorrectPin, handlePinNotAllowed],
   );
 
   useEffect(() => {
@@ -144,7 +160,6 @@ const usePinFlow = () => {
     provideNewPinKey,
     cancelPinFlow,
     pinLength,
-    userInfo,
   };
 };
 
