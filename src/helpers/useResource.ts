@@ -73,6 +73,7 @@ function useResources(
       scopes,
       profileId,
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type, shouldAuthenticate, profileId, currentDetails]);
 
   return {

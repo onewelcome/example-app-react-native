@@ -443,7 +443,7 @@ SPEC CHECKSUMS:
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   OneginiSDKiOS: 11c47c9b19b86e6ee6c2758d532b31e6220f0431
-  onewelcome-react-native-sdk: 980b30b9ac27c2fd673e114a629c843fda0fd4df
+  onewelcome-react-native-sdk: 3277d07d1f54cbccbe1355a39c1dd6ae7d784979
   RCT-Folly: b9d9fe1fc70114b751c076104e52f3b1b5e5a95a
   RCTRequired: b723d4d6da2795df58189a01f92856b6912cf256
   RCTTypeSafety: 3973d2fcf39f43f7819e840d56ea6b2fe45996a0
