@@ -50,11 +50,6 @@ const PinModal: React.FC<{}> = () => {
             currentPinLength={pin.length}
             requiredPinLength={pinLength || 5}
           />
-          {remainingFailureCount && (
-            <Text style={styles.error}>
-              {`Pin is incorrect, you have ${remainingFailureCount} attempts remaining`}
-            </Text>
-          )}
           {error && <Text style={styles.error}>{error}</Text>}
         </View>
         <View style={styles.bottomContainer}>

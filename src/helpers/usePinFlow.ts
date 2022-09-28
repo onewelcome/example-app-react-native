@@ -27,9 +27,9 @@ const usePinFlow = () => {
       if (flow !== event.flow) {
         setFlow(event.flow);
       }
-      if (event.data && !isNaN(Number(event.data))) {
-        await setPinProfile(event.profileId, event.data);
-        setPinLength(event.data);
+      if (event.flow === Events.PinFlow.Create) {
+        await setPinProfile(event.profileId, event.pinLength);
+        setPinLength(event.pinLength);
       } else {
         setPinLength(await getPinProfile(event.profileId));
       }
@@ -43,19 +43,20 @@ const usePinFlow = () => {
     setPin('');
   }, []);
 
-  const handleIncorrectPin = useCallback((event: Events.IncorrectPinEvent) => {
-    setRemainingFailureCount(event.remainingFailureCount);
-    setPin('');
-    setConfirmMode(false);
-  }, []);
+  const handleIncorrectPin = useCallback(
+    (event: Events.IncorrectPinEvent) => {
+      handleError(
+        `Pin is incorrect, you have ${event.remainingFailureCount} attempts remaining`,
+      );
+    },
+    [handleError],
+  );
 
   const handlePinNotAllowed = useCallback(
     (event: Events.PinNotAllowedEvent) => {
-      setError(event.errorMsg);
-      setConfirmMode(false);
-      setPin('');
+      handleError(event.errorMsg);
     },
-    [],
+    [handleError],
   );
 
   const handleNotification = useCallback(
