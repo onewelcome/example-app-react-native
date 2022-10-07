@@ -1,6 +1,7 @@
 import {useCallback, useEffect, useState} from 'react';
 import OnewelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
 import {useProfileStorage} from './useProfileStorage';
+import {PinAuthenticationEvent} from 'onewelcome-react-native-sdk/ts/events';
 
 const usePinFlow = () => {
   const [flow, setFlow] = useState<Events.PinFlow>(Events.PinFlow.Create);
@@ -21,20 +22,23 @@ const usePinFlow = () => {
     setPin('');
   }, []);
 
-  const handleOpen = useCallback(
-    async (event: Events.PinOpenEvent) => {
+  const handleCreateOpen = useCallback(
+    async (event: Events.PinCreateOpenEvent) => {
       setVisible(true);
-      if (flow !== event.flow) {
-        setFlow(event.flow);
-      }
-      if (event.flow === Events.PinFlow.Create) {
-        await setPinProfile(event.profileId, event.pinLength);
-        setPinLength(event.pinLength);
-      } else {
-        setPinLength(await getPinProfile(event.profileId));
-      }
+      setFlow(event.flow);
+      setPinLength(event.pinLength);
+      await setPinProfile(event.profileId, event.pinLength);
     },
-    [flow, getPinProfile, setPinProfile],
+    [setPinProfile],
+  );
+
+  const handleAuthOpen = useCallback(
+    async (event: Events.PinAuthenticationOpenEvent) => {
+      setVisible(true);
+      setFlow(event.flow);
+      setPinLength(await getPinProfile(event.profileId));
+    },
+    [getPinProfile],
   );
 
   const handleError = useCallback((err: string) => {
@@ -59,37 +63,56 @@ const usePinFlow = () => {
     [handleError],
   );
 
-  const handleNotification = useCallback(
-    async (event: Events.PinEvent) => {
+  const handleCreateNotification = useCallback(
+    async (event: Events.PinCreateEvent) => {
       console.log('handle PIN notification event: ', event);
       switch (event.action) {
-        case Events.Pin.Open:
-          await handleOpen(event);
+        case Events.PinCreate.Open:
+          await handleCreateOpen(event);
           break;
-        case Events.Pin.Close:
+        case Events.PinCreate.Close:
           setInitialState();
           break;
-        case Events.Pin.IncorrectPin:
-          handleIncorrectPin(event);
-          break;
-        case Events.Pin.PinNotAllowed:
+        case Events.PinCreate.PinNotAllowed:
           handlePinNotAllowed(event);
           break;
       }
     },
-    [handleOpen, setInitialState, handleIncorrectPin, handlePinNotAllowed],
+    [handleCreateOpen, setInitialState, handlePinNotAllowed],
+  );
+
+  const handleAuthNotification = useCallback(
+    async (event: Events.PinAuthenticationEvent) => {
+      console.log('handle PIN notification event: ', event);
+      switch (event.action) {
+        case Events.PinAuthentication.Open:
+          await handleAuthOpen(event);
+          break;
+        case Events.PinAuthentication.Close:
+          setInitialState();
+          break;
+        case Events.PinAuthentication.IncorrectPin:
+          handleIncorrectPin(event);
+          break;
+      }
+    },
+    [handleAuthOpen, setInitialState, handleIncorrectPin],
   );
 
   useEffect(() => {
-    const listener = OnewelcomeSdk.addEventListener(
-      Events.SdkNotification.Pin,
-      handleNotification,
+    const authListener = OnewelcomeSdk.addEventListener(
+      Events.SdkNotification.PinAuth,
+      handleAuthNotification,
     );
-
+    const createListener = OnewelcomeSdk.addEventListener(
+      Events.SdkNotification.PinCreate,
+      handleCreateNotification,
+    );
     return () => {
-      listener.remove();
+      authListener.remove();
+      createListener.remove();
     };
-  }, [handleNotification]);
+  }, [handleAuthNotification, handleCreateNotification]);
 
   const handleCreateConfirmPin = (newPinValue: string) => {
     if (newPinValue.length === pinLength) {
