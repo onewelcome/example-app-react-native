@@ -12,11 +12,13 @@ import TwoWayOtpApiModal from '../modals/customRegistration/TwoWayOtpApiModal';
 import HomeScreen from '../screens/home/HomeScreen';
 import MobileAuthOTPModal from '../modals/mobileauthotp/MobileAuthOTPModal';
 import FingerprintModal from '../modals/fingerprint/FingerprintModal';
-import {AuthProvider} from "../../providers/auth.provider";
+import {AuthProvider} from '../../providers/auth.provider';
+import {useSDK} from '../../helpers/useSDK';
+import SplashScreen from '../screens/splash/SplashScreen';
 
 const App: React.FC<{}> = () => {
   const [isReadyToExit, setIsReadyToExit] = useState(false);
-
+  const {isBuilt, isSdkError, startSDK} = useSDK();
   useEffect(() => {
     const subscriber = BackHandler.addEventListener('hardwareBackPress', () => {
       if (isReadyToExit) {
@@ -31,30 +33,36 @@ const App: React.FC<{}> = () => {
 
       return true;
     });
-
     return () => subscriber.remove();
   }, [isReadyToExit]);
 
-  return (
-      <AuthProvider>
-        <StatusBar
-            barStyle={Platform.OS === 'android' ? 'light-content' : 'default'}
-            backgroundColor={'#4a38ae'}
-        />
-        <SafeAreaView style={styles.container}>
-          <FingerprintModal/>
-          <MobileAuthOTPModal/>
-          <TwoWayOtpApiModal/>
-          <PinModal/>
-          <HomeScreen/>
-        </SafeAreaView>
-      </AuthProvider>
+  useEffect(() => {
+    startSDK();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return isBuilt || isSdkError ? (
+    <AuthProvider>
+      <StatusBar
+        barStyle={Platform.OS === 'android' ? 'light-content' : 'default'}
+        backgroundColor={'#4a38ae'}
+      />
+      <SafeAreaView style={styles.container}>
+        <FingerprintModal />
+        <MobileAuthOTPModal />
+        <TwoWayOtpApiModal />
+        <PinModal />
+        <HomeScreen />
+      </SafeAreaView>
+    </AuthProvider>
+  ) : (
+    <SplashScreen />
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     backgroundColor: '#ffffff',
   },
 });
