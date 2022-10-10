@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {Assets} from '../../../../assets';
 import RegisterButton from './components/RegisterButton';
-import AuthButton from './components/AuthButton';
+import AuthContainer from './components/AuthContainer';
 import Button from '../../general/Button';
 import InfoView from '../info/InfoView';
 
@@ -10,7 +10,7 @@ interface Props {
   onAuthorized?: (success?: boolean) => void;
 }
 
-const AuthScreen: React.FC<Props> = (props) => {
+const AuthScreen: React.FC<Props> = props => {
   const [isInfoVisible, setIsInfoVisible] = useState(false);
 
   return isInfoVisible ? (
@@ -22,7 +22,7 @@ const AuthScreen: React.FC<Props> = (props) => {
         <Text style={styles.logoText}>Example App</Text>
       </View>
 
-      <AuthButton onAuthorized={props.onAuthorized} />
+      <AuthContainer onAuthorized={props.onAuthorized} />
 
       <View style={styles.registerContainer}>
         <RegisterButton onRegistered={props.onAuthorized} />
