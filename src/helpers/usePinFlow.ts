@@ -9,7 +9,7 @@ const usePinFlow = () => {
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isConfirmMode, setConfirmMode] = useState(false);
-  const [pinLength, setPinLength] = useState<number | null>(null);
+  const [pinLength, setPinLength] = useState<number>(0);
   const {getPinProfile, setPinProfile} = useProfileStorage();
 
   const cancelPinFlow = () => onCancelPinFlow(flow);
