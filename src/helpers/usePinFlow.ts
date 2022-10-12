@@ -7,10 +7,9 @@ const usePinFlow = () => {
   const [pin, setPin] = useState('');
   const [firstPin, setFirstPin] = useState('');
   const [visible, setVisible] = useState(false);
-  const [userInfo, setUserInfo] = useState(null);
   const [error, setError] = useState<string | null>(null);
   const [isConfirmMode, setConfirmMode] = useState(false);
-  const [pinLength, setPinLength] = useState<number | null>(null);
+  const [pinLength, setPinLength] = useState<number>(0);
   const {getPinProfile, setPinProfile} = useProfileStorage();
 
   const cancelPinFlow = () => onCancelPinFlow(flow);
@@ -28,9 +27,9 @@ const usePinFlow = () => {
       if (flow !== event.flow) {
         setFlow(event.flow);
       }
-      if (event.data && !isNaN(Number(event.data))) {
-        await setPinProfile(event.profileId, event.data);
-        setPinLength(event.data);
+      if (event.flow === Events.PinFlow.Create) {
+        await setPinProfile(event.profileId, event.pinLength);
+        setPinLength(event.pinLength);
       } else {
         setPinLength(await getPinProfile(event.profileId));
       }
@@ -38,12 +37,27 @@ const usePinFlow = () => {
     [flow, getPinProfile, setPinProfile],
   );
 
-  const handleError = useCallback((err: string | null, userInfo_?: any) => {
+  const handleError = useCallback((err: string) => {
     setError(err);
     setConfirmMode(false);
-    setUserInfo(userInfo_ || null);
     setPin('');
   }, []);
+
+  const handleIncorrectPin = useCallback(
+    (event: Events.IncorrectPinEvent) => {
+      handleError(
+        `Pin is incorrect, you have ${event.remainingFailureCount} attempts remaining`,
+      );
+    },
+    [handleError],
+  );
+
+  const handlePinNotAllowed = useCallback(
+    (event: Events.PinNotAllowedEvent) => {
+      handleError(event.errorMsg);
+    },
+    [handleError],
+  );
 
   const handleNotification = useCallback(
     async (event: Events.PinEvent) => {
@@ -52,15 +66,18 @@ const usePinFlow = () => {
         case Events.Pin.Open:
           await handleOpen(event);
           break;
-        case Events.Pin.Error:
-          handleError(event.errorMsg, event.userInfo);
-          break;
         case Events.Pin.Close:
           setInitialState();
           break;
+        case Events.Pin.IncorrectPin:
+          handleIncorrectPin(event);
+          break;
+        case Events.Pin.PinNotAllowed:
+          handlePinNotAllowed(event);
+          break;
       }
     },
-    [handleOpen, handleError, setInitialState],
+    [handleOpen, setInitialState, handleIncorrectPin, handlePinNotAllowed],
   );
 
   useEffect(() => {
@@ -144,7 +161,6 @@ const usePinFlow = () => {
     provideNewPinKey,
     cancelPinFlow,
     pinLength,
-    userInfo,
   };
 };
 
