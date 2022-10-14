@@ -1,12 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Linking,
-  EmitterSubscription,
-} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {StyleSheet, Text, View, Linking} from 'react-native';
 import Button from '../../../general/Button';
 import Switch from '../../../general/Switch';
 import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
@@ -23,7 +16,6 @@ interface Props {
 const RegisterButton: React.FC<Props> = props => {
   const [isDefaultProvider, setIsDefaultProvider] = useState(true);
   const [isRegistering, setRegistering] = useState(false);
-  const [linkUri, setLinkUri] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isShownCustomRegistration, setShowCustomRegistration] = useState(
     false,
@@ -46,53 +38,55 @@ const RegisterButton: React.FC<Props> = props => {
     [],
   );
 
+  const handleRegistrationURLEvent = useCallback(
+    async (event: Events.RegistrationURLEvent) => {
+      Linking.openURL(event.url);
+    },
+    [],
+  );
+
+  const startRegister = async (
+    providerId: string | null,
+    onRegisterSuccess?: () => void,
+  ) => {
+    setError?.(null);
+    setRegistering?.(true);
+
+    try {
+      const profile = await OneWelcomeSdk.registerUser(providerId, ['read']);
+      CurrentUser.id = profile.profileId;
+      setRegistering(false);
+      onRegisterSuccess?.();
+    } catch (e: any) {
+      setRegistering(false);
+      setShowCustomRegistration(false);
+      setError?.(e.message ? e.message : 'Something strange happened');
+    }
+  };
+
   useEffect(() => {
-    const listener = OneWelcomeSdk.addEventListener(
+    const customRegistrationListener = OneWelcomeSdk.addEventListener(
       Events.SdkNotification.CustomRegistration,
       handleCustomRegistration,
     );
 
-    return () => {
-      listener.remove();
-    };
-  }, [handleCustomRegistration]);
-
-  useEffect(() => {
-    const handleOpenURL = (event: any) => {
-      if (event.url.substr(0, event.url.indexOf(':')) === linkUri) {
-        OneWelcomeSdk.handleRegistrationCallback(event.url);
-      }
-    };
-
-    const getLinkUri = async () => {
-      let uri = await AsyncStorage.getItem('@redirectUri');
-      setLinkUri(uri);
-    };
-    let listener: EmitterSubscription;
-    if (linkUri) {
-      listener = Linking.addListener('url', handleOpenURL);
-    } else {
-      getLinkUri();
-    }
+    const registerListener = OneWelcomeSdk.addEventListener(
+      Events.SdkNotification.Registration,
+      handleRegistrationURLEvent,
+    );
 
     return () => {
-      if (listener) {
-        listener.remove();
-      }
+      customRegistrationListener.remove();
+      registerListener.remove();
     };
-  }, [linkUri]);
+  }, [handleCustomRegistration, handleRegistrationURLEvent]);
 
   return (
     <View style={styles.container}>
       {isShownCustomRegistration && !isRegistering ? (
         <CustomRegistrationChooserView
           onProviderSelected={idProvider =>
-            startRegister(
-              idProvider,
-              setRegistering,
-              setError,
-              props.onRegistered,
-            )
+            startRegister(idProvider, props.onRegistered)
           }
           onCancelPressed={() => setShowCustomRegistration(false)}
         />
@@ -111,7 +105,7 @@ const RegisterButton: React.FC<Props> = props => {
           isRegistering
             ? OneWelcomeSdk.cancelRegistration()
             : isDefaultProvider
-            ? startRegister(null, setRegistering, setError, props.onRegistered)
+            ? startRegister(null, props.onRegistered)
             : setShowCustomRegistration(!isShownCustomRegistration)
         }
       />
@@ -147,29 +141,5 @@ const styles = StyleSheet.create({
     color: '#c82d2d',
   },
 });
-
-//
-
-const startRegister = async (
-  providerId: string | null,
-  setRegistering?: (success: boolean) => void,
-  setError?: (error: string | null) => void,
-  onRegisterSuccess?: () => void,
-) => {
-  setError?.(null);
-  setRegistering?.(true);
-
-  try {
-    const profile = await OneWelcomeSdk.registerUser(providerId, ['read']);
-    CurrentUser.id = profile.profileId;
-    setRegistering?.(false);
-    onRegisterSuccess?.();
-  } catch (e: any) {
-    setRegistering?.(false);
-    setError?.(e.message ? e.message : 'Something strange happened');
-  }
-};
-
-//
 
 export default RegisterButton;
