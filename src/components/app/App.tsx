@@ -1,28 +1,33 @@
 import React, {useContext, useEffect} from 'react';
 import PinModal from '../modals/pin/PinModal';
 import TwoWayOtpApiModal from '../modals/customRegistration/TwoWayOtpApiModal';
-import HomeScreen from '../screens/home/HomeScreen';
 import MobileAuthOTPModal from '../modals/mobileauthotp/MobileAuthOTPModal';
 import FingerprintModal from '../modals/fingerprint/FingerprintModal';
 import {useSDK} from '../../helpers/useSDK';
 import SplashScreen from '../screens/splash/SplashScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import AuthScreen from '../screens/auth/AuthScreen';
 import DashboardScreen from '../screens/dashboard/DashboardScreen';
 import InfoScreen from '../screens/info/InfoScreen';
 import {AuthContext} from '../../providers/auth.provider';
+import AuthScreen from '../screens/auth/AuthScreen';
 
 export type RootStackParamList = {
-  Home: undefined;
   AuthScreen: undefined;
   DashboardScreen: undefined;
   InfoScreen: undefined;
 };
 
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
+}
+
 const App: React.FC<{}> = () => {
   const {isBuilt, isSdkError, startSDK} = useSDK();
   const {
     state: {authorized: isAuthorized},
+    dispatch,
   } = useContext(AuthContext);
 
   useEffect(() => {
@@ -48,7 +53,6 @@ const App: React.FC<{}> = () => {
           <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
         ) : (
           <>
-            <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="AuthScreen" component={AuthScreen} />
             <Stack.Screen name="InfoScreen" component={InfoScreen} />
           </>

@@ -1,16 +1,20 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {Assets} from '../../../../assets';
 import RegisterButton from './components/RegisterButton';
 import AuthContainer from './components/AuthContainer';
 import Button from '../../general/Button';
 import {useNavigation} from '@react-navigation/native';
+import {AuthActionTypes} from '../../../providers/auth.actions';
+import {AuthContext} from '../../../providers/auth.provider';
 
-interface Props {
-  onAuthorized?: (success?: boolean) => void;
-}
-const AuthScreen: React.FC<Props> = props => {
+const AuthScreen: React.FC = () => {
   const navigation = useNavigation();
+  const {dispatch} = useContext(AuthContext);
+
+  const onAuthorized = () => {
+    dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: true});
+  };
 
   return (
     <View style={styles.container}>
@@ -19,10 +23,10 @@ const AuthScreen: React.FC<Props> = props => {
         <Text style={styles.logoText}>Example App</Text>
       </View>
 
-      <AuthContainer onAuthorized={props.onAuthorized} />
+      <AuthContainer onAuthorized={onAuthorized} />
 
       <View style={styles.registerContainer}>
-        <RegisterButton onRegistered={props.onAuthorized} />
+        <RegisterButton onRegistered={onAuthorized} />
       </View>
       <View style={styles.infoContainer}>
         <Button
