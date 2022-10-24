@@ -6,6 +6,8 @@ import {
   Platform,
   BackHandler,
   ToastAndroid,
+  View,
+  Text,
 } from 'react-native';
 import PinModal from '../modals/pin/PinModal';
 import TwoWayOtpApiModal from '../modals/customRegistration/TwoWayOtpApiModal';
@@ -15,6 +17,8 @@ import FingerprintModal from '../modals/fingerprint/FingerprintModal';
 import {AuthProvider} from '../../providers/auth.provider';
 import {useSDK} from '../../helpers/useSDK';
 import SplashScreen from '../screens/splash/SplashScreen';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 const App: React.FC<{}> = () => {
   const [isReadyToExit, setIsReadyToExit] = useState(false);
@@ -41,22 +45,37 @@ const App: React.FC<{}> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return isBuilt || isSdkError ? (
-    <AuthProvider>
-      <StatusBar
-        barStyle={Platform.OS === 'android' ? 'light-content' : 'default'}
-        backgroundColor={'#4a38ae'}
-      />
-      <SafeAreaView style={styles.container}>
-        <FingerprintModal />
-        <MobileAuthOTPModal />
-        <TwoWayOtpApiModal />
-        <PinModal />
-        <HomeScreen />
-      </SafeAreaView>
-    </AuthProvider>
-  ) : (
-    <SplashScreen />
+  function MainContent() {
+    return (
+      <>
+        <StatusBar
+          barStyle={Platform.OS === 'android' ? 'light-content' : 'default'}
+          backgroundColor={'#4a38ae'}
+        />
+        <SafeAreaView style={styles.container}>
+          <FingerprintModal />
+          <MobileAuthOTPModal />
+          <TwoWayOtpApiModal />
+          <PinModal />
+          <HomeScreen />
+        </SafeAreaView>
+      </>
+    );
+  }
+
+  const Stack = createNativeStackNavigator();
+  return (
+    <NavigationContainer>
+      <AuthProvider>
+        <Stack.Navigator initialRouteName="Splash">
+          {isBuilt || isSdkError ? (
+            <Stack.Screen name="Home" component={MainContent} />
+          ) : (
+            <Stack.Screen name="Splash" component={SplashScreen} />
+          )}
+        </Stack.Navigator>
+      </AuthProvider>
+    </NavigationContainer>
   );
 };
 
