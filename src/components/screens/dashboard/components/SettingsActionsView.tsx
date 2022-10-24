@@ -1,67 +1,60 @@
-import React, {Dispatch, useCallback, useContext, useState} from 'react';
+import React, {useCallback, useContext, useState} from 'react';
 import {Text, StyleSheet, Alert} from 'react-native';
 import ContentContainer from './ContentContainer';
 import Button from '../../../general/Button';
 import {enrollMobileAuthentication} from '../../../helpers/MobileAuthenticationHelper';
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
-import {AuthContext} from "../../../../providers/auth.provider";
-import {AuthActionTypes} from "../../../../providers/auth.actions";
+import {AuthContext} from '../../../../providers/auth.provider';
+import {AuthActionTypes} from '../../../../providers/auth.actions';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from 'src/components/app/App';
 
-const renderButton = (
-  name: string,
-  onPress?: () => void,
-  disabled: boolean = true,
-) => {
-  return (
-    <Button
-      containerStyle={styles.button}
-      name={name}
-      disabled={disabled}
-      onPress={onPress}
-    />
-  );
-};
+type Props = NativeStackScreenProps<RootStackParamList, 'SettingsScreen'>;
 
-const renderMessage = (message: string) => {
-  return <Text>{message}</Text>;
-};
-
-interface Props {
-  onChangeAuthPressed?: () => void;
-  onChangePinPressed?: () => void;
-}
-
-const SettingsActionsView: React.FC<Props> = (props) => {
+const SettingsActionsView = ({navigation}: Props) => {
   const {dispatch} = useContext(AuthContext);
   const [message, setMessage] = useState('');
 
-    const onChangePinPressed = useCallback(async () => {
-      try {
-        await OneWelcomeSdk.changePin();
-        Alert.alert('Success', 'PIN changed successfully');
-      } catch (e: any) {
-        if (e.message && e.code !== 9006) {
-          Alert.alert('Error', e.message);
-        }
-        if (e.code == '9003') {
-          dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: false});
-        }
+  const onChangePinPressed = useCallback(async () => {
+    try {
+      await OneWelcomeSdk.changePin();
+      Alert.alert('Success', 'PIN changed successfully');
+    } catch (e: any) {
+      if (e.message && e.code !== 9006) {
+        Alert.alert('Error', e.message);
       }
-    }, [dispatch]);
+      if (e.code == '9003') {
+        dispatch({
+          type: AuthActionTypes.AUTH_SET_AUTHORIZATION,
+          payload: false,
+        });
+      }
+    }
+  }, [dispatch]);
 
   return (
     <ContentContainer>
-      {renderMessage(message)}
-      {renderButton(
-        'ENROLL FOR MOBILE AUTH',
-        () => {
+      <Text>{message}</Text>
+      <Button
+        containerStyle={styles.button}
+        name={'ENROLL FOR MOBILE AUTH'}
+        onPress={() => {
           setMessage('');
           enrollMobileAuthentication(setMessage, setMessage);
-        },
-        false,
-      )}
-      {renderButton('CHANGE PIN', onChangePinPressed, false)}
-      {renderButton('CHANGE AUTHENTICATION', props.onChangeAuthPressed, false)}
+        }}
+      />
+      <Button
+        containerStyle={styles.button}
+        name={'CHANGE PIN'}
+        onPress={onChangePinPressed}
+      />
+      <Button
+        containerStyle={styles.button}
+        name={'CHANGE AUTHENTICATION'}
+        onPress={() => {
+          navigation.navigate('ChangeAuthScreen');
+        }}
+      />
     </ContentContainer>
   );
 };

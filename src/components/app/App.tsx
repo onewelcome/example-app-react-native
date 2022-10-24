@@ -13,6 +13,7 @@ import AuthScreen from '../screens/auth/AuthScreen';
 import DevicesView from '../screens/devices/DevicesView';
 import OtpCodeView from '../screens/dashboard/components/OtpCodeView';
 import SettingsActionsView from '../screens/dashboard/components/SettingsActionsView';
+import ChangeAuthView from '../screens/dashboard/components/ChangeAuthView';
 
 export type RootStackParamList = {
   AuthScreen: undefined;
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   DevicesScreen: undefined;
   OTPScreen: undefined;
   SettingsScreen: undefined;
+  ChangeAuthScreen: undefined;
 };
 
 declare global {
@@ -64,6 +66,7 @@ const App: React.FC<{}> = () => {
               name="SettingsScreen"
               component={SettingsActionsView}
             />
+            <Stack.Screen name="ChangeAuthScreen" component={ChangeAuthView} />
           </>
         ) : (
           <>
