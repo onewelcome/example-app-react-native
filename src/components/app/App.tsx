@@ -10,11 +10,17 @@ import DashboardScreen from '../screens/dashboard/DashboardScreen';
 import InfoScreen from '../screens/info/InfoScreen';
 import {AuthContext} from '../../providers/auth.provider';
 import AuthScreen from '../screens/auth/AuthScreen';
+import DevicesView from '../screens/devices/DevicesView';
+import OtpCodeView from '../screens/dashboard/components/OtpCodeView';
+import SettingsActionsView from '../screens/dashboard/components/SettingsActionsView';
 
 export type RootStackParamList = {
   AuthScreen: undefined;
   DashboardScreen: undefined;
   InfoScreen: undefined;
+  DevicesScreen: undefined;
+  OTPScreen: undefined;
+  SettingsScreen: undefined;
 };
 
 declare global {
@@ -50,7 +56,15 @@ const App: React.FC<{}> = () => {
 
       <Stack.Navigator>
         {isAuthorized ? (
-          <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
+          <>
+            <Stack.Screen name="DashboardScreen" component={DashboardScreen} />
+            <Stack.Screen name="DevicesScreen" component={DevicesView} />
+            <Stack.Screen name="OTPScreen" component={OtpCodeView} />
+            <Stack.Screen
+              name="SettingsScreen"
+              component={SettingsActionsView}
+            />
+          </>
         ) : (
           <>
             <Stack.Screen name="AuthScreen" component={AuthScreen} />
