@@ -1,49 +1,30 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, Image, Alert, ScrollView} from 'react-native';
-import {Assets} from '../../../../assets';
-import BackButton from '../../general/BackButton';
+import {StyleSheet, Alert, ScrollView} from 'react-native';
 import SettingsActionsView from './components/SettingsActionsView';
 import DashboardActionsView from './components/DashboardActionsView';
 import ChangeAuthView from './components/ChangeAuthView';
 import OtpCodeView from './components/OtpCodeView';
 import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
 import DevicesView from '../devices/DevicesView';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from 'src/components/app/App';
 
-interface Props {
-  onLogout: () => void;
-}
+type Props = NativeStackScreenProps<RootStackParamList, 'DashboardScreen'>;
 
-const DashboardScreen: React.FC<Props> = (props) => {
+const DashboardScreen = ({}: Props) => {
   const [contentView, setContentView] = useState(
     CONTENT_VIEW.DASHBOARD_ACTIONS,
   );
 
   function onShowAccessToken() {
     OneWelcomeSdk.getAccessToken()
-      .then((token) => Alert.alert('Access Token', token))
+      .then(token => Alert.alert('Access Token', token))
       .catch(() => Alert.alert('Error!', 'Could not get AccessToken!'));
   }
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        {contentView === CONTENT_VIEW.DASHBOARD_ACTIONS ? (
-          <Image style={styles.headerIcon} source={Assets.oneginiIcon} />
-        ) : (
-          <BackButton
-            onPress={() => backButtonHandler(contentView, setContentView)}
-          />
-        )}
-        <Text style={styles.headerTitle}>
-          {TITLE_BY_CONTENT_VIEW.get(contentView)}
-        </Text>
-      </View>
-      {renderContent(
-        contentView,
-        setContentView,
-        props.onLogout,
-        onShowAccessToken,
-      )}
+      {renderContent(contentView, setContentView, onShowAccessToken)}
     </ScrollView>
   );
 };
@@ -90,14 +71,12 @@ const backButtonHandler = (
 const renderContent = (
   currentContentView: CONTENT_VIEW,
   setContentView: (contentView: CONTENT_VIEW) => void,
-  onLogout: () => void,
   onShowAccessToken?: () => void,
 ) => {
   switch (currentContentView) {
     case CONTENT_VIEW.DASHBOARD_ACTIONS:
       return (
         <DashboardActionsView
-          onLogout={onLogout}
           onSettingsPressed={() =>
             setContentView(CONTENT_VIEW.SETTINGS_ACTIONS)
           }
@@ -122,9 +101,7 @@ const renderContent = (
         />
       );
     case CONTENT_VIEW.CHANGE_AUTH:
-      return <ChangeAuthView
-                onLogout={onLogout}
-             />;
+      return <ChangeAuthView />;
     case CONTENT_VIEW.OTP_CODE:
       return <OtpCodeView />;
     case CONTENT_VIEW.DEVICES:
@@ -139,28 +116,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f8f8',
-  },
-  header: {
-    position: 'absolute',
-    height: '8%',
-    top: 0,
-    right: 0,
-    left: 0,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#5f48dd',
-  },
-  headerTitle: {
-    color: '#ffffff',
-    fontSize: 22,
-    fontWeight: '400',
-  },
-  headerIcon: {
-    position: 'absolute',
-    left: '1%',
-    height: '80%',
-    resizeMode: 'contain',
   },
 });
 

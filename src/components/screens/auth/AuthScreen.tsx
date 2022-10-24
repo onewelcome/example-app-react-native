@@ -1,21 +1,18 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {Assets} from '../../../../assets';
 import RegisterButton from './components/RegisterButton';
 import AuthContainer from './components/AuthContainer';
 import Button from '../../general/Button';
-import InfoView from '../info/InfoView';
+import {useNavigation} from '@react-navigation/native';
 
 interface Props {
   onAuthorized?: (success?: boolean) => void;
 }
-
 const AuthScreen: React.FC<Props> = props => {
-  const [isInfoVisible, setIsInfoVisible] = useState(false);
+  const navigation = useNavigation();
 
-  return isInfoVisible ? (
-    <InfoView onFinished={() => setIsInfoVisible(false)} />
-  ) : (
+  return (
     <View style={styles.container}>
       <View style={styles.logoHolder}>
         <Image source={Assets.logo} />
@@ -31,7 +28,7 @@ const AuthScreen: React.FC<Props> = props => {
         <Button
           name="INFO"
           onPress={() => {
-            setIsInfoVisible(true);
+            navigation.navigate('InfoScreen');
           }}
         />
       </View>

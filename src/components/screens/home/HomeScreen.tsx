@@ -1,26 +1,16 @@
-import React, {useContext} from 'react';
-import DashboardScreen from '../dashboard/DashboardScreen';
+import React from 'react';
 import AuthScreen from '../auth/AuthScreen';
-import {AuthContext} from '../../../providers/auth.provider';
-import {AuthActionTypes} from '../../../providers/auth.actions';
+import type {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {RootStackParamList} from 'src/components/app/App';
 
-const HomeScreen: React.FC<{}> = () => {
-  const {
-    state: {authorized: isAuthorized},
-    dispatch,
-  } = useContext(AuthContext);
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
-  return isAuthorized ? (
-    <DashboardScreen
-      onLogout={() =>
-        dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: false})
-      }
-    />
-  ) : (
+const HomeScreen = ({navigation}: Props) => {
+  return (
     <AuthScreen
-      onAuthorized={() =>
-        dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: true})
-      }
+      onAuthorized={() => {
+        navigation.navigate('DashboardScreen');
+      }}
     />
   );
 };

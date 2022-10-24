@@ -10,10 +10,10 @@ const onSingleSingOn = () => {
   OneWelcomeSdk.startSingleSignOn(
     'https://login-mobile.test.onegini.com/personal/dashboard',
   )
-    .then((it) => {
+    .then(it => {
       Linking.openURL(it.url);
     })
-    .catch((error) => {
+    .catch(error => {
       Alert.alert('Error', JSON.stringify(error));
     });
 };
@@ -41,7 +41,7 @@ interface Props {
   onAccessTokenPressed?: () => void;
 }
 
-const DashboardActionsView: React.FC<Props> = (props) => {
+const DashboardActionsView: React.FC<Props> = props => {
   return (
     <ContentContainer>
       <Text style={styles.helloText}>{`Hello user: ${CurrentUser.id}`}</Text>
@@ -54,7 +54,7 @@ const DashboardActionsView: React.FC<Props> = (props) => {
       {renderButton('SINGLE SIGN-ON', () => onSingleSingOn(), false)}
       {renderButton('SETTINGS', props.onSettingsPressed, false)}
       {renderButton('DEREGISTER', () => deregisterUser(props.onLogout), false)}
-      {renderButton('LOGOUT', () => logout(props.onLogout), false)}
+      {renderButton('LOGOUT', () => logout(), false)}
       {renderButton(
         'ACCESS TOKEN',
         () => props.onAccessTokenPressed?.(),
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginVertical: 14,
-    flex:1,
+    flex: 1,
   },
 });
 
