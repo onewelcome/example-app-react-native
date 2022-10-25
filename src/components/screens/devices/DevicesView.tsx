@@ -2,16 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Layout from '../../constants/Layout';
-import {
-  Types,
-} from 'onewelcome-react-native-sdk';
-import { useResources } from '../../../helpers/useResource';
+import {Types} from 'onewelcome-react-native-sdk';
+import {useResources} from '../../../helpers/useResource';
 
 interface RenderDevice {
-    id: string;
-    name: string;
-    application: string;
-    platform: string;
+  id: string;
+  name: string;
+  application: string;
+  platform: string;
 }
 
 //@todo resolve this with more types for resources
@@ -39,10 +37,13 @@ const DevicesView: React.FC<{}> = () => {
   const [devices, setDevices] = useState<RenderDevice[] | undefined>(undefined);
 
   useEffect(() => {
-      if(data){
-          const mappedData = typeof data === 'string' || (data as any) instanceof String ? JSON.parse(data as unknown as string) : data;
-          setDevices(mappedData['devices']);
-      }
+    if (data) {
+      const mappedData =
+        typeof data === 'string' || (data as any) instanceof String
+          ? JSON.parse((data as unknown) as string)
+          : data;
+      setDevices(mappedData['devices']);
+    }
   }, [setDevices, data]);
 
   return (
@@ -70,7 +71,6 @@ const DevicesView: React.FC<{}> = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Layout.window.width * 0.2,
     paddingBottom: '15%',
     paddingHorizontal: '4%',
   },

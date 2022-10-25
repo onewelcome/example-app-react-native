@@ -29,7 +29,7 @@ const DashboardScreen = ({navigation}: Props) => {
         Linking.openURL(it.url);
       })
       .catch(error => {
-        Alert.alert('Error', JSON.stringify(error));
+        Alert.alert(`Error code: ${error.code}`, `${error.message}`);
       });
   };
 
