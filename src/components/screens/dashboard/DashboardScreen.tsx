@@ -1,5 +1,12 @@
-import React, {useContext} from 'react';
-import {StyleSheet, Alert, ScrollView, Text, Linking} from 'react-native';
+import React, {useCallback, useContext} from 'react';
+import {
+  StyleSheet,
+  Alert,
+  ScrollView,
+  Text,
+  Linking,
+  BackHandler,
+} from 'react-native';
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from 'src/components/app/App';
@@ -9,6 +16,7 @@ import {CurrentUser} from '../../../auth/auth';
 import {AuthContext} from '../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../providers/auth.actions';
 import {logout, deregisterUser} from '../../helpers/DashboardHelpers';
+import {useFocusEffect} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'DashboardScreen'>;
 
@@ -33,9 +41,32 @@ const DashboardScreen = ({navigation}: Props) => {
       });
   };
 
-  const onLogout = () => {
+  const onLogout = useCallback(() => {
     dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: false});
-  };
+  }, [dispatch]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert('Log out?', '', [
+          {text: 'Cancel', style: 'cancel', onPress: () => {}},
+          {
+            text: 'Log out',
+            style: 'destructive',
+            onPress: () => onLogout(),
+          },
+        ]);
+        return true;
+      };
+
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        onBackPress,
+      );
+
+      return () => subscription.remove();
+    }, [onLogout]),
+  );
 
   return (
     <ScrollView style={styles.container}>
