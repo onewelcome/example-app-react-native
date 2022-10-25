@@ -2,21 +2,19 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {StyleSheet, Text, View, Linking} from 'react-native';
 import Button from '../../../general/Button';
 import Switch from '../../../general/Switch';
-import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
-import CustomRegistrationChooserView from '../CustomRegistrationChooserView';
+import OneWelcomeSdk, {Events, Types} from 'onewelcome-react-native-sdk';
 import {CurrentUser} from '../../../../auth/auth';
-
-//
+import IdpSelectorModal from './IdpSelectorModal';
 
 interface Props {
   onRegistered?: () => void;
 }
 
-//@todo add providers selector
 const RegisterButton: React.FC<Props> = props => {
   const [isDefaultProvider, setIsDefaultProvider] = useState(true);
   const [isRegistering, setRegistering] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [providers, setProviders] = useState<Types.IdentityProvider[]>([]);
   const [isShownCustomRegistration, setShowCustomRegistration] = useState(
     false,
   );
@@ -81,18 +79,28 @@ const RegisterButton: React.FC<Props> = props => {
     };
   }, [handleCustomRegistration, handleRegistrationURLEvent]);
 
+  useEffect(() => {
+    OneWelcomeSdk.getIdentityProviders().then(identityProviders => {
+      setProviders(identityProviders);
+    });
+  }, []);
+
+  const handleSelectedIdp = (id: string) => {
+    startRegister(id, props.onRegistered);
+  };
+
+  const handleCancelIdpModal = () => {
+    setShowCustomRegistration(false);
+  };
+
   return (
     <View style={styles.container}>
-      {isShownCustomRegistration && !isRegistering ? (
-        <CustomRegistrationChooserView
-          onProviderSelected={idProvider =>
-            startRegister(idProvider, props.onRegistered)
-          }
-          onCancelPressed={() => setShowCustomRegistration(false)}
-        />
-      ) : (
-        <View />
-      )}
+      <IdpSelectorModal
+        visible={isShownCustomRegistration}
+        identityProviders={providers ?? []}
+        onSetSelectedIdp={handleSelectedIdp}
+        onCancel={handleCancelIdpModal}
+      />
       <Button
         name={
           isRegistering
@@ -106,20 +114,13 @@ const RegisterButton: React.FC<Props> = props => {
             ? OneWelcomeSdk.cancelRegistration()
             : isDefaultProvider
             ? startRegister(null, props.onRegistered)
-            : setShowCustomRegistration(!isShownCustomRegistration)
+            : setShowCustomRegistration(true)
         }
       />
       <Switch
         containerStyle={styles.switch}
         label={'USE DEFAULT IDENTITY PROVIDER'}
-        onSwitch={() =>
-          setIsDefaultProvider(previousState => {
-            if (!previousState) {
-              setShowCustomRegistration(false);
-            }
-            return !previousState;
-          })
-        }
+        onSwitch={() => setIsDefaultProvider(!isDefaultProvider)}
         value={isDefaultProvider}
       />
       <Text style={styles.errorText}>{error}</Text>

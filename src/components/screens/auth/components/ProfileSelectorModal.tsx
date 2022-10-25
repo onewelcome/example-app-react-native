@@ -3,7 +3,6 @@ import ModalSelector from 'react-native-modal-selector';
 import {StyleSheet} from 'react-native';
 
 interface Props {
-  profileId?: (success: boolean) => void;
   profiles: {id: string; authenticated: boolean}[];
   selectedProfileId: string;
   setSelectedProfileId: React.Dispatch<React.SetStateAction<string>>;
