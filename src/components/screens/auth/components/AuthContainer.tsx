@@ -7,7 +7,7 @@ import {CurrentUser} from '../../../../auth/auth';
 import {AuthContext} from '../../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import ProfileSelectorModal from './ProfileSelectorModal';
-import AuthenticatorSelectorModal from './AuthenticatorSelectorModal';
+import {useActionSheet} from '@expo/react-native-action-sheet';
 
 interface Props {
   onAuthorized?: (success: boolean) => void;
@@ -20,9 +20,32 @@ const AuthContainer: React.FC<Props> = props => {
     setEnablePreferedAuthenticator,
   ] = useState<boolean>(true);
   const [selectedProfileId, setSelectedProfileId] = useState<string>('');
-  const [showAuthenticatorModal, setShowAuthenticatorModal] = useState<boolean>(
-    false,
-  );
+  const {showActionSheetWithOptions} = useActionSheet();
+
+  const showAuthenticatorsSelector = async (profileId: string) => {
+    const authenticators = await OneWelcomeSdk.getRegisteredAuthenticators(
+      profileId,
+    );
+    const authenticatorNames = authenticators.map(
+      authenticator => authenticator.name,
+    );
+    const options = authenticatorNames.concat(['Cancel']);
+    const cancelButtonIndex = options.length - 1;
+    const message = 'Choose an authenticator to log in with.';
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        message,
+      },
+      (selectedIndex: number | undefined) => {
+        console.log(selectedIndex);
+        if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
+          handleSelectAuthenticator(authenticators[selectedIndex].id);
+        }
+      },
+    );
+  };
 
   const {
     state: {
@@ -79,21 +102,12 @@ const AuthContainer: React.FC<Props> = props => {
   const handleSelectAuthenticator = useCallback(
     async (authenticatorId: string) => {
       authenticateProfile(selectedProfileId, authenticatorId);
-      setShowAuthenticatorModal(false);
     },
     [authenticateProfile, selectedProfileId],
   );
 
   return (
     <View style={styles.container}>
-      <AuthenticatorSelectorModal
-        visible={showAuthenticatorModal}
-        onSelectAuthenticator={handleSelectAuthenticator}
-        profileId={selectedProfileId}
-        onCancel={() => {
-          setShowAuthenticatorModal(false);
-        }}
-      />
       <ProfileSelectorModal
         visible={profiles && profiles.length > 0}
         profiles={profiles ?? []}
@@ -107,7 +121,7 @@ const AuthContainer: React.FC<Props> = props => {
         onPress={() => {
           enablePreferedAuthenticator
             ? authenticateProfile(selectedProfileId)
-            : setShowAuthenticatorModal(true);
+            : showAuthenticatorsSelector(selectedProfileId);
         }}
       />
       <Switch
