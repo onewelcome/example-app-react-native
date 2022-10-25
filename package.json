@@ -23,6 +23,7 @@
   },
   "readmeFilename": "README.md",
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.14.0",
     "@react-native-async-storage/async-storage": "^1.15.17",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
