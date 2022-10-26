@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, Pressable, ViewStyle} from 'react-native';
+import {StyleSheet, Text, Pressable, ViewStyle, TextStyle} from 'react-native';
 
 interface Props {
   name: string;
@@ -8,6 +8,7 @@ interface Props {
   backgroundColor?: string;
   backgroundColorPressed?: string;
   containerStyle?: ViewStyle;
+  textStyle?: TextStyle;
 }
 
 const Button: React.FC<Props> = ({
@@ -17,11 +18,16 @@ const Button: React.FC<Props> = ({
   backgroundColor = '#25b2ff',
   backgroundColorPressed = '#1e8dca',
   containerStyle,
+  textStyle,
 }) => {
   const buttonStyle = {
     ...styles.button,
     ...containerStyle,
     opacity: disabled ? 0.5 : 1,
+  };
+  const buttonTextStyle = {
+    ...styles.text,
+    ...textStyle,
   };
 
   return (
@@ -33,8 +39,9 @@ const Button: React.FC<Props> = ({
         buttonStyle,
       ]}
       disabled={disabled}
-      onPress={() => (disabled ? null : onPress?.())}>
-      <Text style={styles.text}>{name}</Text>
+      onPress={() => (disabled ? null : onPress?.())}
+    >
+      <Text style={buttonTextStyle}>{name}</Text>
     </Pressable>
   );
 };

@@ -6,7 +6,6 @@ import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import {CurrentUser} from '../../../../auth/auth';
 import {AuthContext} from '../../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
-import ProfileSelectorModal from './ProfileSelectorModal';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 
 interface Props {
@@ -22,7 +21,7 @@ const AuthContainer: React.FC<Props> = props => {
   const [selectedProfileId, setSelectedProfileId] = useState<string>('');
   const {showActionSheetWithOptions} = useActionSheet();
 
-  const showAuthenticatorsSelector = async (profileId: string) => {
+  const showAuthenticatorSelector = async (profileId: string) => {
     const authenticators = await OneWelcomeSdk.getRegisteredAuthenticators(
       profileId,
     );
@@ -39,9 +38,28 @@ const AuthContainer: React.FC<Props> = props => {
         message,
       },
       (selectedIndex: number | undefined) => {
-        console.log(selectedIndex);
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
           handleSelectAuthenticator(authenticators[selectedIndex].id);
+        }
+      },
+    );
+  };
+
+  const showProfileSelector = async () => {
+    const profiles = await OneWelcomeSdk.getUserProfiles();
+    const profileIds = profiles.map(profile => profile.profileId);
+    const options = profileIds.concat(['Cancel']);
+    const cancelButtonIndex = options.length - 1;
+    const message = 'Choose a profile.';
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        message,
+      },
+      (selectedIndex: number | undefined) => {
+        if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
+          setSelectedProfileId(profileIds[selectedIndex]);
         }
       },
     );
@@ -108,11 +126,14 @@ const AuthContainer: React.FC<Props> = props => {
 
   return (
     <View style={styles.container}>
-      <ProfileSelectorModal
-        visible={profiles && profiles.length > 0}
-        profiles={profiles ?? []}
-        selectedProfileId={selectedProfileId}
-        setSelectedProfileId={setSelectedProfileId}
+      <Button
+        name={selectedProfileId ? selectedProfileId : 'No registered profile'}
+        disabled={!profiles || profiles.length < 1}
+        containerStyle={styles.profileSelectorButton}
+        textStyle={styles.profileSelectorButtonText}
+        onPress={() => {
+          showProfileSelector();
+        }}
       />
       <Button
         name={enablePreferedAuthenticator ? 'LOG IN' : 'LOG IN WITH ...'}
@@ -121,7 +142,7 @@ const AuthContainer: React.FC<Props> = props => {
         onPress={() => {
           enablePreferedAuthenticator
             ? authenticateProfile(selectedProfileId)
-            : showAuthenticatorsSelector(selectedProfileId);
+            : showAuthenticatorSelector(selectedProfileId);
         }}
       />
       <Switch
@@ -156,6 +177,14 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
+  },
+  profileSelectorButton: {
+    marginTop: 10,
+    backgroundColor: 'white',
+    borderColor: '#777777',
+  },
+  profileSelectorButtonText: {
+    color: '#777777',
   },
 });
 
