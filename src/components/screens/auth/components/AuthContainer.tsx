@@ -160,7 +160,6 @@ const AuthContainer: React.FC<Props> = props => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: '30%',
     width: '100%',
     alignItems: 'center',
   },
