@@ -1,6 +1,5 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import Switch from '../../general/Switch';
 import {Assets} from '../../../../assets';
 import RegisterButton from './components/RegisterButton';
 import AuthContainer from './components/AuthContainer';
@@ -19,12 +18,13 @@ const AuthScreen: React.FC = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ContentContainer containerStyle={styles.contentContainer}>
         <View style={styles.logoContainer}>
           <Image source={Assets.logo} />
           <Text style={styles.logoText}>Example App</Text>
         </View>
+
         <View style={styles.authContainer}>
           <AuthContainer onAuthorized={onAuthorized} />
         </View>
@@ -48,9 +48,9 @@ const styles = StyleSheet.create({
     position: 'relative',
     alignItems: 'center',
   },
-  container: {
+  scrollContainer: {
     flexDirection: 'column',
-    minHeight: '100%',
+    flexGrow: 1,
   },
   contentContainer: {
     flex: 1,
@@ -76,12 +76,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
   },
-  switch: {
-    marginTop: 10,
-    marginBottom: 'auto',
-  },
   infoContainer: {
-    marginTop: 'auto',
     width: '100%',
   },
   errorText: {
