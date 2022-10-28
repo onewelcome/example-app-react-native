@@ -49,17 +49,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    flex: 1,
     flexDirection: 'column',
+    minHeight: '100%',
   },
   contentContainer: {
     flex: 1,
     flexDirection: 'column',
-    height: '100%',
     paddingVertical: 30,
   },
   authContainer: {
-    paddingTop: 20,
+    paddingTop: 50,
   },
   logo: {
     width: '100%',

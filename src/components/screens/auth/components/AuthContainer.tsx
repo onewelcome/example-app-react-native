@@ -180,10 +180,12 @@ const styles = StyleSheet.create({
   profileSelectorButton: {
     marginTop: 10,
     backgroundColor: 'white',
-    borderColor: '#777777',
+    borderColor: '#D0D0D0',
+    borderWidth: 1,
+    borderRadius: 5,
   },
   profileSelectorButtonText: {
-    color: '#777777',
+    color: 'black',
   },
 });
 
