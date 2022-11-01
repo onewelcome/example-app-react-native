@@ -1,9 +1,8 @@
-import React, {useState, useEffect, useRef, useContext} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import ContentContainer from './ContentContainer';
 import Row from '../../../general/Row';
 import Switch from '../../../general/Switch';
-import ModalSelector from 'react-native-modal-selector';
 import {
   registerFingerprintAuthenticator,
   deregisterFingerprintAuthenticator,
@@ -14,6 +13,8 @@ import {
 import {Types} from 'onewelcome-react-native-sdk';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import {AuthContext} from '../../../..//providers/auth.provider';
+import {useActionSheet} from '@expo/react-native-action-sheet';
+import Button from '../../../../components/general/Button';
 
 const emptyRegisteredAuthenticators: Types.Authenticator[] = [
   {id: '0', name: '', isPreferred: true, isRegistered: false, type: ''},
@@ -41,13 +42,37 @@ const ChangeAuthView: React.FC = () => {
   const [preferred, setPreferred] = useState<Types.Authenticator>(
     pinRegisteredAuthenticator,
   );
+  const {showActionSheetWithOptions} = useActionSheet();
 
   const onLogout = () => {
     dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: false});
   };
 
-  // because react-native-modal-selector is broken and calls onChange when unmount
-  const isModalOpen = useRef(false);
+  const showPreferredAuthenticatorSelector = async () => {
+    const authenticatorNames = registeredAuthenticators.map(
+      authenticator => authenticator.name,
+    );
+    const options = authenticatorNames.concat(['Cancel']);
+    const cancelButtonIndex = options.length - 1;
+    const selectorMesssage = 'Choose a preferred authenticator.';
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        message: selectorMesssage,
+      },
+      (selectedIndex: number | undefined) => {
+        if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
+          onPreferredChanged(
+            registeredAuthenticators[selectedIndex],
+            setMessage,
+            setPreferred,
+            setRegisteredAuthenticators,
+          );
+        }
+      },
+    );
+  };
 
   useEffect(() => {
     isFingerprintAuthenticatorRegistered(setFingerprintEnable);
@@ -78,28 +103,15 @@ const ChangeAuthView: React.FC = () => {
       {renderMessage(message)}
       <Row containerStyle={styles.row}>
         <Text style={styles.methodLabel}>Login Method</Text>
-        <ModalSelector
-          data={registeredAuthenticators}
-          initValue={preferred.name}
-          selectedKey={preferred.id}
-          keyExtractor={item => item.id}
-          labelExtractor={item => item.name}
-          selectedItemTextStyle={{fontWeight: '700'}}
-          onModalClose={() => {
-            isModalOpen.current = false;
-          }}
-          onModalOpen={() => {
-            isModalOpen.current = true;
-          }}
-          onChange={option => {
-            if (isModalOpen.current) {
-              onPreferredChanged(
-                option,
-                setMessage,
-                setPreferred,
-                setRegisteredAuthenticators,
-              );
-            }
+        <Button
+          name={preferred.name}
+          disabled={
+            !registeredAuthenticators || registeredAuthenticators.length < 1
+          }
+          containerStyle={styles.authSelectorButton}
+          textStyle={styles.authSelectorButtonText}
+          onPress={() => {
+            showPreferredAuthenticatorSelector();
           }}
         />
       </Row>
@@ -245,6 +257,17 @@ const styles = StyleSheet.create({
   },
   message: {
     margin: 15,
+  },
+  authSelectorButton: {
+    marginTop: 10,
+    backgroundColor: 'white',
+    borderColor: '#D0D0D0',
+    borderWidth: 1,
+    borderRadius: 5,
+    width: undefined,
+  },
+  authSelectorButtonText: {
+    color: 'black',
   },
 });
 
