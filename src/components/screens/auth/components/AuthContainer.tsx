@@ -6,8 +6,7 @@ import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import {CurrentUser} from '../../../../auth/auth';
 import {AuthContext} from '../../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
-import ProfileSelectorModal from './ProfileSelectorModal';
-import AuthenticatorSelectorModal from './AuthenticatorSelectorModal';
+import {useActionSheet} from '@expo/react-native-action-sheet';
 
 interface Props {
   onAuthorized?: (success: boolean) => void;
@@ -20,9 +19,51 @@ const AuthContainer: React.FC<Props> = props => {
     setEnablePreferedAuthenticator,
   ] = useState<boolean>(true);
   const [selectedProfileId, setSelectedProfileId] = useState<string>('');
-  const [showAuthenticatorModal, setShowAuthenticatorModal] = useState<boolean>(
-    false,
-  );
+  const {showActionSheetWithOptions} = useActionSheet();
+
+  const showAuthenticatorSelector = async (profileId: string) => {
+    const authenticators = await OneWelcomeSdk.getRegisteredAuthenticators(
+      profileId,
+    );
+    const authenticatorNames = authenticators.map(
+      authenticator => authenticator.name,
+    );
+    const options = authenticatorNames.concat(['Cancel']);
+    const cancelButtonIndex = options.length - 1;
+    const message = 'Choose an authenticator to log in with.';
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        message,
+      },
+      (selectedIndex: number | undefined) => {
+        if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
+          handleSelectAuthenticator(authenticators[selectedIndex].id);
+        }
+      },
+    );
+  };
+
+  const showProfileSelector = async () => {
+    const profiles = await OneWelcomeSdk.getUserProfiles();
+    const profileIds = profiles.map(profile => profile.profileId);
+    const options = profileIds.concat(['Cancel']);
+    const cancelButtonIndex = options.length - 1;
+    const message = 'Choose a profile.';
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        message,
+      },
+      (selectedIndex: number | undefined) => {
+        if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
+          setSelectedProfileId(profileIds[selectedIndex]);
+        }
+      },
+    );
+  };
 
   const {
     state: {
@@ -79,26 +120,20 @@ const AuthContainer: React.FC<Props> = props => {
   const handleSelectAuthenticator = useCallback(
     async (authenticatorId: string) => {
       authenticateProfile(selectedProfileId, authenticatorId);
-      setShowAuthenticatorModal(false);
     },
     [authenticateProfile, selectedProfileId],
   );
 
   return (
     <View style={styles.container}>
-      <AuthenticatorSelectorModal
-        visible={showAuthenticatorModal}
-        onSelectAuthenticator={handleSelectAuthenticator}
-        profileId={selectedProfileId}
-        onCancel={() => {
-          setShowAuthenticatorModal(false);
+      <Button
+        name={selectedProfileId ? selectedProfileId : 'No registered profile'}
+        disabled={!profiles || profiles.length < 1}
+        containerStyle={styles.profileSelectorButton}
+        textStyle={styles.profileSelectorButtonText}
+        onPress={() => {
+          showProfileSelector();
         }}
-      />
-      <ProfileSelectorModal
-        visible={profiles && profiles.length > 0}
-        profiles={profiles ?? []}
-        selectedProfileId={selectedProfileId}
-        setSelectedProfileId={setSelectedProfileId}
       />
       <Button
         name={enablePreferedAuthenticator ? 'LOG IN' : 'LOG IN WITH ...'}
@@ -107,7 +142,7 @@ const AuthContainer: React.FC<Props> = props => {
         onPress={() => {
           enablePreferedAuthenticator
             ? authenticateProfile(selectedProfileId)
-            : setShowAuthenticatorModal(true);
+            : showAuthenticatorSelector(selectedProfileId);
         }}
       />
       <Switch
@@ -125,7 +160,6 @@ const AuthContainer: React.FC<Props> = props => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: '30%',
     width: '100%',
     alignItems: 'center',
   },
@@ -142,6 +176,16 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 10,
+  },
+  profileSelectorButton: {
+    marginTop: 10,
+    backgroundColor: 'white',
+    borderColor: '#D0D0D0',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  profileSelectorButtonText: {
+    color: 'black',
   },
 });
 

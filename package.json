@@ -23,10 +23,15 @@
   },
   "readmeFilename": "README.md",
   "dependencies": {
+    "@expo/react-native-action-sheet": "^3.14.0",
     "@react-native-async-storage/async-storage": "^1.15.17",
+    "@react-navigation/native": "^6.0.13",
+    "@react-navigation/native-stack": "^6.9.1",
     "onewelcome-react-native-sdk": "https://github.com/onewelcome/sdk-react-native#develop",
     "react": "18.0.0",
-    "react-native": "0.69.2"
+    "react-native": "0.69.2",
+    "react-native-safe-area-context": "^4.4.1",
+    "react-native-screens": "^3.18.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",
@@ -42,7 +47,6 @@
     "eslint": "^7.11.0",
     "jest": "^26.6.0",
     "metro-react-native-babel-preset": "^0.63.0",
-    "react-native-modal-selector": "^2.1.1",
     "react-test-renderer": "16.13.1",
     "typescript": "^4.2.3"
   }
