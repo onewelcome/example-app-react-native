@@ -30,7 +30,6 @@ const RegisterButton: React.FC<Props> = props => {
         message,
       },
       (selectedIndex: number | undefined) => {
-        console.log(selectedIndex);
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
           handleSelectedIdp(providers[selectedIndex].id);
         }
