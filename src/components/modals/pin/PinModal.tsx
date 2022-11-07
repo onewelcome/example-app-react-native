@@ -10,8 +10,6 @@ const getTitle = (flow: Events.PinFlow) => {
   switch (flow) {
     case Events.PinFlow.Create:
       return 'Create Pin';
-    case Events.PinFlow.Change:
-      return 'Change Pin';
     case Events.PinFlow.Authentication:
       return 'Current Pin';
     default:

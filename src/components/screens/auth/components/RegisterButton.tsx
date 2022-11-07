@@ -42,7 +42,6 @@ const RegisterButton: React.FC<Props> = props => {
       switch (event.identityProviderId) {
         case 'qr_registration':
           OneWelcomeSdk.submitCustomRegistrationAction(
-            Events.CustomRegistrationAction.ProvideToken,
             event.identityProviderId,
             'Onegini',
           );
