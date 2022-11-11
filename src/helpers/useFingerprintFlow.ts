@@ -18,27 +18,31 @@ const useFingerprintFlow = () => {
     Events.FingerprintStage.Idle,
   );
 
-  const onStart = () => {
+  const onStart = useCallback(() => {
     setStage(Events.FingerprintStage.Started);
     setActive(true);
     OnewelcomeSdk.submitFingerprintAcceptAuthenticationRequest();
-  };
-  const cancelFlow = () => {
+  }, []);
+  const cancelFlow = useCallback(() => {
     setActive(false);
     setStage(Events.FingerprintStage.Idle);
     onCancelFlow();
-  };
+  }, []);
   const fallbackToPin = () => {
     setActive(false);
     setStage(Events.FingerprintStage.Idle);
     onFallbackToPin();
   };
-  const onFinish = () => {
+  const onFinish = useCallback(() => {
     setActive(false);
     setStage(Events.FingerprintStage.Finished);
-  };
-  const onNextAuthAttempt = () => setStage(Events.FingerprintStage.NextAttempt);
-  const onCaptured = () => setStage(Events.FingerprintStage.Captured);
+  }, []);
+  const onNextAuthAttempt = useCallback(() => {
+    setStage(Events.FingerprintStage.NextAttempt);
+  }, []);
+  const onCaptured = useCallback(() => {
+    setStage(Events.FingerprintStage.Captured);
+  }, []);
 
   const handleNotification = useCallback(
     (event: Events.FingerprintEvent) => {
