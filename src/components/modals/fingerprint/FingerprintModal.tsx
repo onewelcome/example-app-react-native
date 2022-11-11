@@ -3,9 +3,9 @@ import {StyleSheet, View, Modal, Text} from 'react-native';
 import {Events} from 'onewelcome-react-native-sdk';
 import AppColors from '../../constants/AppColors';
 import Button from '../../general/Button';
-import { useFingerprintFlow } from '../../../helpers/useFingerprintFlow';
+import {useFingerprintFlow} from '../../../helpers/useFingerprintFlow';
 
-const MESSAGE_BY_STAGE: Map<Events.FingerprintStage, string> = new Map ([
+const MESSAGE_BY_STAGE: Map<Events.FingerprintStage, string> = new Map([
   [Events.FingerprintStage.Idle, 'Waiting for fingerprint flow trigger...'],
   [Events.FingerprintStage.Started, 'Use Fingerprint Sensor'],
   [Events.FingerprintStage.NextAttempt, 'Try again...'],
@@ -22,19 +22,16 @@ const FingerprintModal: React.FC<{}> = () => {
       transparent={false}
       animationType="fade"
       visible={active}
-      onRequestClose={() => null}>
+      onRequestClose={() => null}
+    >
       <View style={styles.container}>
-        <Text style={styles.title}>
-          {"Confirm with fingerprint"}
-        </Text>
-        <Text style={styles.message}>
-          {message}
-        </Text>
+        <Text style={styles.title}>{'Confirm with fingerprint'}</Text>
+        <Text style={styles.message}>{message}</Text>
         <View style={styles.buttonContainer}>
-          <Button name={"USE PIN CODE"} onPress={() => fallbackToPin()} />
+          <Button name={'USE PIN CODE'} onPress={() => fallbackToPin()} />
         </View>
         <View style={styles.buttonContainer}>
-          <Button name={"CANCEL"} onPress={() => cancelFlow()} />
+          <Button name={'CANCEL'} onPress={() => cancelFlow()} />
         </View>
       </View>
     </Modal>

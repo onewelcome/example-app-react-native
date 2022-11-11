@@ -8,7 +8,7 @@ const enrollMobileAuthentication = (
     .then(() => {
       setSuccessful('Mobile Authentication enabled');
     })
-    .catch((error) => {
+    .catch(error => {
       setError(error.message);
     });
 };
@@ -22,7 +22,7 @@ const handleMobileAuthWithOtp = (
     .then(() => {
       setSuccessful?.('Authentication successful');
     })
-    .catch((error) => {
+    .catch(error => {
       setError?.(error.message);
     });
 };

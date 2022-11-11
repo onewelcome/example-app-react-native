@@ -42,7 +42,7 @@ const DevicesView: React.FC<{}> = () => {
         typeof data === 'string' || (data as any) instanceof String
           ? JSON.parse((data as unknown) as string)
           : data;
-      setDevices(mappedData['devices']);
+      setDevices(mappedData.devices);
     }
   }, [setDevices, data]);
 
