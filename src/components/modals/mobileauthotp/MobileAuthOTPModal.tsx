@@ -34,8 +34,7 @@ const MobileAuthOTPModal: React.FC<{}> = () => {
       transparent={false}
       animationType="fade"
       visible={visible}
-      onRequestClose={() => setVisible(false)}
-    >
+      onRequestClose={() => setVisible(false)}>
       <View style={styles.container}>
         <Text style={styles.title}>{'Mobile Auth OTP'}</Text>
         <Text style={styles.message}>{message}</Text>

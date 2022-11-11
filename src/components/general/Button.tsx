@@ -39,8 +39,7 @@ const Button: React.FC<Props> = ({
         buttonStyle,
       ]}
       disabled={disabled}
-      onPress={() => (disabled ? null : onPress?.())}
-    >
+      onPress={() => (disabled ? null : onPress?.())}>
       <Text style={buttonTextStyle}>{name}</Text>
     </Pressable>
   );

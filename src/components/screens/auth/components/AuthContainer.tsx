@@ -14,10 +14,8 @@ interface Props {
 
 const AuthContainer: React.FC<Props> = props => {
   const [error, setError] = useState<string | null>(null);
-  const [
-    enablePreferedAuthenticator,
-    setEnablePreferedAuthenticator,
-  ] = useState<boolean>(true);
+  const [enablePreferedAuthenticator, setEnablePreferedAuthenticator] =
+    useState<boolean>(true);
   const [selectedProfileId, setSelectedProfileId] = useState<string>('');
   const {showActionSheetWithOptions} = useActionSheet();
 

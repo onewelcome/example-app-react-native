@@ -39,8 +39,7 @@ const PinModal: React.FC<{}> = () => {
       onRequestClose={() => {
         console.log('PIN MODAL: ON REQUEST CLOSE');
         cancelPinFlow();
-      }}
-    >
+      }}>
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <Text style={styles.title}>{title}</Text>

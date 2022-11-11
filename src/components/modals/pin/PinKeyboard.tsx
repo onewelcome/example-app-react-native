@@ -32,8 +32,7 @@ const KeyButton: React.FC<KeyButtonProps> = props => {
     <TouchableOpacity
       activeOpacity={props.hidden ? 1 : 0.7}
       style={style}
-      onPress={() => (!props.hidden ? props.onPress?.(props.item) : null)}
-    >
+      onPress={() => (!props.hidden ? props.onPress?.(props.item) : null)}>
       {!props.hidden && <Text style={styles.keyText}>{props.item}</Text>}
     </TouchableOpacity>
   );

@@ -39,7 +39,7 @@ const DevicesView: React.FC<{}> = () => {
     if (data) {
       const mappedData =
         typeof data === 'string' || (data as any) instanceof String
-          ? JSON.parse((data as unknown) as string)
+          ? JSON.parse(data as unknown as string)
           : data;
       setDevices(mappedData.devices);
     }

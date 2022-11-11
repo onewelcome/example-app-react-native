@@ -22,8 +22,7 @@ const FingerprintModal: React.FC<{}> = () => {
       transparent={false}
       animationType="fade"
       visible={active}
-      onRequestClose={() => null}
-    >
+      onRequestClose={() => null}>
       <View style={styles.container}>
         <Text style={styles.title}>{'Confirm with fingerprint'}</Text>
         <Text style={styles.message}>{message}</Text>

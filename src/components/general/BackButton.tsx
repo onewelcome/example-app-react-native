@@ -29,8 +29,7 @@ const BackButton: React.FC<Props> = ({
     <Pressable
       style={buttonStyle}
       disabled={disabled}
-      onPress={() => (disabled ? null : onPress?.())}
-    >
+      onPress={() => (disabled ? null : onPress?.())}>
       {({pressed}) => (
         <Image
           source={
