@@ -5479,6 +5479,11 @@ progress@^2.0.0:
   resolved "https://registry.npmjs.org/progress/-/progress-2.0.3.tgz"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
+promise-any-polyfill@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/promise-any-polyfill/-/promise-any-polyfill-1.0.1.tgz#563872dd0abd370bfa8039e63980469b4b8b0d53"
+  integrity sha512-51Tj+hOoV3LOeCHItmWBklN9FYkyV53uIIjjzgIchitGneTvl6+ivOxWXhxraeUzzS3YFRpXRPPbv7+KD3NzYQ==
+
 promise@^8.0.3:
   version "8.1.0"
   resolved "https://registry.npmjs.org/promise/-/promise-8.1.0.tgz"
