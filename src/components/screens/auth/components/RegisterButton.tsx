@@ -5,6 +5,7 @@ import Switch from '../../../general/Switch';
 import OneWelcomeSdk, {Events, Types} from 'onewelcome-react-native-sdk';
 import {CurrentUser} from '../../../../auth/auth';
 import {useActionSheet} from '@expo/react-native-action-sheet';
+import {cancelRegistration} from '../../../helpers/RegistrationHelper';
 
 interface Props {
   onRegistered?: () => void;
@@ -117,7 +118,7 @@ const RegisterButton: React.FC<Props> = props => {
         }
         onPress={() =>
           isRegistering
-            ? OneWelcomeSdk.cancelRegistration()
+            ? cancelRegistration()
             : isDefaultProvider
             ? startRegister(null, props.onRegistered)
             : showIdentityProvidersSelector()

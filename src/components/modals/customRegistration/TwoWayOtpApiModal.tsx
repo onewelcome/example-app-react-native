@@ -3,6 +3,7 @@ import {StyleSheet, View, Modal, Text, TextInput} from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Button from '../../general/Button';
 import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
+import {cancelRegistration} from '../../helpers/RegistrationHelper';
 
 const IdProvider = '2-way-otp-api';
 
@@ -75,7 +76,7 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
           <Button
             name={'CANCEL'}
             onPress={() => {
-              OneWelcomeSdk.cancelRegistration();
+              cancelRegistration();
               setVisible(false);
             }}
           />
