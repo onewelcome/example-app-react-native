@@ -31,8 +31,8 @@ export const useSDK = () => {
       await AsyncStorage.setItem('@redirectUri', linkUriString);
       setBuilt(true);
       setRedirectUri(linkUriString);
-    } catch (e) {
-      Alert.alert('Error when starting SDK', JSON.stringify(e));
+    } catch (e: any) {
+      Alert.alert(`Error when starting SDK. Code:${e.code}`, e.message);
       setSdkError(true);
     }
   };

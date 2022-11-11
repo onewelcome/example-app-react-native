@@ -44,7 +44,7 @@ const App: React.FC<{}> = () => {
 
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
-  if (!isBuilt && !isSdkError) {
+  if (!isBuilt || isSdkError) {
     return <SplashScreen />;
   }
 
