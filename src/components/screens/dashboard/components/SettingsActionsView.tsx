@@ -7,7 +7,7 @@ import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import {AuthContext} from '../../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from 'src/components/app/App';
+import type {RootStackParamList} from 'src/components/app/App';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SettingsScreen'>;
 
@@ -23,6 +23,7 @@ const SettingsActionsView = ({navigation}: Props) => {
       if (e.message && e.code !== 9006) {
         Alert.alert('Error', e.message);
       }
+      // eslint-disable-next-line eqeqeq
       if (e.code == '9003') {
         dispatch({
           type: AuthActionTypes.AUTH_SET_AUTHORIZATION,

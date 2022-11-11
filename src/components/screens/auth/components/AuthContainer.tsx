@@ -39,7 +39,10 @@ const AuthContainer: React.FC<Props> = props => {
       },
       (selectedIndex: number | undefined) => {
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
-          handleSelectAuthenticator(authenticators[selectedIndex].id);
+          let authenticator = authenticators[selectedIndex];
+          if (authenticator) {
+            handleSelectAuthenticator(authenticator.id);
+          }
         }
       },
     );
@@ -59,7 +62,7 @@ const AuthContainer: React.FC<Props> = props => {
       },
       (selectedIndex: number | undefined) => {
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
-          setSelectedProfileId(profileIds[selectedIndex]);
+          setSelectedProfileId(profileIds[selectedIndex] ?? '');
         }
       },
     );

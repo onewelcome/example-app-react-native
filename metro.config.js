@@ -5,18 +5,15 @@
  * @format
  */
 
- const path = require('path');
- 
- module.exports = {
-   projectRoot: __dirname,
-   watchFolders: [__dirname],
-   transformer: {
-     getTransformOptions: async () => ({
-       transform: {
-         experimentalImportSupport: false,
-         inlineRequires: true,
-       },
-     }),
-   },
- };
- 
+module.exports = {
+  projectRoot: __dirname,
+  watchFolders: [__dirname],
+  transformer: {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: true,
+      },
+    }),
+  },
+};

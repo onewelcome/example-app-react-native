@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from 'src/components/app/App';
+import type {RootStackParamList} from 'src/components/app/App';
 import Button from '../../../components/general/Button';
 import ContentContainer from './components/ContentContainer';
 import {CurrentUser} from '../../../auth/auth';

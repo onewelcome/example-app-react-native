@@ -1,4 +1,4 @@
-import {AuthState} from './auth.provider';
+import type {AuthState} from './auth.provider';
 import {AuthAction, AuthActionTypes} from './auth.actions';
 
 export const authReducer = (

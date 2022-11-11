@@ -13,8 +13,6 @@ interface Props {
   onSwitch?: (enabled: boolean) => void;
   label: string;
   disabled?: boolean;
-  backgroundColor?: string;
-  backgroundColorPressed?: string;
   containerStyle?: ViewStyle;
   labelStyle?: ViewStyle | TextStyle;
 }
@@ -24,8 +22,6 @@ const Switch: React.FC<Props> = ({
   onSwitch,
   label,
   disabled = false,
-  backgroundColor = '#25b2ff',
-  backgroundColorPressed = '#1e8dca',
   containerStyle,
   labelStyle,
 }) => {

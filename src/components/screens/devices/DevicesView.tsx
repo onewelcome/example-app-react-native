@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import AppColors from '../../constants/AppColors';
-import Layout from '../../constants/Layout';
 import {Types} from 'onewelcome-react-native-sdk';
 import {useResources} from '../../../helpers/useResource';
 

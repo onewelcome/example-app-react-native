@@ -1,11 +1,8 @@
 'use strict';
 
-
 module.exports = {
   dependencies: {
-    'onewelcome-react-native-sdk' : {
-    },
-    '@react-native-async-storage/async-storage' : {
-    }
-  }
-}
+    'onewelcome-react-native-sdk': {},
+    '@react-native-async-storage/async-storage': {},
+  },
+};

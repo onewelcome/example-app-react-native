@@ -35,7 +35,6 @@ const App: React.FC<{}> = () => {
   const {isBuilt, isSdkError, startSDK} = useSDK();
   const {
     state: {authorized: isAuthorized},
-    dispatch,
   } = useContext(AuthContext);
 
   useEffect(() => {
