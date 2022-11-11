@@ -27,11 +27,7 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({children}: AuthProviderProps) {
-  const [state, dispatch] = useReducer(
-    authReducer,
-    initialAuthState,
-    state => state,
-  );
+  const [state, dispatch] = useReducer(authReducer, initialAuthState);
   const value = useMemo(() => ({state, dispatch}), [state, dispatch]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
