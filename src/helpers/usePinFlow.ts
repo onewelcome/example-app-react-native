@@ -183,7 +183,7 @@ const onCancelPinFlow = (flow: Events.PinFlow) => {
       OnewelcomeSdk.cancelPinAuthentication();
       break;
     case Events.PinFlow.Create:
-      OnewelcomeSdk.cancelRegistration();
+      OnewelcomeSdk.cancelPinCreation();
   }
 };
 
