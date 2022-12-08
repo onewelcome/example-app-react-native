@@ -43,7 +43,7 @@ const getRegisteredAuthenticators = async (
   console.log('allAuthenticators: ', JSON.stringify(allAuthenticators));
   console.log('authenticators: ', JSON.stringify(authenticators));
 
-  authenticators.forEach((it) => {
+  authenticators.forEach(it => {
     if (it.isPreferred) {
       preferred(it);
     }
@@ -71,7 +71,10 @@ const setPreferredAuthenticator = async (
   console.log(preferred);
   try {
     const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
-    await OneWelcomeSdk.setPreferredAuthenticator(profile.profileId, preferred.id);
+    await OneWelcomeSdk.setPreferredAuthenticator(
+      profile.profileId,
+      preferred.id,
+    );
     successful(true);
     message('The ' + preferred.name + ' is set');
   } catch (error: any) {

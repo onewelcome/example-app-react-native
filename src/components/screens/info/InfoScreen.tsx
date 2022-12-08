@@ -2,12 +2,11 @@ import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import Button from '../../general/Button';
 import ContentContainer from '../dashboard/components/ContentContainer';
 import AppColors from '../../constants/AppColors';
 import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
 import {useResources} from '../../../helpers/useResource';
-import {RootStackParamList} from 'src/components/app/App';
+import type {RootStackParamList} from 'src/components/app/App';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InfoScreen'>;
 
@@ -40,7 +39,7 @@ const getData = (data: any, key: string) => {
   }
 };
 
-const InfoScreen = ({navigation, route}: Props) => {
+const InfoScreen = ({}: Props) => {
   const [profileError, setProfileError] = useState<string | null>(null);
   const [profileId, setProfileId] = useState<string | null>(null);
 

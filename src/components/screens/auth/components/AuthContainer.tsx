@@ -14,10 +14,8 @@ interface Props {
 
 const AuthContainer: React.FC<Props> = props => {
   const [error, setError] = useState<string | null>(null);
-  const [
-    enablePreferedAuthenticator,
-    setEnablePreferedAuthenticator,
-  ] = useState<boolean>(true);
+  const [enablePreferedAuthenticator, setEnablePreferedAuthenticator] =
+    useState<boolean>(true);
   const [selectedProfileId, setSelectedProfileId] = useState<string>('');
   const {showActionSheetWithOptions} = useActionSheet();
 
@@ -39,7 +37,10 @@ const AuthContainer: React.FC<Props> = props => {
       },
       (selectedIndex: number | undefined) => {
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
-          handleSelectAuthenticator(authenticators[selectedIndex].id);
+          let authenticator = authenticators[selectedIndex];
+          if (authenticator) {
+            handleSelectAuthenticator(authenticator.id);
+          }
         }
       },
     );
@@ -59,7 +60,7 @@ const AuthContainer: React.FC<Props> = props => {
       },
       (selectedIndex: number | undefined) => {
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
-          setSelectedProfileId(profileIds[selectedIndex]);
+          setSelectedProfileId(profileIds[selectedIndex] ?? '');
         }
       },
     );

@@ -1,40 +1,48 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Platform } from 'react-native';
+import {useState, useEffect, useCallback} from 'react';
+import {Platform} from 'react-native';
 import OnewelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
 
-const onCancelFlow = () => Platform.OS === 'android'
-  ? OnewelcomeSdk.submitFingerprintDenyAuthenticationRequest()
-  : null; // iOS handled natively
+const onCancelFlow = () =>
+  Platform.OS === 'android'
+    ? OnewelcomeSdk.submitFingerprintDenyAuthenticationRequest()
+    : null; // iOS handled natively
 
-const onFallbackToPin = () => Platform.OS === 'android'
-  ? OnewelcomeSdk.submitFingerprintFallbackToPin()
-  : null; // iOS handled natively
+const onFallbackToPin = () =>
+  Platform.OS === 'android'
+    ? OnewelcomeSdk.submitFingerprintFallbackToPin()
+    : null; // iOS handled natively
 
 const useFingerprintFlow = () => {
   const [active, setActive] = useState<boolean>(false);
-  const [stage, setStage] = useState<Events.FingerprintStage>(Events.FingerprintStage.Idle);
+  const [stage, setStage] = useState<Events.FingerprintStage>(
+    Events.FingerprintStage.Idle,
+  );
 
-  const onStart = () => {
+  const onStart = useCallback(() => {
     setStage(Events.FingerprintStage.Started);
     setActive(true);
     OnewelcomeSdk.submitFingerprintAcceptAuthenticationRequest();
-  };
-  const cancelFlow = () => {
+  }, []);
+  const cancelFlow = useCallback(() => {
     setActive(false);
-    setStage(Events.FingerprintStage.Idle)
+    setStage(Events.FingerprintStage.Idle);
     onCancelFlow();
-  };
+  }, []);
   const fallbackToPin = () => {
     setActive(false);
-    setStage(Events.FingerprintStage.Idle)
+    setStage(Events.FingerprintStage.Idle);
     onFallbackToPin();
-  }
-  const onFinish = () => {
+  };
+  const onFinish = useCallback(() => {
     setActive(false);
     setStage(Events.FingerprintStage.Finished);
-  }
-  const onNextAuthAttempt = () => setStage(Events.FingerprintStage.NextAttempt);
-  const onCaptured = () => setStage(Events.FingerprintStage.Captured);
+  }, []);
+  const onNextAuthAttempt = useCallback(() => {
+    setStage(Events.FingerprintStage.NextAttempt);
+  }, []);
+  const onCaptured = useCallback(() => {
+    setStage(Events.FingerprintStage.Captured);
+  }, []);
 
   const handleNotification = useCallback(
     (event: Events.FingerprintEvent) => {
@@ -74,6 +82,6 @@ const useFingerprintFlow = () => {
     fallbackToPin,
     cancelFlow,
   };
-}
+};
 
-export {useFingerprintFlow}
+export {useFingerprintFlow};

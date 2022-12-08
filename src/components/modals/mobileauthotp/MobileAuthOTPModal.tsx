@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, Modal, Text, TextInput} from 'react-native';
+import {StyleSheet, View, Modal, Text} from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Button from '../../general/Button';
 import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
@@ -34,8 +34,7 @@ const MobileAuthOTPModal: React.FC<{}> = () => {
       transparent={false}
       animationType="fade"
       visible={visible}
-      onRequestClose={() => setVisible(false)}
-    >
+      onRequestClose={() => setVisible(false)}>
       <View style={styles.container}>
         <Text style={styles.title}>{'Mobile Auth OTP'}</Text>
         <Text style={styles.message}>{message}</Text>

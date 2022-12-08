@@ -35,7 +35,6 @@ const App: React.FC<{}> = () => {
   const {isBuilt, isSdkError, startSDK} = useSDK();
   const {
     state: {authorized: isAuthorized},
-    dispatch,
   } = useContext(AuthContext);
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const App: React.FC<{}> = () => {
 
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
-  if (!isBuilt && !isSdkError) {
+  if (!isBuilt || isSdkError) {
     return <SplashScreen />;
   }
 

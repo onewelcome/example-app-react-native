@@ -22,7 +22,7 @@ interface KeyButtonProps {
   onPress?: (item: string) => void;
 }
 
-const KeyButton: React.FC<KeyButtonProps> = (props) => {
+const KeyButton: React.FC<KeyButtonProps> = props => {
   const style = {
     ...styles.keyContainer,
     ...(props.hidden ? {backgroundColor: 'transparent'} : {}),
@@ -45,10 +45,10 @@ interface PinKeyboardProps {
   onPress?: (item: string) => void;
 }
 
-const PinKeyboard: React.FC<PinKeyboardProps> = (props) => {
+const PinKeyboard: React.FC<PinKeyboardProps> = props => {
   return (
     <View style={styles.container}>
-      {buttons.map((item) => (
+      {buttons.map(item => (
         <KeyButton
           key={item}
           item={item}

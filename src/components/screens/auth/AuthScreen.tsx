@@ -8,7 +8,6 @@ import {useNavigation} from '@react-navigation/native';
 import {AuthActionTypes} from '../../../providers/auth.actions';
 import {AuthContext} from '../../../providers/auth.provider';
 import ContentContainer from '../dashboard/components/ContentContainer';
-import OneginiSdk, {Events} from 'onewelcome-react-native-sdk';
 
 const AuthScreen: React.FC = () => {
   const navigation = useNavigation();

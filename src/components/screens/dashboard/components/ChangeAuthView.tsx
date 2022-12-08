@@ -10,7 +10,7 @@ import {
   getRegisteredAuthenticators,
   setPreferredAuthenticator,
 } from '../../../helpers/FingerprintHelper';
-import {Types} from 'onewelcome-react-native-sdk';
+import type {Types} from 'onewelcome-react-native-sdk';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import {AuthContext} from '../../../..//providers/auth.provider';
 import {useActionSheet} from '@expo/react-native-action-sheet';
@@ -63,12 +63,15 @@ const ChangeAuthView: React.FC = () => {
       },
       (selectedIndex: number | undefined) => {
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
-          onPreferredChanged(
-            registeredAuthenticators[selectedIndex],
-            setMessage,
-            setPreferred,
-            setRegisteredAuthenticators,
-          );
+          const authenticator = registeredAuthenticators[selectedIndex];
+          if (authenticator) {
+            onPreferredChanged(
+              authenticator,
+              setMessage,
+              setPreferred,
+              setRegisteredAuthenticators,
+            );
+          }
         }
       },
     );
@@ -155,7 +158,7 @@ const onPreferredChanged = (
 ) => {
   setPreferredAuthenticator(
     preferred,
-    (success: boolean) => {
+    () => {
       getRegisteredAuthenticators(
         setRegisteredAuthenticators,
         () => {},
@@ -186,6 +189,7 @@ const onSwithFingerprint = (
         );
       },
       (error: any) => {
+        // eslint-disable-next-line eqeqeq
         if (error.code == '9002' || error.code == '9003') {
           logout();
         } else {
@@ -204,6 +208,7 @@ const onSwithFingerprint = (
         );
       },
       (error: any) => {
+        // eslint-disable-next-line eqeqeq
         if (error.code == '9002' || error.code == '9003') {
           logout();
         } else {

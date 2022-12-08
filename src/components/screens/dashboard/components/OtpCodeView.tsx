@@ -19,7 +19,7 @@ const OtpCodeView: React.FC<{}> = () => {
         <Text style={styles.label}>OTP CODE</Text>
         <TextInput
           style={styles.otpCodeInput}
-          onChangeText={(text) => {
+          onChangeText={text => {
             setOtpCode(text);
           }}
         />

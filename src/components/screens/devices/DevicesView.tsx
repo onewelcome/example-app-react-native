@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import AppColors from '../../constants/AppColors';
-import Layout from '../../constants/Layout';
 import {Types} from 'onewelcome-react-native-sdk';
 import {useResources} from '../../../helpers/useResource';
 
@@ -40,9 +39,9 @@ const DevicesView: React.FC<{}> = () => {
     if (data) {
       const mappedData =
         typeof data === 'string' || (data as any) instanceof String
-          ? JSON.parse((data as unknown) as string)
+          ? JSON.parse(data as unknown as string)
           : data;
-      setDevices(mappedData['devices']);
+      setDevices(mappedData.devices);
     }
   }, [setDevices, data]);
 

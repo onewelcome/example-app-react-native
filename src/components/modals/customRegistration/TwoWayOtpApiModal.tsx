@@ -45,8 +45,7 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
       transparent={false}
       animationType="fade"
       visible={visible}
-      onRequestClose={() => setVisible(false)}
-    >
+      onRequestClose={() => setVisible(false)}>
       <View style={styles.container}>
         <Text style={styles.title}>{'2-way-otp-api'}</Text>
         <Text style={styles.cahalangeCode}>{'Cahalange Code: '}</Text>
