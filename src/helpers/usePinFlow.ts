@@ -1,7 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import OnewelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
 import {useProfileStorage} from './useProfileStorage';
-import {PinAuthenticationEvent} from 'onewelcome-react-native-sdk/ts/events';
 
 const usePinFlow = () => {
   const [flow, setFlow] = useState<Events.PinFlow>(Events.PinFlow.Create);
@@ -117,11 +116,7 @@ const usePinFlow = () => {
   const handleCreateConfirmPin = (newPinValue: string) => {
     if (newPinValue.length === pinLength) {
       if (firstPin === newPinValue) {
-        OnewelcomeSdk.submitPinAction(
-          flow,
-          Events.PinAction.ProvidePin,
-          newPinValue,
-        );
+        OnewelcomeSdk.submitPin(flow, newPinValue);
       } else {
         handleError('Pins do not match');
       }
@@ -144,11 +139,7 @@ const usePinFlow = () => {
 
   const handleAuthenticatePin = (newPinValue: string) => {
     if (newPinValue.length === pinLength) {
-      OnewelcomeSdk.submitPinAction(
-        flow,
-        Events.PinAction.ProvidePin,
-        newPinValue,
-      );
+      OnewelcomeSdk.submitPin(flow, newPinValue);
     }
   };
 
@@ -165,7 +156,6 @@ const usePinFlow = () => {
         handleAuthenticatePin(newPinValue);
         break;
       case Events.PinFlow.Create:
-      case Events.PinFlow.Change:
         if (isConfirmMode) {
           handleCreateConfirmPin(newPinValue);
         } else {
@@ -187,7 +177,14 @@ const usePinFlow = () => {
   };
 };
 
-const onCancelPinFlow = (flow: Events.PinFlow) =>
-  OnewelcomeSdk.submitPinAction(flow, Events.PinAction.Cancel, null);
+const onCancelPinFlow = (flow: Events.PinFlow) => {
+  switch (flow) {
+    case Events.PinFlow.Authentication:
+      OnewelcomeSdk.cancelPinAuthentication();
+      break;
+    case Events.PinFlow.Create:
+      OnewelcomeSdk.cancelPinCreation();
+  }
+};
 
 export {usePinFlow};

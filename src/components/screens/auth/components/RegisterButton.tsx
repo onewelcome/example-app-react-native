@@ -5,6 +5,7 @@ import Switch from '../../../general/Switch';
 import OneWelcomeSdk, {Events, Types} from 'onewelcome-react-native-sdk';
 import {CurrentUser} from '../../../../auth/auth';
 import {useActionSheet} from '@expo/react-native-action-sheet';
+import {cancelRegistration} from '../../../helpers/RegistrationHelper';
 
 interface Props {
   onRegistered?: () => void;
@@ -31,7 +32,10 @@ const RegisterButton: React.FC<Props> = props => {
       },
       (selectedIndex: number | undefined) => {
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
-          handleSelectedIdp(providers[selectedIndex].id);
+          let provider = providers[selectedIndex];
+          if (provider) {
+            handleSelectedIdp(provider.id);
+          }
         }
       },
     );
@@ -42,7 +46,6 @@ const RegisterButton: React.FC<Props> = props => {
       switch (event.identityProviderId) {
         case 'qr_registration':
           OneWelcomeSdk.submitCustomRegistrationAction(
-            Events.CustomRegistrationAction.ProvideToken,
             event.identityProviderId,
             'Onegini',
           );
@@ -118,7 +121,7 @@ const RegisterButton: React.FC<Props> = props => {
         }
         onPress={() =>
           isRegistering
-            ? OneWelcomeSdk.cancelRegistration()
+            ? cancelRegistration()
             : isDefaultProvider
             ? startRegister(null, props.onRegistered)
             : showIdentityProvidersSelector()

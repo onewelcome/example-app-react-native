@@ -3,6 +3,7 @@ import {StyleSheet, View, Modal, Text, TextInput} from 'react-native';
 import AppColors from '../../constants/AppColors';
 import Button from '../../general/Button';
 import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
+import {cancelRegistration} from '../../helpers/RegistrationHelper';
 
 const IdProvider = '2-way-otp-api';
 
@@ -19,7 +20,6 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
           switch (event.action) {
             case Events.CustomRegistration.InitRegistration:
               OneWelcomeSdk.submitCustomRegistrationAction(
-                Events.CustomRegistrationAction.ProvideToken,
                 event.identityProviderId,
                 null,
               );
@@ -45,7 +45,8 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
       transparent={false}
       animationType="fade"
       visible={visible}
-      onRequestClose={() => setVisible(false)}>
+      onRequestClose={() => setVisible(false)}
+    >
       <View style={styles.container}>
         <Text style={styles.title}>{'2-way-otp-api'}</Text>
         <Text style={styles.cahalangeCode}>{'Cahalange Code: '}</Text>
@@ -55,7 +56,7 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
           keyboardType={'numeric'}
           maxLength={6}
           style={styles.responseCodeInput}
-          onChangeText={(text) => {
+          onChangeText={text => {
             setResponseCode(text);
           }}
         />
@@ -64,7 +65,6 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
             name={'OK'}
             onPress={() => {
               OneWelcomeSdk.submitCustomRegistrationAction(
-                Events.CustomRegistrationAction.ProvideToken,
                 IdProvider,
                 responseCode,
               );
@@ -76,11 +76,7 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
           <Button
             name={'CANCEL'}
             onPress={() => {
-              OneWelcomeSdk.submitCustomRegistrationAction(
-                Events.CustomRegistrationAction.Cancel,
-                IdProvider,
-                'Cancelled by user',
-              );
+              cancelRegistration();
               setVisible(false);
             }}
           />
