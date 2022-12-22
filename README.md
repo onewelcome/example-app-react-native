@@ -7,7 +7,7 @@ The React Native Example App is using the [Onewelcome React Native SDK](https://
 
 2. Make sure to folow the SDK Configuration and Resolving dependecies sections.
 3. run `yarn android` or `yarn ios`
->**Note** iOS currently does not work natively with m1. You can run it under rosetta2 with `arch -x86_64 yarn ios` 
+>**Note** if you encounter an error `No simulator available with name "iPhone 13"` run the command with a proper simulator, e.g. `yarn ios --simulator="iPhone 14"`
 
 ## SDK Configuration
 
