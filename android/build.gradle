@@ -48,8 +48,7 @@ allprojects {
             }
         }
         google()
-        maven { url 'https://www.jitpack.io' }
-                if (project.hasProperty('onegini_artifactory_user') && project.hasProperty('onegini_artifactory_password')) {
+        if (project.hasProperty('onegini_artifactory_user') && project.hasProperty('onegini_artifactory_password')) {
             maven {
                 url "https://repo.onegini.com/artifactory/onegini-sdk"
                 credentials {
