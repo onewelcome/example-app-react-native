@@ -18,8 +18,7 @@ const deregisterFingerprintAuthenticator = async (
   onError: (error: any) => void,
 ) => {
   try {
-    const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
-    await OneWelcomeSdk.deregisterFingerprintAuthenticator(profile.profileId);
+    await OneWelcomeSdk.deregisterAuthenticator('fingerprint');
     onSuccess();
   } catch (error: any) {
     onError(error);
