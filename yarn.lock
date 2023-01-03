@@ -5623,7 +5623,7 @@ onetime@^5.1.0:
 
 "onewelcome-react-native-sdk@https://github.com/onewelcome/sdk-react-native#develop":
   version "0.6.0"
-  resolved "https://github.com/onewelcome/sdk-react-native#7ff6ec065a794fd3a8e0f09b53d9576568d66e5b"
+  resolved "https://github.com/onewelcome/sdk-react-native#3f88a64e6556ac45e17c52d321227e95baeb2e2a"
 
 open@^6.2.0:
   version "6.4.0"

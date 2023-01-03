@@ -56,9 +56,14 @@ const isFingerprintAuthenticatorRegistered = async (
   returnEnable: (enabled: boolean) => void,
 ) => {
   const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
-  const registered = await OneWelcomeSdk.isFingerprintAuthenticatorRegistered(
+  const registeredAuthenticators = await OneWelcomeSdk.getRegisteredAuthenticators(
     profile.profileId,
   );
+  const registered = registeredAuthenticators.some(
+    authenticator =>
+      authenticator.id == 'fingerprint' && authenticator.isRegistered,
+  );
+
   returnEnable(registered);
 };
 
