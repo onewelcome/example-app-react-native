@@ -47,16 +47,21 @@ const ChangeAuthView: React.FC = () => {
   };
 
   const updateAuthenticators = async () => {
-    isFingerprintAuthenticatorRegistered(setFingerprintEnable);
-    getAllAuthenticators(
-      setRegisteredAuthenticators,
-      setAllAuthenticators,
-      setPreferredAuthenticator,
-    );
+    try {
+      await isFingerprintAuthenticatorRegistered(setFingerprintEnable);
+      await getAllAuthenticators(
+        setRegisteredAuthenticators,
+        setAllAuthenticators,
+        setPreferredAuthenticator,
+      );
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   useEffect(() => {
     updateAuthenticators();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const showPreferredAuthenticatorSelector = async () => {
@@ -78,10 +83,10 @@ const ChangeAuthView: React.FC = () => {
           if (authenticator) {
             try {
               await setPreferredAuthenticatorSdk(authenticator, setMessage);
-              await updateAuthenticators();
             } catch (err) {
               handleError(err);
             }
+            await updateAuthenticators();
           }
         }
       },
@@ -109,14 +114,13 @@ const ChangeAuthView: React.FC = () => {
     try {
       if (enabled) {
         await OneWelcomeSdk.registerAuthenticator(authenticatorId);
-        await updateAuthenticators();
       } else {
         await OneWelcomeSdk.deregisterAuthenticator(authenticatorId);
-        await updateAuthenticators();
       }
     } catch (err) {
       handleError(err);
     }
+    await updateAuthenticators();
   };
 
   const handleError = (error: any) => {
