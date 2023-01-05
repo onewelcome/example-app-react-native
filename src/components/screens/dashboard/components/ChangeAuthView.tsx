@@ -5,7 +5,7 @@ import Row from '../../../general/Row';
 import Switch from '../../../general/Switch';
 import {
   getAllAuthenticators,
-  setPreferredAuthenticator,
+  setPreferredAuthenticator as setPreferredAuthenticatorSdk,
 } from '../../../helpers/AuthenticatorHelper';
 import {isFingerprintAuthenticatorRegistered} from '../../../helpers/FingerprintHelper';
 import type {Types} from 'onewelcome-react-native-sdk';
@@ -13,7 +13,7 @@ import {AuthActionTypes} from '../../../../providers/auth.actions';
 import {AuthContext} from '../../../..//providers/auth.provider';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import Button from '../../../../components/general/Button';
-import OneginiSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 
 const emptyRegisteredAuthenticators: Types.Authenticator[] = [
   {id: '0', name: '', isPreferred: true, isRegistered: false, type: ''},
@@ -38,9 +38,8 @@ const ChangeAuthView: React.FC = () => {
   const [allAuthenticators, setAllAuthenticators] = useState<
     Types.Authenticator[]
   >(emptyRegisteredAuthenticators);
-  const [preferred, setPreferred] = useState<Types.Authenticator>(
-    pinRegisteredAuthenticator,
-  );
+  const [preferredAuthenticator, setPreferredAuthenticator] =
+    useState<Types.Authenticator>(pinRegisteredAuthenticator);
   const {showActionSheetWithOptions} = useActionSheet();
 
   const logout = () => {
@@ -52,7 +51,7 @@ const ChangeAuthView: React.FC = () => {
     getAllAuthenticators(
       setRegisteredAuthenticators,
       setAllAuthenticators,
-      setPreferred,
+      setPreferredAuthenticator,
     );
   };
 
@@ -78,7 +77,7 @@ const ChangeAuthView: React.FC = () => {
           const authenticator = registeredAuthenticators[selectedIndex];
           if (authenticator) {
             try {
-              await setPreferredAuthenticator(authenticator, setMessage);
+              await setPreferredAuthenticatorSdk(authenticator, setMessage);
               await updateAuthenticators();
             } catch (err) {
               handleError(err);
@@ -109,10 +108,10 @@ const ChangeAuthView: React.FC = () => {
   ) => {
     try {
       if (enabled) {
-        await OneginiSdk.registerAuthenticator(authenticatorId);
+        await OneWelcomeSdk.registerAuthenticator(authenticatorId);
         await updateAuthenticators();
       } else {
-        await OneginiSdk.deregisterAuthenticator(authenticatorId);
+        await OneWelcomeSdk.deregisterAuthenticator(authenticatorId);
         await updateAuthenticators();
       }
     } catch (err) {
@@ -138,7 +137,7 @@ const ChangeAuthView: React.FC = () => {
       <Row containerStyle={styles.row}>
         <Text style={styles.methodLabel}>Login Method</Text>
         <Button
-          name={preferred.name}
+          name={preferredAuthenticator.name}
           disabled={
             !registeredAuthenticators || registeredAuthenticators.length < 1
           }

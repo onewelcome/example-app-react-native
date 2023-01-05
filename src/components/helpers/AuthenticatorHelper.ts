@@ -32,7 +32,9 @@ const setPreferredAuthenticator = async (
       profile.profileId,
       preferred.id,
     );
-    setMessage('The ' + preferred.name + ' is set');
+    setMessage(
+      `The Authenticator ${preferred.name} is now set as the default authentication method`,
+    );
   } catch (error: any) {
     setMessage(error.message);
   }
