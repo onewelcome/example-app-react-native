@@ -3,7 +3,7 @@ import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
 const getAllAuthenticators = async (
   setRegisteredAuthenticators: (authenticators: Types.Authenticator[]) => void,
   setAllAuthenticators: (authenticators: Types.Authenticator[]) => void,
-  setPreferred: (authenticator: Types.Authenticator) => void,
+  setPreferredAuthenticator: (authenticator: Types.Authenticator) => void,
 ) => {
   const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
   const registeredAuthenticators =
@@ -15,14 +15,14 @@ const getAllAuthenticators = async (
 
   registeredAuthenticators.forEach(it => {
     if (it.isPreferred) {
-      setPreferred(it);
+      setPreferredAuthenticator(it);
     }
   });
   setRegisteredAuthenticators(registeredAuthenticators);
   setAllAuthenticators(allAuthenticators);
 };
 
-const setPreferredAuthenticator = async (
+const setPreferredAuthenticatorSdk = async (
   preferred: Types.Authenticator,
   setMessage: (msg: string) => void,
 ) => {
@@ -40,4 +40,4 @@ const setPreferredAuthenticator = async (
   }
 };
 
-export {getAllAuthenticators, setPreferredAuthenticator};
+export {getAllAuthenticators, setPreferredAuthenticatorSdk};

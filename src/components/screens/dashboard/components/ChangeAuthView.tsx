@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, {useState, useEffect, useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import ContentContainer from './ContentContainer';
@@ -5,7 +6,7 @@ import Row from '../../../general/Row';
 import Switch from '../../../general/Switch';
 import {
   getAllAuthenticators,
-  setPreferredAuthenticator as setPreferredAuthenticatorSdk,
+  setPreferredAuthenticatorSdk,
 } from '../../../helpers/AuthenticatorHelper';
 import {isFingerprintAuthenticatorRegistered} from '../../../helpers/FingerprintHelper';
 import type {Types} from 'onewelcome-react-native-sdk';
@@ -127,8 +128,14 @@ const ChangeAuthView: React.FC = () => {
     if (!error) {
       return;
     }
-    // eslint-disable-next-line eqeqeq
-    if (error.code == '9002' || error.code == '9003') {
+    // TODO: Move this into a helper so we can use it everwhere.
+    if (
+      error.code == '8012' ||
+      error.code == '9002' ||
+      error.code == '9003' ||
+      error.code == '9010' ||
+      error.code == '10012'
+    ) {
       logout();
     } else {
       setMessage(error.message);
