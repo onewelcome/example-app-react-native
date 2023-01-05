@@ -4,17 +4,16 @@ import ContentContainer from './ContentContainer';
 import Row from '../../../general/Row';
 import Switch from '../../../general/Switch';
 import {
-  registerFingerprintAuthenticator,
-  deregisterFingerprintAuthenticator,
-  isFingerprintAuthenticatorRegistered,
-  getRegisteredAuthenticators,
+  getAllAuthenticators,
   setPreferredAuthenticator,
-} from '../../../helpers/FingerprintHelper';
+} from '../../../helpers/AuthenticatorHelper';
+import {isFingerprintAuthenticatorRegistered} from '../../../helpers/FingerprintHelper';
 import type {Types} from 'onewelcome-react-native-sdk';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import {AuthContext} from '../../../..//providers/auth.provider';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import Button from '../../../../components/general/Button';
+import OneginiSdk from 'onewelcome-react-native-sdk';
 
 const emptyRegisteredAuthenticators: Types.Authenticator[] = [
   {id: '0', name: '', isPreferred: true, isRegistered: false, type: ''},
@@ -31,7 +30,7 @@ const pinRegisteredAuthenticator: Types.Authenticator = {
 const ChangeAuthView: React.FC = () => {
   const {dispatch} = useContext(AuthContext);
 
-  const [isFigerprintEnable, setFingerprintEnable] = useState(false);
+  const [isfingerprintEnable, setFingerprintEnable] = useState(false);
   const [message, setMessage] = useState('');
   const [registeredAuthenticators, setRegisteredAuthenticators] = useState<
     Types.Authenticator[]
@@ -44,9 +43,22 @@ const ChangeAuthView: React.FC = () => {
   );
   const {showActionSheetWithOptions} = useActionSheet();
 
-  const onLogout = () => {
+  const logout = () => {
     dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: false});
   };
+
+  const updateAuthenticators = async () => {
+    isFingerprintAuthenticatorRegistered(setFingerprintEnable);
+    getAllAuthenticators(
+      setRegisteredAuthenticators,
+      setAllAuthenticators,
+      setPreferred,
+    );
+  };
+
+  useEffect(() => {
+    updateAuthenticators();
+  }, []);
 
   const showPreferredAuthenticatorSelector = async () => {
     const authenticatorNames = registeredAuthenticators.map(
@@ -61,43 +73,62 @@ const ChangeAuthView: React.FC = () => {
         cancelButtonIndex,
         message: selectorMesssage,
       },
-      (selectedIndex: number | undefined) => {
+      async (selectedIndex: number | undefined) => {
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
           const authenticator = registeredAuthenticators[selectedIndex];
           if (authenticator) {
-            onPreferredChanged(
-              authenticator,
-              setMessage,
-              setPreferred,
-              setRegisteredAuthenticators,
-            );
+            try {
+              await setPreferredAuthenticator(authenticator, setMessage);
+              updateAuthenticators();
+            } catch (err) {
+              handleError(err);
+            }
           }
         }
       },
     );
   };
 
-  useEffect(() => {
-    isFingerprintAuthenticatorRegistered(setFingerprintEnable);
-    getRegisteredAuthenticators(
-      setRegisteredAuthenticators,
-      setAllAuthenticators,
-      setPreferred,
-    );
-  }, []);
-
-  const hasFingerprintAuthenticator =
-    allAuthenticators.findIndex(
-      auth =>
-        auth.name.toUpperCase() === 'TOUCHID' ||
-        auth.name.toUpperCase() === 'FINGERPRINT',
-    ) > -1;
+  const fingerprintAuthenticatorId = allAuthenticators.find(
+    auth =>
+      auth.name.toUpperCase() === 'TOUCHID' ||
+      auth.name.toUpperCase() === 'FINGERPRINT',
+  )?.id;
 
   const renderMessage = (msg: string) => {
     if (msg !== '') {
       return <Text style={styles.message}>{msg}</Text>;
     } else {
       return;
+    }
+  };
+
+  const onSwitchFingerprint = async (
+    enabled: boolean,
+    authenticatorId: string,
+  ) => {
+    try {
+      if (enabled) {
+        await OneginiSdk.registerAuthenticator(authenticatorId);
+        await updateAuthenticators();
+      } else {
+        await OneginiSdk.deregisterAuthenticator(authenticatorId);
+        await updateAuthenticators();
+      }
+    } catch (err) {
+      handleError(err);
+    }
+  };
+
+  const handleError = (error: any) => {
+    if (!error) {
+      return;
+    }
+    // eslint-disable-next-line eqeqeq
+    if (error.code == '9002' || error.code == '9003') {
+      logout();
+    } else {
+      setMessage(error.message);
     }
   };
 
@@ -127,96 +158,20 @@ const ChangeAuthView: React.FC = () => {
           value={true}
           disabled={true}
         />
-        {hasFingerprintAuthenticator && (
+        {fingerprintAuthenticatorId !== undefined && (
           <Switch
             containerStyle={styles.fingerprintSwitchContainer}
             labelStyle={styles.switchLabel}
             label={'Fingerprint'}
             onSwitch={(enabled: boolean) =>
-              onSwithFingerprint(
-                enabled,
-                setFingerprintEnable,
-                setMessage,
-                setRegisteredAuthenticators,
-                setPreferred,
-                onLogout,
-              )
+              onSwitchFingerprint(enabled, fingerprintAuthenticatorId)
             }
-            value={isFigerprintEnable}
+            value={isfingerprintEnable}
           />
         )}
       </View>
     </ContentContainer>
   );
-};
-
-const onPreferredChanged = (
-  preferred: Types.Authenticator,
-  setMessage: (msg: string) => void,
-  setPreferred: (authenticator: Types.Authenticator) => void,
-  setRegisteredAuthenticators: (authenticators: Types.Authenticator[]) => void,
-) => {
-  setPreferredAuthenticator(
-    preferred,
-    () => {
-      getRegisteredAuthenticators(
-        setRegisteredAuthenticators,
-        () => {},
-        setPreferred,
-      );
-    },
-    setMessage,
-  );
-};
-
-const onSwithFingerprint = (
-  isEnable: boolean,
-  setFigerprintEnable: (enabled: boolean) => void,
-  setMessage: (message: string) => void,
-  setRegisteredAuthenticators: (authenticators: Types.Authenticator[]) => void,
-  setPreferred: (authenticator: Types.Authenticator) => void,
-  logout: () => void,
-) => {
-  setMessage('');
-  if (isEnable) {
-    registerFingerprintAuthenticator(
-      () => {
-        setFigerprintEnable(true);
-        getRegisteredAuthenticators(
-          setRegisteredAuthenticators,
-          () => {},
-          setPreferred,
-        );
-      },
-      (error: any) => {
-        // eslint-disable-next-line eqeqeq
-        if (error.code == '9002' || error.code == '9003') {
-          logout();
-        } else {
-          setMessage(error.message);
-        }
-      },
-    );
-  } else {
-    deregisterFingerprintAuthenticator(
-      () => {
-        setFigerprintEnable(false);
-        getRegisteredAuthenticators(
-          setRegisteredAuthenticators,
-          () => {},
-          setPreferred,
-        );
-      },
-      (error: any) => {
-        // eslint-disable-next-line eqeqeq
-        if (error.code == '9002' || error.code == '9003') {
-          logout();
-        } else {
-          setMessage(error.message);
-        }
-      },
-    );
-  }
 };
 
 const styles = StyleSheet.create({
