@@ -79,7 +79,7 @@ const ChangeAuthView: React.FC = () => {
           if (authenticator) {
             try {
               await setPreferredAuthenticator(authenticator, setMessage);
-              updateAuthenticators();
+              await updateAuthenticators();
             } catch (err) {
               handleError(err);
             }
