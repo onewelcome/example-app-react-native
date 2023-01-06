@@ -128,7 +128,7 @@ const ChangeAuthView: React.FC = () => {
     if (!error) {
       return;
     }
-    // TODO: Move this into a helper so we can use it everwhere.
+    // RNP-137 TODO: Move this into a helper so we can use it everwhere.
     if (
       error.code == '8012' ||
       error.code == '9002' ||
