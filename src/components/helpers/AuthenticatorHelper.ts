@@ -13,11 +13,13 @@ const getAllAuthenticators = async (
     profile.profileId,
   );
 
-  registeredAuthenticators.forEach(it => {
-    if (it.isPreferred) {
-      setPreferredAuthenticator(it);
-    }
-  });
+  const prefferedAuthenticator = registeredAuthenticators.find(
+    it => it.isPreferred,
+  );
+
+  if (prefferedAuthenticator) {
+    setPreferredAuthenticator(prefferedAuthenticator);
+  }
   setRegisteredAuthenticators(registeredAuthenticators);
   setAllAuthenticators(allAuthenticators);
 };
