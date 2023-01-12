@@ -1,20 +1,19 @@
+/* eslint-disable eqeqeq */
 import React, {useState, useEffect, useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import ContentContainer from './ContentContainer';
 import Row from '../../../general/Row';
 import Switch from '../../../general/Switch';
 import {
-  registerFingerprintAuthenticator,
-  deregisterFingerprintAuthenticator,
-  isFingerprintAuthenticatorRegistered,
-  getRegisteredAuthenticators,
-  setPreferredAuthenticator,
-} from '../../../helpers/FingerprintHelper';
-import type {Types} from 'onewelcome-react-native-sdk';
+  getAllAuthenticators,
+  setPreferredAuthenticatorSdk,
+} from '../../../helpers/AuthenticatorHelper';
+import {isBiometricAuthenticatorRegistered} from '../../../helpers/BiometricHelper';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import {AuthContext} from '../../../..//providers/auth.provider';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import Button from '../../../../components/general/Button';
+import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
 
 const emptyRegisteredAuthenticators: Types.Authenticator[] = [
   {id: '0', name: '', isPreferred: true, isRegistered: false, type: ''},
@@ -31,7 +30,7 @@ const pinRegisteredAuthenticator: Types.Authenticator = {
 const ChangeAuthView: React.FC = () => {
   const {dispatch} = useContext(AuthContext);
 
-  const [isFigerprintEnable, setFingerprintEnable] = useState(false);
+  const [isBiometricEnable, setBiometricEnable] = useState(false);
   const [message, setMessage] = useState('');
   const [registeredAuthenticators, setRegisteredAuthenticators] = useState<
     Types.Authenticator[]
@@ -39,14 +38,31 @@ const ChangeAuthView: React.FC = () => {
   const [allAuthenticators, setAllAuthenticators] = useState<
     Types.Authenticator[]
   >(emptyRegisteredAuthenticators);
-  const [preferred, setPreferred] = useState<Types.Authenticator>(
-    pinRegisteredAuthenticator,
-  );
+  const [preferredAuthenticator, setPreferredAuthenticator] =
+    useState<Types.Authenticator>(pinRegisteredAuthenticator);
   const {showActionSheetWithOptions} = useActionSheet();
 
-  const onLogout = () => {
+  const logout = () => {
     dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: false});
   };
+
+  const updateAuthenticators = async () => {
+    try {
+      setBiometricEnable(await isBiometricAuthenticatorRegistered());
+      await getAllAuthenticators(
+        setRegisteredAuthenticators,
+        setAllAuthenticators,
+        setPreferredAuthenticator,
+      );
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  useEffect(() => {
+    updateAuthenticators();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const showPreferredAuthenticatorSelector = async () => {
     const authenticatorNames = registeredAuthenticators.map(
@@ -61,37 +77,25 @@ const ChangeAuthView: React.FC = () => {
         cancelButtonIndex,
         message: selectorMesssage,
       },
-      (selectedIndex: number | undefined) => {
+      async (selectedIndex: number | undefined) => {
         if (selectedIndex !== undefined && selectedIndex < options.length - 1) {
           const authenticator = registeredAuthenticators[selectedIndex];
           if (authenticator) {
-            onPreferredChanged(
-              authenticator,
-              setMessage,
-              setPreferred,
-              setRegisteredAuthenticators,
-            );
+            try {
+              await setPreferredAuthenticatorSdk(authenticator, setMessage);
+            } catch (err) {
+              handleError(err);
+            }
+            await updateAuthenticators();
           }
         }
       },
     );
   };
 
-  useEffect(() => {
-    isFingerprintAuthenticatorRegistered(setFingerprintEnable);
-    getRegisteredAuthenticators(
-      setRegisteredAuthenticators,
-      setAllAuthenticators,
-      setPreferred,
-    );
-  }, []);
-
-  const hasFingerprintAuthenticator =
-    allAuthenticators.findIndex(
-      auth =>
-        auth.name.toUpperCase() === 'TOUCHID' ||
-        auth.name.toUpperCase() === 'FINGERPRINT',
-    ) > -1;
+  const biometricAuthenticatorId = allAuthenticators.find(auth =>
+    Object.values<string>(Types.BiometricAuthenticatorIds).includes(auth.id),
+  )?.id;
 
   const renderMessage = (msg: string) => {
     if (msg !== '') {
@@ -101,13 +105,47 @@ const ChangeAuthView: React.FC = () => {
     }
   };
 
+  const onSwitchBiometric = async (
+    enabled: boolean,
+    authenticatorId: string,
+  ) => {
+    try {
+      if (enabled) {
+        await OneWelcomeSdk.registerAuthenticator(authenticatorId);
+      } else {
+        await OneWelcomeSdk.deregisterAuthenticator(authenticatorId);
+      }
+    } catch (err) {
+      handleError(err);
+    }
+    await updateAuthenticators();
+  };
+
+  const handleError = (error: any) => {
+    if (!error) {
+      return;
+    }
+    // RNP-137 TODO: Move this into a helper so we can use it everywhere.
+    if (
+      error.code == '8012' ||
+      error.code == '9002' ||
+      error.code == '9003' ||
+      error.code == '9010' ||
+      error.code == '10012'
+    ) {
+      logout();
+    } else {
+      setMessage(error.message);
+    }
+  };
+
   return (
     <ContentContainer containerStyle={styles.container}>
       {renderMessage(message)}
       <Row containerStyle={styles.row}>
         <Text style={styles.methodLabel}>Login Method</Text>
         <Button
-          name={preferred.name}
+          name={preferredAuthenticator.name}
           disabled={
             !registeredAuthenticators || registeredAuthenticators.length < 1
           }
@@ -127,96 +165,20 @@ const ChangeAuthView: React.FC = () => {
           value={true}
           disabled={true}
         />
-        {hasFingerprintAuthenticator && (
+        {biometricAuthenticatorId !== undefined && (
           <Switch
-            containerStyle={styles.fingerprintSwitchContainer}
+            containerStyle={styles.biometricSwitchContainer}
             labelStyle={styles.switchLabel}
-            label={'Fingerprint'}
+            label={'Biometric'}
             onSwitch={(enabled: boolean) =>
-              onSwithFingerprint(
-                enabled,
-                setFingerprintEnable,
-                setMessage,
-                setRegisteredAuthenticators,
-                setPreferred,
-                onLogout,
-              )
+              onSwitchBiometric(enabled, biometricAuthenticatorId)
             }
-            value={isFigerprintEnable}
+            value={isBiometricEnable}
           />
         )}
       </View>
     </ContentContainer>
   );
-};
-
-const onPreferredChanged = (
-  preferred: Types.Authenticator,
-  setMessage: (msg: string) => void,
-  setPreferred: (authenticator: Types.Authenticator) => void,
-  setRegisteredAuthenticators: (authenticators: Types.Authenticator[]) => void,
-) => {
-  setPreferredAuthenticator(
-    preferred,
-    () => {
-      getRegisteredAuthenticators(
-        setRegisteredAuthenticators,
-        () => {},
-        setPreferred,
-      );
-    },
-    setMessage,
-  );
-};
-
-const onSwithFingerprint = (
-  isEnable: boolean,
-  setFigerprintEnable: (enabled: boolean) => void,
-  setMessage: (message: string) => void,
-  setRegisteredAuthenticators: (authenticators: Types.Authenticator[]) => void,
-  setPreferred: (authenticator: Types.Authenticator) => void,
-  logout: () => void,
-) => {
-  setMessage('');
-  if (isEnable) {
-    registerFingerprintAuthenticator(
-      () => {
-        setFigerprintEnable(true);
-        getRegisteredAuthenticators(
-          setRegisteredAuthenticators,
-          () => {},
-          setPreferred,
-        );
-      },
-      (error: any) => {
-        // eslint-disable-next-line eqeqeq
-        if (error.code == '9002' || error.code == '9003') {
-          logout();
-        } else {
-          setMessage(error.message);
-        }
-      },
-    );
-  } else {
-    deregisterFingerprintAuthenticator(
-      () => {
-        setFigerprintEnable(false);
-        getRegisteredAuthenticators(
-          setRegisteredAuthenticators,
-          () => {},
-          setPreferred,
-        );
-      },
-      (error: any) => {
-        // eslint-disable-next-line eqeqeq
-        if (error.code == '9002' || error.code == '9003') {
-          logout();
-        } else {
-          setMessage(error.message);
-        }
-      },
-    );
-  }
 };
 
 const styles = StyleSheet.create({
@@ -252,7 +214,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#d7d7d7',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  fingerprintSwitchContainer: {
+  biometricSwitchContainer: {
     paddingTop: 10,
   },
   switchLabel: {
