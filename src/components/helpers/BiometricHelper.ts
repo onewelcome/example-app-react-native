@@ -1,8 +1,6 @@
 import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
 
-const isBiometricAuthenticatorRegistered = async (
-  returnEnable: (enabled: boolean) => void,
-) => {
+const isBiometricAuthenticatorRegistered = async (): Promise<boolean> => {
   const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
   const registeredAuthenticators =
     await OneWelcomeSdk.getRegisteredAuthenticators(profile.id);
@@ -14,7 +12,7 @@ const isBiometricAuthenticatorRegistered = async (
       ),
   );
 
-  returnEnable(registered);
+  return registered;
 };
 
 export {isBiometricAuthenticatorRegistered};

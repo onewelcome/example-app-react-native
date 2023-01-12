@@ -48,7 +48,7 @@ const ChangeAuthView: React.FC = () => {
 
   const updateAuthenticators = async () => {
     try {
-      await isBiometricAuthenticatorRegistered(setBiometricEnable);
+      setBiometricEnable(await isBiometricAuthenticatorRegistered());
       await getAllAuthenticators(
         setRegisteredAuthenticators,
         setAllAuthenticators,
