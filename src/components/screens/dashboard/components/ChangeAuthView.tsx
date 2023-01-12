@@ -8,13 +8,12 @@ import {
   getAllAuthenticators,
   setPreferredAuthenticatorSdk,
 } from '../../../helpers/AuthenticatorHelper';
-import {isFingerprintAuthenticatorRegistered} from '../../../helpers/FingerprintHelper';
-import type {Types} from 'onewelcome-react-native-sdk';
+import {isBiometricAuthenticatorRegistered} from '../../../helpers/BiometricHelper';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import {AuthContext} from '../../../..//providers/auth.provider';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import Button from '../../../../components/general/Button';
-import OneWelcomeSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
 
 const emptyRegisteredAuthenticators: Types.Authenticator[] = [
   {id: '0', name: '', isPreferred: true, isRegistered: false, type: ''},
@@ -31,7 +30,7 @@ const pinRegisteredAuthenticator: Types.Authenticator = {
 const ChangeAuthView: React.FC = () => {
   const {dispatch} = useContext(AuthContext);
 
-  const [isFingerprintEnable, setFingerprintEnable] = useState(false);
+  const [isBiometricEnable, setBiometricEnable] = useState(false);
   const [message, setMessage] = useState('');
   const [registeredAuthenticators, setRegisteredAuthenticators] = useState<
     Types.Authenticator[]
@@ -49,7 +48,7 @@ const ChangeAuthView: React.FC = () => {
 
   const updateAuthenticators = async () => {
     try {
-      await isFingerprintAuthenticatorRegistered(setFingerprintEnable);
+      await isBiometricAuthenticatorRegistered(setBiometricEnable);
       await getAllAuthenticators(
         setRegisteredAuthenticators,
         setAllAuthenticators,
@@ -94,10 +93,8 @@ const ChangeAuthView: React.FC = () => {
     );
   };
 
-  const fingerprintAuthenticatorId = allAuthenticators.find(
-    auth =>
-      auth.name.toUpperCase() === 'TOUCHID' ||
-      auth.name.toUpperCase() === 'FINGERPRINT',
+  const biometricAuthenticatorId = allAuthenticators.find(auth =>
+    Object.values<string>(Types.BiometricAuthenticatorIds).includes(auth.id),
   )?.id;
 
   const renderMessage = (msg: string) => {
@@ -108,7 +105,7 @@ const ChangeAuthView: React.FC = () => {
     }
   };
 
-  const onSwitchFingerprint = async (
+  const onSwitchBiometric = async (
     enabled: boolean,
     authenticatorId: string,
   ) => {
@@ -168,15 +165,15 @@ const ChangeAuthView: React.FC = () => {
           value={true}
           disabled={true}
         />
-        {fingerprintAuthenticatorId !== undefined && (
+        {biometricAuthenticatorId !== undefined && (
           <Switch
-            containerStyle={styles.fingerprintSwitchContainer}
+            containerStyle={styles.biometricSwitchContainer}
             labelStyle={styles.switchLabel}
-            label={'Fingerprint'}
+            label={'Biometric'}
             onSwitch={(enabled: boolean) =>
-              onSwitchFingerprint(enabled, fingerprintAuthenticatorId)
+              onSwitchBiometric(enabled, biometricAuthenticatorId)
             }
-            value={isFingerprintEnable}
+            value={isBiometricEnable}
           />
         )}
       </View>
@@ -217,7 +214,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#d7d7d7',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  fingerprintSwitchContainer: {
+  biometricSwitchContainer: {
     paddingTop: 10,
   },
   switchLabel: {

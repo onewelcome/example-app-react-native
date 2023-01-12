@@ -1,6 +1,6 @@
-import OneWelcomeSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
 
-const isFingerprintAuthenticatorRegistered = async (
+const isBiometricAuthenticatorRegistered = async (
   returnEnable: (enabled: boolean) => void,
 ) => {
   const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
@@ -9,11 +9,12 @@ const isFingerprintAuthenticatorRegistered = async (
   const registered = registeredAuthenticators.some(
     authenticator =>
       authenticator.isRegistered &&
-      (authenticator.name.toUpperCase() === 'TOUCHID' ||
-        authenticator.name.toUpperCase() === 'FINGERPRINT'),
+      Object.values<string>(Types.BiometricAuthenticatorIds).includes(
+        authenticator.id,
+      ),
   );
 
   returnEnable(registered);
 };
 
-export {isFingerprintAuthenticatorRegistered};
+export {isBiometricAuthenticatorRegistered};
