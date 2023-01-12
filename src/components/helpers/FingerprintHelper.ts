@@ -5,7 +5,7 @@ const isFingerprintAuthenticatorRegistered = async (
 ) => {
   const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
   const registeredAuthenticators =
-    await OneWelcomeSdk.getRegisteredAuthenticators(profile.profileId);
+    await OneWelcomeSdk.getRegisteredAuthenticators(profile.id);
   const registered = registeredAuthenticators.some(
     authenticator =>
       authenticator.isRegistered &&

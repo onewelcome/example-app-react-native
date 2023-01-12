@@ -48,7 +48,7 @@ const AuthContainer: React.FC<Props> = props => {
 
   const showProfileSelector = async () => {
     const profiles = await OneWelcomeSdk.getUserProfiles();
-    const profileIds = profiles.map(profile => profile.profileId);
+    const profileIds = profiles.map(profile => profile.id);
     const options = profileIds.concat(['Cancel']);
     const cancelButtonIndex = options.length - 1;
     const message = 'Choose a profile.';
@@ -79,7 +79,7 @@ const AuthContainer: React.FC<Props> = props => {
       const userProfiles = await OneWelcomeSdk.getUserProfiles();
       dispatch({
         type: AuthActionTypes.AUTH_SET_PROFILE_IDS,
-        payload: userProfiles?.map(({profileId}) => profileId) || [],
+        payload: userProfiles?.map(({id}) => id) || [],
       });
     } catch (e: any) {
       setError(e.message);

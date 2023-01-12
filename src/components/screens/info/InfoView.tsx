@@ -18,7 +18,7 @@ const getProfileData = async (
     const profiles = await OneWelcomeSdk.getUserProfiles();
 
     if (profiles[0]) {
-      setProfileId(profiles[0].profileId);
+      setProfileId(profiles[0].id);
     } else {
       setProfileError('No profiles registered.');
     }

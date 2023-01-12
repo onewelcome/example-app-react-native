@@ -73,7 +73,7 @@ const RegisterButton: React.FC<Props> = props => {
 
     try {
       const profile = await OneWelcomeSdk.registerUser(providerId, ['read']);
-      CurrentUser.id = profile.profileId;
+      CurrentUser.id = profile.id;
       setRegistering(false);
       onRegisterSuccess?.();
     } catch (e: any) {

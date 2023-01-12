@@ -7,10 +7,10 @@ const getAllAuthenticators = async (
 ) => {
   const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
   const registeredAuthenticators =
-    await OneWelcomeSdk.getRegisteredAuthenticators(profile.profileId);
+    await OneWelcomeSdk.getRegisteredAuthenticators(profile.id);
 
   const allAuthenticators = await OneWelcomeSdk.getAllAuthenticators(
-    profile.profileId,
+    profile.id,
   );
 
   const prefferedAuthenticator = registeredAuthenticators.find(
@@ -30,10 +30,7 @@ const setPreferredAuthenticatorSdk = async (
 ) => {
   try {
     const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
-    await OneWelcomeSdk.setPreferredAuthenticator(
-      profile.profileId,
-      preferred.id,
-    );
+    await OneWelcomeSdk.setPreferredAuthenticator(profile.id, preferred.id);
     setMessage(
       `The Authenticator ${preferred.name} is now set as the default authentication method`,
     );
