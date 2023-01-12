@@ -31,7 +31,7 @@ const pinRegisteredAuthenticator: Types.Authenticator = {
 const ChangeAuthView: React.FC = () => {
   const {dispatch} = useContext(AuthContext);
 
-  const [isfingerprintEnable, setFingerprintEnable] = useState(false);
+  const [isFingerprintEnable, setFingerprintEnable] = useState(false);
   const [message, setMessage] = useState('');
   const [registeredAuthenticators, setRegisteredAuthenticators] = useState<
     Types.Authenticator[]
@@ -128,7 +128,7 @@ const ChangeAuthView: React.FC = () => {
     if (!error) {
       return;
     }
-    // RNP-137 TODO: Move this into a helper so we can use it everwhere.
+    // RNP-137 TODO: Move this into a helper so we can use it everywhere.
     if (
       error.code == '8012' ||
       error.code == '9002' ||
@@ -176,7 +176,7 @@ const ChangeAuthView: React.FC = () => {
             onSwitch={(enabled: boolean) =>
               onSwitchFingerprint(enabled, fingerprintAuthenticatorId)
             }
-            value={isfingerprintEnable}
+            value={isFingerprintEnable}
           />
         )}
       </View>
