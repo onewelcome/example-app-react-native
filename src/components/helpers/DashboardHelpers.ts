@@ -15,7 +15,7 @@ const deregisterUser = async (onDeregisterSuccess?: () => void) => {
     const profiles = await OneWelcomeSdk.getUserProfiles();
 
     if (profiles[0]) {
-      await OneWelcomeSdk.deregisterUser(profiles[0].profileId);
+      await OneWelcomeSdk.deregisterUser(profiles[0].id);
       onDeregisterSuccess?.();
     } else {
       Alert.alert('error', 'Not found logged in user.');

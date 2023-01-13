@@ -6,7 +6,7 @@ const registerFingerprintAuthenticator = async (
 ) => {
   try {
     const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
-    await OneWelcomeSdk.registerFingerprintAuthenticator(profile.profileId);
+    await OneWelcomeSdk.registerFingerprintAuthenticator(profile.id);
     onSuccess();
   } catch (error: any) {
     onError(error);
@@ -19,7 +19,7 @@ const deregisterFingerprintAuthenticator = async (
 ) => {
   try {
     const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
-    await OneWelcomeSdk.deregisterFingerprintAuthenticator(profile.profileId);
+    await OneWelcomeSdk.deregisterFingerprintAuthenticator(profile.id);
     onSuccess();
   } catch (error: any) {
     onError(error);
@@ -33,11 +33,11 @@ const getRegisteredAuthenticators = async (
 ) => {
   const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
   const authenticators = await OneWelcomeSdk.getRegisteredAuthenticators(
-    profile.profileId,
+    profile.id,
   );
 
   const allAuthenticators = await OneWelcomeSdk.getAllAuthenticators(
-    profile.profileId,
+    profile.id,
   );
 
   console.log('allAuthenticators: ', JSON.stringify(allAuthenticators));
@@ -56,9 +56,8 @@ const isFingerprintAuthenticatorRegistered = async (
   returnEnable: (enabled: boolean) => void,
 ) => {
   const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
-  const registeredAuthenticators = await OneWelcomeSdk.getRegisteredAuthenticators(
-    profile.profileId,
-  );
+  const registeredAuthenticators =
+    await OneWelcomeSdk.getRegisteredAuthenticators(profile.id);
   const registered = registeredAuthenticators.some(
     authenticator =>
       authenticator.id == 'fingerprint' && authenticator.isRegistered,
@@ -76,10 +75,7 @@ const setPreferredAuthenticator = async (
   console.log(preferred);
   try {
     const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
-    await OneWelcomeSdk.setPreferredAuthenticator(
-      profile.profileId,
-      preferred.id,
-    );
+    await OneWelcomeSdk.setPreferredAuthenticator(profile.id, preferred.id);
     successful(true);
     message('The ' + preferred.name + ' is set');
   } catch (error: any) {
