@@ -1,6 +1,7 @@
 import {useContext} from 'react';
 import {AuthActionTypes} from '../providers/auth.actions';
 import {AuthContext} from '../providers/auth.provider';
+import {SDKError} from 'onewelcome-react-native-sdk';
 
 export const useErrorHandling = () => {
   const {dispatch} = useContext(AuthContext);
@@ -15,11 +16,11 @@ export const useErrorHandling = () => {
     }
 
     if (
-      error.code == '8012' ||
-      error.code == '9002' ||
-      error.code == '9003' ||
-      error.code == '9010' ||
-      error.code == '10012'
+      error.code === SDKError.NoProfileAuthenticated ||
+      error.code === SDKError.DeviceDeregistered ||
+      error.code === SDKError.UserDeregistered ||
+      error.code === SDKError.UserNotAuthenticated ||
+      error.code === SDKError.DeviceNotAuthenticated
     ) {
       logout();
     }
