@@ -23,14 +23,11 @@ export const useSDK = () => {
     console.log('startsdk');
     try {
       await OneWelcomeSdk.startClient(config);
-      const linkUriResult = await OneWelcomeSdk.getRedirectUri();
-      const linkUriString = linkUriResult.redirectUri.substring(
-        0,
-        linkUriResult.redirectUri.indexOf(':'),
-      );
-      await AsyncStorage.setItem('@redirectUri', linkUriString);
+      const uri = await OneWelcomeSdk.getRedirectUri();
+      const uriPrefix = uri.substring(0, uri.indexOf(':'));
+      await AsyncStorage.setItem('@redirectUri', uriPrefix);
       setBuilt(true);
-      setRedirectUri(linkUriString);
+      setRedirectUri(uriPrefix);
     } catch (e: any) {
       Alert.alert(`Error when starting SDK. Code:${e.code}`, e.message);
       setSdkError(true);
