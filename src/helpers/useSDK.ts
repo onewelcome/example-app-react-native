@@ -23,14 +23,9 @@ export const useSDK = () => {
     console.log('startsdk');
     try {
       await OneWelcomeSdk.startClient(config);
-      const linkUriResult = await OneWelcomeSdk.getRedirectUri();
-      const linkUriString = linkUriResult.redirectUri.substring(
-        0,
-        linkUriResult.redirectUri.indexOf(':'),
-      );
-      await AsyncStorage.setItem('@redirectUri', linkUriString);
+      const uri = await OneWelcomeSdk.getRedirectUri();
       setBuilt(true);
-      setRedirectUri(linkUriString);
+      setRedirectUri(uri);
     } catch (e: any) {
       Alert.alert(`Error when starting SDK. Code:${e.code}`, e.message);
       setSdkError(true);
@@ -39,7 +34,7 @@ export const useSDK = () => {
 
   useEffect(() => {
     const handleOpenURL = (event: {url: string}) => {
-      if (event.url.substring(0, event.url.indexOf(':')) === redirectUri) {
+      if (event.url.startsWith(redirectUri)) {
         OneWelcomeSdk.handleRegistrationCallback(event.url);
       }
     };
