@@ -9,7 +9,8 @@ import java.util.List;
 public class ReactNativeConfig implements OneginiReactNativeConfig {
 
   public List<ReactNativeIdentityProvider> getIdentityProviders() {
-    return Arrays.asList(new ReactNativeIdentityProvider("2-way-otp-api", true),
+    return Arrays.asList(
+        new ReactNativeIdentityProvider("2-way-otp-api", true),
         new ReactNativeIdentityProvider("qr_registration", false));
   }
 }
