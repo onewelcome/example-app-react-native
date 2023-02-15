@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import {Assets} from '../../../../assets';
 import RegisterButton from './components/RegisterButton';
 import AuthContainer from './components/AuthContainer';
