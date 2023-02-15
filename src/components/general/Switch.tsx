@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Switch as RNSwitch,
-  ViewStyle,
-  TextStyle,
-} from 'react-native';
+import {View, StyleSheet, Text, ViewStyle, TextStyle} from 'react-native';
+import AppColors from '../constants/AppColors';
+import {Switch as PaperSwitch} from 'react-native-paper';
 
 interface Props {
   value: boolean;
@@ -38,11 +33,9 @@ const Switch: React.FC<Props> = ({
   return (
     <View style={containerStyles}>
       <Text style={labelStyles}>{label}</Text>
-      <RNSwitch
+      <PaperSwitch
         style={styles.switch}
-        trackColor={{false: '#c6c6c6', true: '#9dddff'}}
-        thumbColor={value ? '#11aeff' : '#f4f3f4'}
-        ios_backgroundColor="#c6c6c6"
+        color={AppColors.primary}
         onValueChange={onSwitch}
         value={value}
         disabled={disabled}
