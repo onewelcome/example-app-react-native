@@ -21,10 +21,8 @@ const AuthScreen: React.FC = () => {
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ContentContainer containerStyle={styles.contentContainer}>
         <View style={styles.logoContainer}>
-          <Image source={Assets.logo} />
-          <Text style={styles.logoText}>Example App</Text>
+          <Image source={Assets.logo} style={styles.logo} />
         </View>
-
         <View style={styles.authContainer}>
           <AuthContainer onAuthorized={onAuthorized} />
         </View>
@@ -46,14 +44,14 @@ const AuthScreen: React.FC = () => {
 const styles = StyleSheet.create({
   logoContainer: {
     position: 'relative',
-    alignItems: 'center',
+    flex: 1,
   },
   scrollContainer: {
     flexDirection: 'column',
     flexGrow: 1,
   },
   contentContainer: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'column',
     paddingVertical: 30,
   },
