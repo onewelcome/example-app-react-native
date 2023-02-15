@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, Pressable, ViewStyle, TextStyle} from 'react-native';
+import AppColors from '../constants/AppColors';
 
 interface Props {
   name: string;
@@ -15,8 +16,8 @@ const Button: React.FC<Props> = ({
   name,
   onPress,
   disabled = false,
-  backgroundColor = '#25b2ff',
-  backgroundColorPressed = '#1e8dca',
+  backgroundColor = AppColors.primary,
+  backgroundColorPressed = AppColors.primaryBackgroundHover,
   containerStyle,
   textStyle,
 }) => {
