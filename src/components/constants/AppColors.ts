@@ -1,9 +1,4 @@
 export default {
-  red: '#ff6060',
-  white: '#ffffff',
-  blue: '#25b2ff',
-  black: '#000000',
-  gray: 'gray',
   textDefault: '#0F0F1E',
   dimmed: '#6F6F76',
   thinLines: '#C3C3C7',
@@ -19,4 +14,5 @@ export default {
   warning: '#FF6105',
   info: '#003B5E',
   success: '#008A28',
+  pureWhite: '#FFFFFF',
 };
