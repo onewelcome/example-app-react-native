@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
+import AppColors from '../../../constants/AppColors';
 
 interface Props {
   containerStyle?: ViewStyle;
@@ -19,7 +20,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     flex: 1,
-    backgroundColor: '#ffffff',
     paddingHorizontal: '12%',
   },
 });

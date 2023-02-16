@@ -3,8 +3,9 @@ import {Modal, StyleSheet, Text, View} from 'react-native';
 import {Events} from 'onewelcome-react-native-sdk';
 import PinInput from './PinInput';
 import PinKeyboard from './PinKeyboard';
-import Button from '../../general/Button';
 import {usePinFlow} from '../../../helpers/usePinFlow';
+import AppColors from '../../constants/AppColors';
+import {Button} from 'react-native-paper';
 
 const getTitle = (flow: Events.PinFlow) => {
   switch (flow) {
@@ -43,10 +44,13 @@ const PinModal: React.FC<{}> = () => {
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <Text style={styles.title}>{title}</Text>
-          <PinInput
-            currentPinLength={pin.length}
-            requiredPinLength={pinLength}
-          />
+          <View style={styles.pinBulletsContainer}>
+            <Text style={styles.subText}>Please enter your PIN code</Text>
+            <PinInput
+              currentPinLength={pin.length}
+              requiredPinLength={pinLength}
+            />
+          </View>
           {error && <Text style={styles.error}>{error}</Text>}
         </View>
         <View style={styles.bottomContainer}>
@@ -54,11 +58,13 @@ const PinModal: React.FC<{}> = () => {
             pinLength={pin.length}
             onPress={newKey => provideNewPinKey(newKey)}
           />
-          <Button
-            name={'Cancel'}
-            containerStyle={styles.buttonStyle}
-            onPress={() => cancelPinFlow()}
-          />
+          <View style={styles.cancelWrapper}>
+            <Button
+              mode="outlined"
+              children={'Cancel'}
+              onPress={() => cancelPinFlow()}
+            />
+          </View>
         </View>
       </View>
     </Modal>
@@ -66,12 +72,19 @@ const PinModal: React.FC<{}> = () => {
 };
 
 const styles = StyleSheet.create({
+  subText: {
+    fontSize: 18,
+    fontWeight: '500',
+    marginBottom: 30,
+  },
+  pinBulletsContainer: {
+    marginTop: '20%',
+  },
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#cacaca',
+    backgroundColor: AppColors.backgroundElevated,
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 20,
   },
   topContainer: {
@@ -81,24 +94,30 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     marginTop: '10%',
+    color: AppColors.textDefault,
   },
   error: {
     marginTop: '8%',
     fontSize: 22,
-    color: '#c82d2d',
+    color: AppColors.error,
     textAlign: 'center',
   },
   bottomContainer: {
     flex: 1,
-    width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: 20,
   },
-  buttonStyle: {
-    backgroundColor: '#2aa4dd',
-    width: '80%',
+  cancelWrapper: {
     marginTop: 20,
+  },
+  cancelButton: {
+    backgroundColor: AppColors.pureWhite,
+    color: AppColors.textDefault,
+    paddingHorizontal: 40,
+    borderColor: AppColors.primary,
+    borderWidth: 2,
+    borderRadius: 50,
   },
 });
 

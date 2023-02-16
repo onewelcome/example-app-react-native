@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useCallback, useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Switch from '../../../general/Switch';
-import Button from '../../../general/Button';
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import {CurrentUser} from '../../../../auth/auth';
 import {AuthContext} from '../../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import {useActionSheet} from '@expo/react-native-action-sheet';
+import AppColors from '../../../constants/AppColors';
+import {Button} from 'react-native-paper';
 
 interface Props {
   onAuthorized?: (success: boolean) => void;
@@ -128,26 +129,29 @@ const AuthContainer: React.FC<Props> = props => {
   return (
     <View style={styles.container}>
       <Button
-        name={selectedProfileId ? selectedProfileId : 'No registered profile'}
+        children={
+          selectedProfileId ? selectedProfileId : 'No registered profile'
+        }
         disabled={!profiles || profiles.length < 1}
-        containerStyle={styles.profileSelectorButton}
-        textStyle={styles.profileSelectorButtonText}
+        textColor={AppColors.textDefault}
+        style={styles.profileSelectorButtonContainer}
         onPress={() => {
           showProfileSelector();
         }}
       />
       <Button
-        name={enablePreferedAuthenticator ? 'LOG IN' : 'LOG IN WITH ...'}
+        mode="contained"
         disabled={!profiles || profiles.length < 1}
-        containerStyle={styles.button}
         onPress={() => {
           enablePreferedAuthenticator
             ? authenticateProfile(selectedProfileId)
             : showAuthenticatorSelector(selectedProfileId);
-        }}
-      />
+        }}>
+        {enablePreferedAuthenticator ? 'Log in' : 'Log in with ...'}
+      </Button>
+
       <Switch
-        label={'USE PREFERRED AUTHENTICATOR'}
+        label={'Use preferred authenticator'}
         onSwitch={() => {
           setEnablePreferedAuthenticator(!enablePreferedAuthenticator);
         }}
@@ -170,23 +174,25 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 10,
     fontSize: 15,
-    color: '#c82d2d',
+    color: AppColors.error,
   },
   modal: {
     width: '100%',
   },
   button: {
     marginTop: 10,
+    paddingHorizontal: 40,
   },
   profileSelectorButton: {
-    marginTop: 10,
-    backgroundColor: 'white',
-    borderColor: '#D0D0D0',
-    borderWidth: 1,
-    borderRadius: 5,
+    backgroundColor: AppColors.pureWhite,
+    paddingHorizontal: 20,
   },
-  profileSelectorButtonText: {
-    color: 'black',
+  profileSelectorButtonContainer: {
+    borderWidth: 1,
+    borderColor: AppColors.thinLines,
+    borderRadius: 5,
+    backgroundColor: AppColors.pureWhite,
+    marginBottom: 10,
   },
 });
 

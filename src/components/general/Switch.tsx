@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   label: {
     fontSize: 15,
     fontWeight: '400',
-    color: '#777777',
+    color: AppColors.textDefault,
   },
   switch: {
     transform: [{scale: 0.7}],

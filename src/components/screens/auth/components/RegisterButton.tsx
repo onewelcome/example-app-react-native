@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {StyleSheet, Text, View, Linking} from 'react-native';
-import Button from '../../../general/Button';
 import Switch from '../../../general/Switch';
 import OneWelcomeSdk, {Events, Types} from 'onewelcome-react-native-sdk';
 import {CurrentUser} from '../../../../auth/auth';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {cancelRegistration} from '../../../helpers/RegistrationHelper';
+import {Button} from 'react-native-paper';
 
 interface Props {
   onRegistered?: () => void;
@@ -112,24 +112,23 @@ const RegisterButton: React.FC<Props> = props => {
   return (
     <View style={styles.container}>
       <Button
-        name={
-          isRegistering
-            ? 'CANCEL'
-            : isDefaultProvider
-            ? 'REGISTER'
-            : 'REGISTER WITH...'
-        }
+        mode="contained"
         onPress={() =>
           isRegistering
             ? cancelRegistration()
             : isDefaultProvider
             ? startRegister(null, props.onRegistered)
             : showIdentityProvidersSelector()
-        }
-      />
+        }>
+        {isRegistering
+          ? 'Cancel'
+          : isDefaultProvider
+          ? 'Register'
+          : 'Register with...'}
+      </Button>
       <Switch
         containerStyle={styles.switch}
-        label={'USE DEFAULT IDENTITY PROVIDER'}
+        label={'Use default identity provider'}
         onSwitch={() => setIsDefaultProvider(!isDefaultProvider)}
         value={isDefaultProvider}
       />
@@ -139,6 +138,9 @@ const RegisterButton: React.FC<Props> = props => {
 };
 
 const styles = StyleSheet.create({
+  button: {
+    paddingHorizontal: 40,
+  },
   container: {
     flex: 1,
     alignItems: 'center',

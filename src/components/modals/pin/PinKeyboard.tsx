@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import AppColors from '../../constants/AppColors';
 
 const buttons = [
   '1',
@@ -72,14 +73,13 @@ const styles = StyleSheet.create({
     maxWidth: '32%',
     height: '24%',
     margin: 2,
-    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
   },
   keyText: {
     fontSize: 28,
     fontWeight: '500',
-    color: '#2aa4dd',
+    color: AppColors.dimmed,
   },
 });
 

@@ -12,8 +12,9 @@ import {isBiometricAuthenticatorRegistered} from '../../../helpers/BiometricHelp
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import {AuthContext} from '../../../..//providers/auth.provider';
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import Button from '../../../../components/general/Button';
 import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
+import AppColors from '../../../constants/AppColors';
+import {Button} from 'react-native-paper';
 
 const emptyRegisteredAuthenticators: Types.Authenticator[] = [
   {id: '0', name: '', isPreferred: true, isRegistered: false, type: ''},
@@ -143,21 +144,21 @@ const ChangeAuthView: React.FC = () => {
     <ContentContainer containerStyle={styles.container}>
       {renderMessage(message)}
       <Row containerStyle={styles.row}>
-        <Text style={styles.methodLabel}>Login Method</Text>
+        <Text style={styles.methodLabel}>Login Method:</Text>
         <Button
-          name={preferredAuthenticator.name}
+          children={preferredAuthenticator.name}
           disabled={
             !registeredAuthenticators || registeredAuthenticators.length < 1
           }
-          containerStyle={styles.authSelectorButton}
-          textStyle={styles.authSelectorButtonText}
+          style={styles.authSelectorButton}
+          textColor={AppColors.textDefault}
           onPress={() => {
             showPreferredAuthenticatorSelector();
           }}
         />
       </Row>
       <View style={styles.authenticatorsHolder}>
-        <Text style={styles.authenticatorsLabel}>Possible authenticators:</Text>
+        <Text style={styles.authenticatorsLabel}>Authenticators:</Text>
         <Switch
           containerStyle={styles.pinSwitchContainer}
           labelStyle={styles.switchLabel}
@@ -191,20 +192,13 @@ const styles = StyleSheet.create({
     marginTop: 0,
   },
   methodLabel: {
-    color: '#1e8dca',
     fontSize: 22,
     fontWeight: '500',
-  },
-  methodText: {
-    color: '#777777',
-    fontSize: 22,
-    fontWeight: '400',
   },
   authenticatorsHolder: {
     marginTop: '25%',
   },
   authenticatorsLabel: {
-    color: '#1e8dca',
     fontSize: 20,
     fontWeight: '500',
     marginBottom: 20,
@@ -213,6 +207,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: '#d7d7d7',
     borderBottomWidth: StyleSheet.hairlineWidth,
+    justifyContent: 'flex-start',
   },
   biometricSwitchContainer: {
     paddingTop: 10,
@@ -220,18 +215,18 @@ const styles = StyleSheet.create({
   switchLabel: {
     fontSize: 20,
     fontWeight: '500',
-    color: '#7c7c7c',
+    color: AppColors.textDefault,
   },
   message: {
     margin: 15,
   },
   authSelectorButton: {
     marginTop: 10,
-    backgroundColor: 'white',
-    borderColor: '#D0D0D0',
+    backgroundColor: AppColors.pureWhite,
+    borderColor: AppColors.thinLines,
     borderWidth: 1,
     borderRadius: 5,
-    width: undefined,
+    width: 'auto',
   },
   authSelectorButtonText: {
     color: 'black',

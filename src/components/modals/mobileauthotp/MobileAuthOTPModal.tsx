@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Modal, Text} from 'react-native';
-import AppColors from '../../constants/AppColors';
-import Button from '../../general/Button';
 import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
+import AppColors from '../../constants/AppColors';
+import {Button} from 'react-native-paper';
 
 const MobileAuthOTPModal: React.FC<{}> = () => {
   const [message, setMessage] = useState('');
@@ -40,7 +40,8 @@ const MobileAuthOTPModal: React.FC<{}> = () => {
         <Text style={styles.message}>{message}</Text>
         <View style={styles.buttonContainer}>
           <Button
-            name={'OK'}
+            mode="contained"
+            children={'Confirm'}
             onPress={() => {
               OneWelcomeSdk.acceptMobileAuthConfirmation();
               setVisible(false);
@@ -49,7 +50,8 @@ const MobileAuthOTPModal: React.FC<{}> = () => {
         </View>
         <View style={styles.buttonContainer}>
           <Button
-            name={'CANCEL'}
+            mode="outlined"
+            children={'Cancel'}
             onPress={() => {
               OneWelcomeSdk.denyMobileAuthConfirmation();
               setVisible(false);
@@ -65,13 +67,12 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: AppColors.white,
+    backgroundColor: AppColors.backgroundElevated,
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingHorizontal: 20,
   },
   title: {
-    color: AppColors.blue,
     fontSize: 32,
     marginTop: '10%',
   },

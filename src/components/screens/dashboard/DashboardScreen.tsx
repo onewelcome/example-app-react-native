@@ -10,13 +10,14 @@ import {
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {RootStackParamList} from 'src/components/app/App';
-import Button from '../../../components/general/Button';
 import ContentContainer from './components/ContentContainer';
 import {CurrentUser} from '../../../auth/auth';
 import {AuthContext} from '../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../providers/auth.actions';
 import {logout, deregisterUser} from '../../helpers/DashboardHelpers';
 import {useFocusEffect} from '@react-navigation/native';
+import AppColors from '../../../components/constants/AppColors';
+import {Button} from 'react-native-paper';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'DashboardScreen'>;
 
@@ -73,44 +74,51 @@ const DashboardScreen = ({navigation}: Props) => {
       <ContentContainer>
         <Text style={styles.helloText}>{`Hello user: ${CurrentUser.id}`}</Text>
         <Button
-          containerStyle={styles.button}
-          name="YOUR DEVICES"
+          style={styles.button}
+          mode="elevated"
+          children="Your devices"
           onPress={() => navigation.navigate('DevicesScreen')}
         />
         <Button
-          containerStyle={styles.button}
-          name="MOBILE AUTH WITH OTP"
+          style={styles.button}
+          mode="elevated"
+          children="Mobile Auth with OTP"
           onPress={() => navigation.navigate('OTPScreen')}
         />
         <Button
-          containerStyle={styles.button}
-          name="SINGLE SIGN-ON"
+          style={styles.button}
+          mode="elevated"
+          children="Single Sign-On"
           onPress={() => singleSingOn()}
         />
         <Button
-          containerStyle={styles.button}
-          name="SETTINGS"
+          style={styles.button}
+          mode="elevated"
+          children="Settings"
           onPress={() => navigation.navigate('SettingsScreen')}
         />
         <Button
-          containerStyle={styles.button}
-          name="DEREGISTER"
+          style={styles.button}
+          mode="elevated"
+          children="Deregister"
           onPress={() => {
             deregisterUser(onLogout);
           }}
         />
         <Button
-          containerStyle={styles.button}
-          name="LOGOUT"
+          style={styles.button}
+          mode="elevated"
+          children="Access token"
           onPress={() => {
-            logout(onLogout);
+            showAccessToken();
           }}
         />
         <Button
-          containerStyle={styles.button}
-          name="ACCESS TOKEN"
+          style={styles.button}
+          mode="elevated"
+          children="Logout"
           onPress={() => {
-            showAccessToken();
+            logout(onLogout);
           }}
         />
       </ContentContainer>
@@ -121,16 +129,15 @@ const DashboardScreen = ({navigation}: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
   },
   helloText: {
     paddingTop: 15,
-    color: '#1e8dca',
+    color: AppColors.info,
     fontSize: 22,
     fontWeight: '400',
   },
   button: {
-    marginVertical: 14,
+    marginVertical: 10,
     flex: 1,
   },
 });

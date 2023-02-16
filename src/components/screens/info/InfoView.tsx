@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import Button from '../../general/Button';
 import ContentContainer from '../dashboard/components/ContentContainer';
 import AppColors from '../../constants/AppColors';
 import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
@@ -39,7 +38,7 @@ const getData = (data: any, key: string) => {
   }
 };
 
-const InfoView: React.FC<Props> = props => {
+const InfoView: React.FC<Props> = () => {
   const [profileError, setProfileError] = useState<string | null>(null);
   const [profileId, setProfileId] = useState<string | null>(null);
 
@@ -48,7 +47,6 @@ const InfoView: React.FC<Props> = props => {
     {
       method: 'GET',
       parameters: {'custom-param1': 'p1', 'custom-param2': 'p2'},
-      encoding: 'application/json',
       headers: {'custom-header1': 'val1', 'custom-header2': 'val2'},
       path: 'user-id-decorated',
     },
@@ -62,7 +60,6 @@ const InfoView: React.FC<Props> = props => {
     {
       method: 'GET',
       parameters: {'custom-param1': 'p1', 'custom-param2': 'p2'},
-      encoding: 'application/json',
       headers: {'custom-header1': 'val1', 'custom-header2': 'val2'},
       path: 'application-details',
     },
@@ -125,9 +122,6 @@ const InfoView: React.FC<Props> = props => {
           </>
         )}
       </View>
-      <View style={styles.cancelButton}>
-        <Button name={'CANCEL'} onPress={props.onFinished} />
-      </View>
     </ContentContainer>
   );
 };
@@ -144,20 +138,18 @@ const styles = StyleSheet.create({
   },
   label: {
     justifyContent: 'center',
-    color: AppColors.blue,
     fontSize: 24,
     fontWeight: '500',
   },
   info: {
     justifyContent: 'center',
-    color: AppColors.black,
     fontSize: 12,
     fontWeight: '500',
     padding: 6,
   },
   infoError: {
     justifyContent: 'center',
-    color: AppColors.red,
+    color: AppColors.error,
     fontSize: 12,
     fontWeight: '500',
     padding: 6,

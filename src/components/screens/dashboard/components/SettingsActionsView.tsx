@@ -1,13 +1,13 @@
 import React, {useCallback, useContext, useState} from 'react';
 import {Text, StyleSheet, Alert} from 'react-native';
 import ContentContainer from './ContentContainer';
-import Button from '../../../general/Button';
 import {enrollMobileAuthentication} from '../../../helpers/MobileAuthenticationHelper';
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import {AuthContext} from '../../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../../providers/auth.actions';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {RootStackParamList} from 'src/components/app/App';
+import {Button} from 'react-native-paper';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SettingsScreen'>;
 
@@ -37,21 +37,24 @@ const SettingsActionsView = ({navigation}: Props) => {
     <ContentContainer>
       <Text>{message}</Text>
       <Button
-        containerStyle={styles.button}
-        name={'ENROLL FOR MOBILE AUTH'}
+        style={styles.button}
+        mode="elevated"
+        children="Enroll for mobile auth"
         onPress={() => {
           setMessage('');
           enrollMobileAuthentication(setMessage, setMessage);
         }}
       />
       <Button
-        containerStyle={styles.button}
-        name={'CHANGE PIN'}
+        style={styles.button}
+        mode="elevated"
+        children="Change pin"
         onPress={onChangePinPressed}
       />
       <Button
-        containerStyle={styles.button}
-        name={'CHANGE AUTHENTICATION'}
+        style={styles.button}
+        mode="elevated"
+        children="Change authentication"
         onPress={() => {
           navigation.navigate('ChangeAuthScreen');
         }}
@@ -62,7 +65,7 @@ const SettingsActionsView = ({navigation}: Props) => {
 
 const styles = StyleSheet.create({
   button: {
-    marginVertical: 14,
+    marginVertical: 10,
   },
 });
 
