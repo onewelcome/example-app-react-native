@@ -21,8 +21,6 @@ buildscript {
 
     allprojects {
         repositories {
-            // Previous code here.
-            // ...
             if (project.hasProperty('onegini_artifactory_user') && project.hasProperty('onegini_artifactory_password')) {
                 maven {
                     url "https://repo.onegini.com/artifactory/onegini-sdk"
