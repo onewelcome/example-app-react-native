@@ -1,4 +1,4 @@
-package com.rnexampleapp;
+package com.onegini.mobile.rnexampleapp;
 
 import com.onegini.mobile.sdk.reactnative.model.rn.OneginiReactNativeConfig;
 import com.onegini.mobile.sdk.reactnative.model.rn.ReactNativeIdentityProvider;

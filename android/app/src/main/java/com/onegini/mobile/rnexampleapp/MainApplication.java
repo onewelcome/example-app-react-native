@@ -1,4 +1,4 @@
-package com.rnexampleapp;
+package com.onegini.mobile.rnexampleapp;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

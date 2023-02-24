@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.rnexampleapp"
+    namespace "com.onegini.mobile.rnexampleapp"
     defaultConfig {
-        applicationId "com.rnexampleapp"
+        applicationId "com.onegini.mobile.rnexampleapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
