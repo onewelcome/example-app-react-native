@@ -13,7 +13,7 @@ public class OneginiConfigModel implements OneginiClientConfigModel {
   private final String appVersion = "0.1.0";
   private final String baseURL = "https://token-mobile.test.onegini.com";
   private final String resourceBaseURL = "https://token-mobile.test.onegini.com/resources/";
-  private final String keystoreHash = "e856f2dc22abf26e65cd6ffe067a68152d3c9b3ba9201177367aefeedfb1e62b";
+  private final String keystoreHash = "a939e1d2f3926f16224d8425c98743fdd39856c6d7199332ffb4327f513ee7f6";
   private final int maxPinFailures = 5;
   private final String serverPublicKey = null;
 
@@ -65,9 +65,11 @@ public class OneginiConfigModel implements OneginiClientConfigModel {
   }
 
   /**
-   * Get the max PIN failures. This attribute is just used for visual representation towards the end-user.
+   * Get the max PIN failures. This attribute is just used for visual
+   * representation towards the end-user.
    *
-   * @Deprecated Since Android SDK 6.01.00 this attribute is fetched from the Device config.
+   * @Deprecated Since Android SDK 6.01.00 this attribute is fetched from the
+   *             Device config.
    *
    * @return The max PIN failures
    */
@@ -78,15 +80,15 @@ public class OneginiConfigModel implements OneginiClientConfigModel {
   @Override
   public String toString() {
     return "ConfigModel{" +
-            "  appIdentifier='" + appIdentifier + "'" +
-            ", appPlatform='" + appPlatform + "'" +
-            ", redirectionUri='" + redirectionUri + "'" +
-            ", appVersion='" + appVersion + "'" +
-            ", baseURL='" + baseURL + "'" +
-            ", maxPinFailures='" + maxPinFailures + "'" +
-            ", resourceBaseURL='" + resourceBaseURL + "'" +
-            ", keyStoreHash='" + getKeyStoreHash() + "'" +
-            ", serverPublicKey='" + serverPublicKey + "'" +
-            "}";
+        "  appIdentifier='" + appIdentifier + "'" +
+        ", appPlatform='" + appPlatform + "'" +
+        ", redirectionUri='" + redirectionUri + "'" +
+        ", appVersion='" + appVersion + "'" +
+        ", baseURL='" + baseURL + "'" +
+        ", maxPinFailures='" + maxPinFailures + "'" +
+        ", resourceBaseURL='" + resourceBaseURL + "'" +
+        ", keyStoreHash='" + getKeyStoreHash() + "'" +
+        ", serverPublicKey='" + serverPublicKey + "'" +
+        "}";
   }
 }
