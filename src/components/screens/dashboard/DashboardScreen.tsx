@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import type {RootStackParamList} from 'src/components/app/App';
+import type {RootStackParamList} from '../../app/App';
 import ContentContainer from './components/ContentContainer';
 import {CurrentUser} from '../../../auth/auth';
 import {AuthContext} from '../../../providers/auth.provider';
@@ -18,12 +18,13 @@ import {logout, deregisterUser} from '../../helpers/DashboardHelpers';
 import {useFocusEffect} from '@react-navigation/native';
 import AppColors from '../../../components/constants/AppColors';
 import {Button} from 'react-native-paper';
+import {useErrorHandling} from '../../../helpers/useErrorHandling';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'DashboardScreen'>;
 
 const DashboardScreen = ({navigation}: Props) => {
   const {dispatch} = useContext(AuthContext);
-
+  const {logoutOnInvalidToken} = useErrorHandling();
   function showAccessToken() {
     OneWelcomeSdk.getAccessToken()
       .then(token => Alert.alert('Access Token', token))
@@ -38,6 +39,7 @@ const DashboardScreen = ({navigation}: Props) => {
         Linking.openURL(it.url);
       })
       .catch(error => {
+        logoutOnInvalidToken(error);
         Alert.alert(`Error code: ${error.code}`, `${error.message}`);
       });
   };

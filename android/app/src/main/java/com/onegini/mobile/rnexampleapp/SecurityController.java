@@ -1,4 +1,3 @@
-//@todo Later will be transferred to RN Wrapper
 package com.onegini.mobile.rnexampleapp;
 
 @SuppressWarnings({ "unused", "WeakerAccess" })

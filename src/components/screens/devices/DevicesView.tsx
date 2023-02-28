@@ -24,7 +24,7 @@ const DevicesView: React.FC<{}> = () => {
   const {loading, data, error} = useResources(
     Types.ResourceRequestType.User,
     {
-      method: 'GET',
+      method: Types.ResourceMethod.GET,
       headers: {},
       path: 'devices',
     },

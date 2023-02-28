@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, View, ViewStyle} from 'react-native';
-import AppColors from '../../../constants/AppColors';
 
 interface Props {
   containerStyle?: ViewStyle;
+  children?: React.ReactNode;
 }
 
 const ContentContainer: React.FC<Props> = props => {
