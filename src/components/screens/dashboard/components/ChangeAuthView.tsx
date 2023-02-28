@@ -183,10 +183,11 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     borderBottomColor: '#d7d7d7',
     borderBottomWidth: StyleSheet.hairlineWidth,
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
   },
   biometricSwitchContainer: {
     paddingTop: 10,
+    justifyContent: 'space-between',
   },
   switchLabel: {
     fontSize: 20,

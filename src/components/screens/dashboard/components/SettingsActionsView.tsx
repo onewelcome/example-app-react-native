@@ -43,7 +43,7 @@ const SettingsActionsView = ({navigation}: Props) => {
       <Button
         style={styles.button}
         mode="elevated"
-        children="Change pin"
+        children="Change pin "
         onPress={onChangePinPressed}
       />
       <Button
