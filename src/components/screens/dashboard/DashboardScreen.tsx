@@ -17,12 +17,13 @@ import {AuthContext} from '../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../providers/auth.actions';
 import {logout, deregisterUser} from '../../helpers/DashboardHelpers';
 import {useFocusEffect} from '@react-navigation/native';
+import {useErrorHandling} from '../../../helpers/useErrorHandling';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'DashboardScreen'>;
 
 const DashboardScreen = ({navigation}: Props) => {
   const {dispatch} = useContext(AuthContext);
-
+  const {logoutOnInvalidToken} = useErrorHandling();
   function showAccessToken() {
     OneWelcomeSdk.getAccessToken()
       .then(token => Alert.alert('Access Token', token))
@@ -37,6 +38,7 @@ const DashboardScreen = ({navigation}: Props) => {
         Linking.openURL(it.url);
       })
       .catch(error => {
+        logoutOnInvalidToken(error);
         Alert.alert(`Error code: ${error.code}`, `${error.message}`);
       });
   };

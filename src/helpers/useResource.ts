@@ -1,12 +1,12 @@
 import {useState, useEffect, Dispatch, SetStateAction} from 'react';
 import OnewelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
-
-//
+import {useErrorHandling} from './useErrorHandling';
 
 const fetchResource = async (
   setLoading: Dispatch<SetStateAction<boolean>>,
   setError: Dispatch<SetStateAction<any>>,
   setData: Dispatch<SetStateAction<any>>,
+  logoutOnInvalidToken: (e: unknown) => void,
   shouldAuthenticate: boolean,
   type: Types.ResourceRequestType,
   resourceDetails: Types.ResourcesDetails,
@@ -34,6 +34,7 @@ const fetchResource = async (
     setData(data.body);
     setLoading(false);
   } catch (e) {
+    logoutOnInvalidToken(e);
     console.error('fetchResource error = ', e);
 
     setError(e);
@@ -53,6 +54,7 @@ function useResources(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState(null);
+  const {logoutOnInvalidToken} = useErrorHandling();
 
   // get initial details - to prevent from rerender
   const [currentDetails, setCurrentDetails] = useState(details);
@@ -69,6 +71,7 @@ function useResources(
       setLoading,
       setError,
       setData,
+      logoutOnInvalidToken,
       shouldAuthenticate,
       type,
       currentDetails,

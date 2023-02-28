@@ -1,5 +1,4 @@
-/* eslint-disable eqeqeq */
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import ContentContainer from './ContentContainer';
 import Row from '../../../general/Row';
@@ -9,11 +8,11 @@ import {
   setPreferredAuthenticatorSdk,
 } from '../../../helpers/AuthenticatorHelper';
 import {isBiometricAuthenticatorRegistered} from '../../../helpers/BiometricHelper';
-import {AuthActionTypes} from '../../../../providers/auth.actions';
-import {AuthContext} from '../../../..//providers/auth.provider';
+
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import Button from '../../../../components/general/Button';
 import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
+import {useErrorHandling} from '../../../../helpers/useErrorHandling';
 
 const emptyRegisteredAuthenticators: Types.Authenticator[] = [
   {id: '0', name: '', isPreferred: true, isRegistered: false, type: ''},
@@ -28,8 +27,6 @@ const pinRegisteredAuthenticator: Types.Authenticator = {
 };
 
 const ChangeAuthView: React.FC = () => {
-  const {dispatch} = useContext(AuthContext);
-
   const [isBiometricEnable, setBiometricEnable] = useState(false);
   const [message, setMessage] = useState('');
   const [registeredAuthenticators, setRegisteredAuthenticators] = useState<
@@ -41,11 +38,7 @@ const ChangeAuthView: React.FC = () => {
   const [preferredAuthenticator, setPreferredAuthenticator] =
     useState<Types.Authenticator>(pinRegisteredAuthenticator);
   const {showActionSheetWithOptions} = useActionSheet();
-
-  const logout = () => {
-    dispatch({type: AuthActionTypes.AUTH_SET_AUTHORIZATION, payload: false});
-  };
-
+  const {logoutOnInvalidToken} = useErrorHandling();
   const updateAuthenticators = async () => {
     try {
       setBiometricEnable(await isBiometricAuthenticatorRegistered());
@@ -55,7 +48,7 @@ const ChangeAuthView: React.FC = () => {
         setPreferredAuthenticator,
       );
     } catch (error) {
-      handleError(error);
+      logoutOnInvalidToken(error);
     }
   };
 
@@ -84,7 +77,8 @@ const ChangeAuthView: React.FC = () => {
             try {
               await setPreferredAuthenticatorSdk(authenticator, setMessage);
             } catch (err) {
-              handleError(err);
+              logoutOnInvalidToken(err);
+              setMessage(err.message);
             }
             await updateAuthenticators();
           }
@@ -116,27 +110,9 @@ const ChangeAuthView: React.FC = () => {
         await OneWelcomeSdk.deregisterAuthenticator(authenticatorId);
       }
     } catch (err) {
-      handleError(err);
+      logoutOnInvalidToken(err);
     }
     await updateAuthenticators();
-  };
-
-  const handleError = (error: any) => {
-    if (!error) {
-      return;
-    }
-    // RNP-137 TODO: Move this into a helper so we can use it everywhere.
-    if (
-      error.code == '8012' ||
-      error.code == '9002' ||
-      error.code == '9003' ||
-      error.code == '9010' ||
-      error.code == '10012'
-    ) {
-      logout();
-    } else {
-      setMessage(error.message);
-    }
   };
 
   return (
