@@ -26,10 +26,12 @@ const fetchResource = async (
         await OnewelcomeSdk.authenticateDeviceForResource(scopes);
       }
     }
-
-    const data = await OnewelcomeSdk.resourceRequest(type, resourceDetails);
-
-    setData(data);
+    const baseUrl = await OnewelcomeSdk.getResourceBaseUrl();
+    const data = await OnewelcomeSdk.resourceRequest(type, {
+      ...resourceDetails,
+      path: baseUrl + resourceDetails.path,
+    });
+    setData(data.body);
     setLoading(false);
   } catch (e) {
     logoutOnInvalidToken(e);

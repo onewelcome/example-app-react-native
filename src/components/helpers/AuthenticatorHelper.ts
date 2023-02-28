@@ -29,8 +29,7 @@ const setPreferredAuthenticatorSdk = async (
   setMessage: (msg: string) => void,
 ) => {
   try {
-    const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
-    await OneWelcomeSdk.setPreferredAuthenticator(profile.id, preferred.id);
+    await OneWelcomeSdk.setPreferredAuthenticator(preferred.id);
     setMessage(
       `The Authenticator ${preferred.name} is now set as the default authentication method`,
     );
