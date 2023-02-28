@@ -76,7 +76,7 @@ const ChangeAuthView: React.FC = () => {
           if (authenticator) {
             try {
               await setPreferredAuthenticatorSdk(authenticator, setMessage);
-            } catch (err) {
+            } catch (err: any) {
               logoutOnInvalidToken(err);
               setMessage(err.message);
             }

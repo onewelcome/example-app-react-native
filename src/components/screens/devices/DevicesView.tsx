@@ -24,9 +24,7 @@ const DevicesView: React.FC<{}> = () => {
   const {loading, data, error} = useResources(
     Types.ResourceRequestType.User,
     {
-      method: 'GET',
-      parameters: {'custom-param1': 'p1', 'custom-param2': 'p2'},
-      encoding: 'application/json',
+      method: Types.ResourceMethod.GET,
       headers: {'custom-header1': 'val1', 'custom-header2': 'val2'},
       path: 'devices',
     },

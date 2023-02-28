@@ -3,6 +3,7 @@ import {StyleSheet, View, ViewStyle} from 'react-native';
 
 interface Props {
   containerStyle?: ViewStyle;
+  children?: React.ReactNode;
 }
 
 const Row: React.FC<Props> = ({containerStyle, children}) => {
