@@ -6,7 +6,7 @@ import ContentContainer from '../dashboard/components/ContentContainer';
 import AppColors from '../../constants/AppColors';
 import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
 import {useResources} from '../../../helpers/useResource';
-import type {RootStackParamList} from 'src/components/app/App';
+import type {RootStackParamList} from '../../app/App';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InfoScreen'>;
 
@@ -46,10 +46,7 @@ const InfoScreen = ({}: Props) => {
   const implicitResource = useResources(
     Types.ResourceRequestType.Implicit,
     {
-      method: 'GET',
-      parameters: {'custom-param1': 'p1', 'custom-param2': 'p2'},
-      encoding: 'application/json',
-      headers: {'custom-header1': 'val1', 'custom-header2': 'val2'},
+      method: Types.ResourceMethod.GET,
       path: 'user-id-decorated',
     },
     true,
@@ -60,9 +57,7 @@ const InfoScreen = ({}: Props) => {
   const resource = useResources(
     Types.ResourceRequestType.Anonymous,
     {
-      method: 'GET',
-      parameters: {'custom-param1': 'p1', 'custom-param2': 'p2'},
-      encoding: 'application/json',
+      method: Types.ResourceMethod.GET,
       headers: {'custom-header1': 'val1', 'custom-header2': 'val2'},
       path: 'application-details',
     },

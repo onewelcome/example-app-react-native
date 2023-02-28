@@ -5,7 +5,7 @@ import Button from '../../../general/Button';
 import {enrollMobileAuthentication} from '../../../helpers/MobileAuthenticationHelper';
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
-import type {RootStackParamList} from 'src/components/app/App';
+import type {RootStackParamList} from '../../../app/App';
 import {useErrorHandling} from '../../../../helpers/useErrorHandling';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SettingsScreen'>;
