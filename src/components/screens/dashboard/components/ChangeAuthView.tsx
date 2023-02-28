@@ -1,4 +1,3 @@
-/* eslint-disable eqeqeq */
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import ContentContainer from './ContentContainer';
@@ -79,6 +78,7 @@ const ChangeAuthView: React.FC = () => {
               await setPreferredAuthenticatorSdk(authenticator, setMessage);
             } catch (err) {
               logoutOnInvalidToken(err);
+              setMessage(err.message);
             }
             await updateAuthenticators();
           }
