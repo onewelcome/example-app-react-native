@@ -6065,7 +6065,7 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-"onewelcome-react-native-sdk@https://github.com/onewelcome/sdk-react-native#develop":
+"onewelcome-react-native-sdk@https://github.com/onewelcome/sdk-react-native#release_1.0.0-rc3":
   version "0.6.0"
   resolved "https://github.com/onewelcome/sdk-react-native#5fbedebd00be6b8e58c70569e7d0dcec5e641e8b"
 
