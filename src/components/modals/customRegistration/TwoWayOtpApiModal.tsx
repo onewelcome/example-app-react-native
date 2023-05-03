@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Modal, Text, TextInput} from 'react-native';
 import AppColors from '../../constants/AppColors';
-import Button from '../../general/Button';
 import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
 import {cancelRegistration} from '../../helpers/RegistrationHelper';
+import {Button} from 'react-native-paper';
 
 const IdProvider = '2-way-otp-api';
 
@@ -48,7 +48,7 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
       onRequestClose={() => setVisible(false)}>
       <View style={styles.container}>
         <Text style={styles.title}>{'2-way-otp-api'}</Text>
-        <Text style={styles.cahalangeCode}>{'Cahalange Code: '}</Text>
+        <Text style={styles.challengeCode}>{'Challenge Code: '}</Text>
         <Text style={styles.codeFromOnegini}>{codeFromOnegini}</Text>
         <Text style={styles.responseCodeTitle}>{'Response Code:'}</Text>
         <TextInput
@@ -61,7 +61,8 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
         />
         <View style={styles.buttonContainer}>
           <Button
-            name={'OK'}
+            mode="contained"
+            children={'Submit'}
             onPress={() => {
               OneWelcomeSdk.submitCustomRegistrationAction(
                 IdProvider,
@@ -73,7 +74,8 @@ const TwoWayOtpApiModal: React.FC<{}> = ({}) => {
         </View>
         <View style={styles.buttonContainer}>
           <Button
-            name={'CANCEL'}
+            mode="outlined"
+            children={'Cancel'}
             onPress={() => {
               cancelRegistration();
               setVisible(false);
@@ -89,27 +91,25 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: AppColors.white,
+    backgroundColor: AppColors.backgroundElevated,
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingHorizontal: 20,
   },
   title: {
-    color: AppColors.blue,
     fontSize: 32,
     marginTop: '10%',
   },
   codeFromOnegini: {
-    color: AppColors.black,
     fontSize: 32,
     marginTop: '1%',
   },
-  cahalangeCode: {
+  challengeCode: {
     fontSize: 16,
     marginTop: '10%',
   },
   responseCodeInput: {
-    borderColor: AppColors.black,
+    borderColor: AppColors.dimmed,
     width: 150,
     borderWidth: 1,
     marginTop: '10%',

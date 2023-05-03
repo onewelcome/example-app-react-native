@@ -1,5 +1,4 @@
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert, Linking} from 'react-native';
 import {useEffect, useState} from 'react';
 

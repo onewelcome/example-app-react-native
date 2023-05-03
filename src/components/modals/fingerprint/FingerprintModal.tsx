@@ -2,8 +2,8 @@ import React from 'react';
 import {StyleSheet, View, Modal, Text} from 'react-native';
 import {Events} from 'onewelcome-react-native-sdk';
 import AppColors from '../../constants/AppColors';
-import Button from '../../general/Button';
 import {useFingerprintFlow} from '../../../helpers/useFingerprintFlow';
+import {Button} from 'react-native-paper';
 
 const MESSAGE_BY_STAGE: Map<Events.FingerprintStage, string> = new Map([
   [Events.FingerprintStage.Idle, 'Waiting for fingerprint flow trigger...'],
@@ -27,10 +27,18 @@ const FingerprintModal: React.FC<{}> = () => {
         <Text style={styles.title}>{'Confirm with fingerprint'}</Text>
         <Text style={styles.message}>{message}</Text>
         <View style={styles.buttonContainer}>
-          <Button name={'USE PIN CODE'} onPress={() => fallbackToPin()} />
+          <Button
+            mode="elevated"
+            children={'Use pin code'}
+            onPress={() => fallbackToPin()}
+          />
         </View>
         <View style={styles.buttonContainer}>
-          <Button name={'CANCEL'} onPress={() => cancelFlow()} />
+          <Button
+            mode="elevated"
+            children={'Cancel'}
+            onPress={() => cancelFlow()}
+          />
         </View>
       </View>
     </Modal>
@@ -41,13 +49,12 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
-    backgroundColor: AppColors.white,
+    backgroundColor: AppColors.backgroundElevated,
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingHorizontal: 20,
   },
   title: {
-    color: AppColors.blue,
     fontSize: 32,
     marginTop: '10%',
   },

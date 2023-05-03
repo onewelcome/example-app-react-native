@@ -136,20 +136,18 @@ const styles = StyleSheet.create({
   },
   label: {
     justifyContent: 'center',
-    color: AppColors.blue,
     fontSize: 24,
     fontWeight: '500',
   },
   info: {
     justifyContent: 'center',
-    color: AppColors.black,
     fontSize: 12,
     fontWeight: '500',
     padding: 6,
   },
   infoError: {
     justifyContent: 'center',
-    color: AppColors.red,
+    color: AppColors.error,
     fontSize: 12,
     fontWeight: '500',
     padding: 6,

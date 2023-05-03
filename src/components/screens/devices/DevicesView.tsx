@@ -25,7 +25,7 @@ const DevicesView: React.FC<{}> = () => {
     Types.ResourceRequestType.User,
     {
       method: Types.ResourceMethod.GET,
-      headers: {'custom-header1': 'val1', 'custom-header2': 'val2'},
+      headers: {},
       path: 'devices',
     },
     false,
@@ -47,14 +47,14 @@ const DevicesView: React.FC<{}> = () => {
     <ScrollView style={styles.container}>
       {loading && <Text style={styles.loading}>{'loading ...'}</Text>}
       {error && (
-        <Text style={[styles.loading, {color: AppColors.red}]}>
+        <Text style={[styles.loading, {color: AppColors.error}]}>
           {getData(error, 'message')}
         </Text>
       )}
       {data && !loading && !error && (
         <View style={styles.scrollViewContainer}>
           {devices?.map(({name, application, platform, id}) => (
-            <View key={id} style={styles.row}>
+            <View key={id} style={styles.device}>
               <Text style={styles.info}>{`name: ${name}`}</Text>
               <Text style={styles.info}>{`application: ${application}`}</Text>
               <Text style={styles.info}>{`platform: ${platform}`}</Text>
@@ -74,11 +74,10 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     paddingBottom: '15%',
   },
-  row: {
+  device: {
     marginTop: '5%',
     borderRadius: 4,
-    backgroundColor: AppColors.white,
-    shadowColor: AppColors.gray,
+    backgroundColor: AppColors.backgroundElevated,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -88,16 +87,10 @@ const styles = StyleSheet.create({
     elevation: 3,
     padding: '5%',
   },
-  label: {
-    justifyContent: 'center',
-    color: AppColors.blue,
-    fontSize: 24,
-    fontWeight: '500',
-  },
   loading: {
     alignItems: 'center',
     justifyContent: 'center',
-    color: AppColors.blue,
+    color: AppColors.textDefault,
     fontSize: 24,
     fontWeight: '500',
   },
@@ -109,7 +102,7 @@ const styles = StyleSheet.create({
   },
   info: {
     justifyContent: 'center',
-    color: AppColors.black,
+    color: AppColors.textDefault,
     fontSize: 12,
     fontWeight: '500',
     padding: 6,

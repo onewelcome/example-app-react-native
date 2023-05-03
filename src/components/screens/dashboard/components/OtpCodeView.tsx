@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View, TextInput} from 'react-native';
 import ContentContainer from './ContentContainer';
 import AppColors from '../../../constants/AppColors';
-import Button from '../../../general/Button';
 import {handleMobileAuthWithOtp} from '../../../helpers/MobileAuthenticationHelper';
+import {Button} from 'react-native-paper';
 
 const renderMessage = (message: string) => {
   return <Text style={styles.message}>{message}</Text>;
@@ -16,7 +16,7 @@ const OtpCodeView: React.FC<{}> = () => {
   return (
     <ContentContainer containerStyle={styles.container}>
       <View style={styles.row}>
-        <Text style={styles.label}>OTP CODE</Text>
+        <Text style={styles.label}>OTP code</Text>
         <TextInput
           style={styles.otpCodeInput}
           onChangeText={text => {
@@ -25,8 +25,8 @@ const OtpCodeView: React.FC<{}> = () => {
         />
         {renderMessage(message)}
         <Button
-          name={'OK'}
-          containerStyle={styles.okButton}
+          mode="contained"
+          children={'Submit'}
           onPress={() => {
             setMessage('');
             handleMobileAuthWithOtp(otpCode, setMessage, setMessage);
@@ -48,12 +48,12 @@ const styles = StyleSheet.create({
   },
   label: {
     justifyContent: 'center',
-    color: '#1e8dca',
+    color: AppColors.textDefault,
     fontSize: 22,
     fontWeight: '500',
   },
   otpCodeInput: {
-    borderColor: AppColors.black,
+    borderColor: AppColors.dimmed,
     width: '80%',
     borderWidth: 1,
     marginTop: '10%',
@@ -63,10 +63,6 @@ const styles = StyleSheet.create({
   },
   message: {
     margin: 15,
-  },
-  okButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

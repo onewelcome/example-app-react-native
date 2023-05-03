@@ -1,10 +1,13 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
+import AppColors from '../../constants/AppColors';
 
 const Bullet: React.FC<{filled: boolean}> = props => {
   const style = {
     ...styles.bullet,
-    ...(props.filled ? {borderWidth: 0, backgroundColor: '#000'} : {}),
+    ...(props.filled
+      ? {borderWidth: 0, backgroundColor: AppColors.secondary}
+      : {}),
   };
 
   return <View style={style} />;
@@ -25,18 +28,16 @@ const PinInput: React.FC<{
 
 const styles = StyleSheet.create({
   container: {
-    width: '50%',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: '32%',
+    justifyContent: 'center',
   },
   bullet: {
-    width: 28,
-    height: 28,
-    borderRadius: 28 / 2,
-    borderWidth: 4,
-    borderColor: '#000',
-    marginHorizontal: 5,
+    width: 20,
+    height: 20,
+    borderRadius: 100,
+    backgroundColor: AppColors.disabled,
+    marginHorizontal: 10,
   },
 });
 

@@ -1,13 +1,14 @@
 import React, {useContext} from 'react';
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet, View} from 'react-native';
 import {Assets} from '../../../../assets';
 import RegisterButton from './components/RegisterButton';
 import AuthContainer from './components/AuthContainer';
-import Button from '../../general/Button';
 import {useNavigation} from '@react-navigation/native';
 import {AuthActionTypes} from '../../../providers/auth.actions';
 import {AuthContext} from '../../../providers/auth.provider';
 import ContentContainer from '../dashboard/components/ContentContainer';
+import {Button} from 'react-native-paper';
+import AppColors from '../../constants/AppColors';
 
 const AuthScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -21,23 +22,20 @@ const AuthScreen: React.FC = () => {
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <ContentContainer containerStyle={styles.contentContainer}>
         <View style={styles.logoContainer}>
-          <Image source={Assets.logo} />
-          <Text style={styles.logoText}>Example App</Text>
+          <Image source={Assets.logo} style={styles.logo} />
         </View>
-
         <View style={styles.authContainer}>
           <AuthContainer onAuthorized={onAuthorized} />
         </View>
 
         <RegisterButton onRegistered={onAuthorized} />
-        <View style={styles.infoContainer}>
-          <Button
-            name="INFO"
-            onPress={() => {
-              navigation.navigate('InfoScreen');
-            }}
-          />
-        </View>
+        <Button
+          mode="elevated"
+          onPress={() => {
+            navigation.navigate('InfoScreen');
+          }}>
+          Info
+        </Button>
       </ContentContainer>
     </ScrollView>
   );
@@ -46,14 +44,14 @@ const AuthScreen: React.FC = () => {
 const styles = StyleSheet.create({
   logoContainer: {
     position: 'relative',
-    alignItems: 'center',
+    flex: 1,
   },
   scrollContainer: {
     flexDirection: 'column',
     flexGrow: 1,
   },
   contentContainer: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'column',
     paddingVertical: 30,
   },
@@ -65,13 +63,6 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'contain',
   },
-  logoText: {
-    textAlign: 'right',
-    width: '100%',
-    color: '#777777',
-    fontSize: 20,
-    fontWeight: '400',
-  },
   registerContainer: {
     width: '100%',
     flex: 1,
@@ -82,7 +73,7 @@ const styles = StyleSheet.create({
   errorText: {
     marginTop: 10,
     fontSize: 15,
-    color: '#c82d2d',
+    color: AppColors.error,
   },
 });
 
