@@ -5,7 +5,7 @@ import {enrollMobileAuthentication} from '../../../helpers/MobileAuthenticationH
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {RootStackParamList} from '../../../app/App';
-import {Button} from 'react-native-paper';
+import {Button, ActivityIndicator} from 'react-native-paper';
 import {useErrorHandling} from '../../../../helpers/useErrorHandling';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SettingsScreen'>;
@@ -13,9 +13,11 @@ type Props = NativeStackScreenProps<RootStackParamList, 'SettingsScreen'>;
 const SettingsActionsView = ({navigation}: Props) => {
   const [message, setMessage] = useState('');
   const {logoutOnInvalidToken} = useErrorHandling();
+  const [changePinInProgress, setChangePinInProgress] = useState(false);
 
   const onChangePinPressed = useCallback(async () => {
     try {
+      setChangePinInProgress(true);
       await OneWelcomeSdk.changePin();
       Alert.alert('Success', 'PIN changed successfully');
     } catch (error: any) {
@@ -26,41 +28,55 @@ const SettingsActionsView = ({navigation}: Props) => {
       //   of deregistration when supplying invalid pin too often
       logoutOnInvalidToken(error);
     }
-  }, [logoutOnInvalidToken]);
+    setChangePinInProgress(false);
+  }, [logoutOnInvalidToken, setChangePinInProgress]);
 
   return (
-    <ContentContainer>
-      <Text>{message}</Text>
-      <Button
-        style={styles.button}
-        mode="elevated"
-        children="Enroll for mobile auth"
-        onPress={() => {
-          setMessage('');
-          enrollMobileAuthentication(setMessage, setMessage);
-        }}
-      />
-      <Button
-        style={styles.button}
-        mode="elevated"
-        children="Change pin "
-        onPress={onChangePinPressed}
-      />
-      <Button
-        style={styles.button}
-        mode="elevated"
-        children="Change authentication"
-        onPress={() => {
-          navigation.navigate('ChangeAuthScreen');
-        }}
-      />
-    </ContentContainer>
+    <>
+      {changePinInProgress ? (
+        <ContentContainer containerStyle={styles.center}>
+          <ActivityIndicator size={'large'} />
+        </ContentContainer>
+      ) : (
+        <ContentContainer>
+          <Text>{message}</Text>
+          <Button
+            style={styles.button}
+            mode="elevated"
+            children="Enroll for mobile auth"
+            onPress={() => {
+              setMessage('');
+              enrollMobileAuthentication(setMessage, setMessage);
+            }}
+          />
+          <Button
+            style={styles.button}
+            mode="elevated"
+            children="Change pin "
+            onPress={onChangePinPressed}
+          />
+          <Button
+            style={styles.button}
+            mode="elevated"
+            children="Change authentication"
+            onPress={() => {
+              navigation.navigate('ChangeAuthScreen');
+            }}
+          />
+        </ContentContainer>
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
     marginVertical: 10,
+  },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
   },
 });
 
