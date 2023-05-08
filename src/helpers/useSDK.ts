@@ -1,21 +1,30 @@
 import OneWelcomeSdk from 'onewelcome-react-native-sdk';
-import {Alert, Linking} from 'react-native';
-import {useEffect, useState} from 'react';
+import {Linking} from 'react-native';
+import {useContext, useEffect, useState} from 'react';
+import DialogContext from '../providers/dialogContext';
 
 export const useSDK = () => {
   const [isBuilt, setBuilt] = useState(false);
-  const [isSdkError, setSdkError] = useState(false);
+  const [sdkError, setSdkError] = useState(null);
   const [redirectUri, setRedirectUri] = useState('');
+  const {showDialog, closeDialog} = useContext(DialogContext);
   const startSDK = async () => {
     console.log('startsdk');
+
     try {
+      closeDialog();
       await OneWelcomeSdk.startClient();
       const uri = await OneWelcomeSdk.getRedirectUri();
+      setSdkError(null);
       setBuilt(true);
       setRedirectUri(uri);
     } catch (e: any) {
-      Alert.alert(`Error when starting SDK. Code:${e.code}`, e.message);
-      setSdkError(true);
+      showDialog({
+        title: 'Could not start the SDK',
+        message: e?.message,
+        onCloseDialog: startSDK,
+      });
+      setSdkError(e?.message);
     }
   };
 
@@ -36,7 +45,7 @@ export const useSDK = () => {
 
   return {
     isBuilt,
-    isSdkError,
+    sdkError,
     redirectUri,
     startSDK,
   };

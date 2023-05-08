@@ -32,7 +32,7 @@ declare global {
 }
 
 const App: React.FC<{}> = () => {
-  const {isBuilt, isSdkError, startSDK} = useSDK();
+  const {isBuilt, sdkError, startSDK} = useSDK();
   const {
     state: {authorized: isAuthorized},
   } = useContext(AuthContext);
@@ -43,8 +43,7 @@ const App: React.FC<{}> = () => {
   }, []);
 
   const Stack = createNativeStackNavigator<RootStackParamList>();
-
-  if (!isBuilt || isSdkError) {
+  if (!isBuilt || sdkError != null) {
     return <SplashScreen />;
   }
 
