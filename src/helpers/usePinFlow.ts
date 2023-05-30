@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
-import OnewelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
+import OnewelcomeSdk, {Events} from '@onewelcome/react-native-sdk';
 import {useProfileStorage} from './useProfileStorage';
 
 const usePinFlow = () => {

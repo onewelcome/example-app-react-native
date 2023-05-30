@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback, useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Switch from '../../../general/Switch';
-import OneWelcomeSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk from '@onewelcome/react-native-sdk';
 import {CurrentUser} from '../../../../auth/auth';
 import {AuthContext} from '../../../../providers/auth.provider';
 import {AuthActionTypes} from '../../../../providers/auth.actions';

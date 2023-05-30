@@ -1,4 +1,4 @@
-import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Types} from '@onewelcome/react-native-sdk';
 
 const getAllAuthenticators = async (
   setRegisteredAuthenticators: (authenticators: Types.Authenticator[]) => void,

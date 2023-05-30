@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {StyleSheet, Text, View, Linking} from 'react-native';
 import Switch from '../../../general/Switch';
-import OneWelcomeSdk, {Events, Types} from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Events, Types} from '@onewelcome/react-native-sdk';
 import {CurrentUser} from '../../../../auth/auth';
 import {useActionSheet} from '@expo/react-native-action-sheet';
 import {cancelRegistration} from '../../../helpers/RegistrationHelper';

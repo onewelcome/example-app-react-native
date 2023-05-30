@@ -1,4 +1,4 @@
-import OneWelcomeSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk from '@onewelcome/react-native-sdk';
 import {Linking} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
 import DialogContext from '../providers/dialogContext';

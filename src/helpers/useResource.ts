@@ -1,5 +1,5 @@
 import {useState, useEffect, Dispatch, SetStateAction} from 'react';
-import OnewelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
+import OnewelcomeSdk, {Types} from '@onewelcome/react-native-sdk';
 import {useErrorHandling} from './useErrorHandling';
 
 const fetchResource = async (

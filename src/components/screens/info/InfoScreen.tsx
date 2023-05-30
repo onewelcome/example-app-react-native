@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import ContentContainer from '../dashboard/components/ContentContainer';
 import AppColors from '../../constants/AppColors';
-import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Types} from '@onewelcome/react-native-sdk';
 import {useResources} from '../../../helpers/useResource';
 import type {RootStackParamList} from '../../app/App';
 

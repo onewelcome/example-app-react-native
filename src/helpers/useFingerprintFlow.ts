@@ -1,6 +1,6 @@
 import {useState, useEffect, useCallback} from 'react';
 import {Platform} from 'react-native';
-import OnewelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
+import OnewelcomeSdk, {Events} from '@onewelcome/react-native-sdk';
 
 const onCancelFlow = () =>
   Platform.OS === 'android'

@@ -7,7 +7,7 @@ import {
   Linking,
   BackHandler,
 } from 'react-native';
-import OneWelcomeSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk from '@onewelcome/react-native-sdk';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {RootStackParamList} from '../../app/App';
 import ContentContainer from './components/ContentContainer';

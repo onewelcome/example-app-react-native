@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Modal, Text} from 'react-native';
-import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Events} from '@onewelcome/react-native-sdk';
 import AppColors from '../../constants/AppColors';
 import {Button} from 'react-native-paper';
 

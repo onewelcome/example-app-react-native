@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react';
 import {Text, StyleSheet, Alert} from 'react-native';
 import ContentContainer from './ContentContainer';
 import {enrollMobileAuthentication} from '../../../helpers/MobileAuthenticationHelper';
-import OneWelcomeSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk from '@onewelcome/react-native-sdk';
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import type {RootStackParamList} from '../../../app/App';
 import {Button, ActivityIndicator} from 'react-native-paper';

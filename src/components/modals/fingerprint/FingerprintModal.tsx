@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View, Modal, Text} from 'react-native';
-import {Events} from 'onewelcome-react-native-sdk';
+import {Events} from '@onewelcome/react-native-sdk';
 import AppColors from '../../constants/AppColors';
 import {useFingerprintFlow} from '../../../helpers/useFingerprintFlow';
 import {Button} from 'react-native-paper';

@@ -1,4 +1,4 @@
-import OneWelcomeSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk from '@onewelcome/react-native-sdk';
 
 const enrollMobileAuthentication = (
   setSuccessful: (msg: string) => void,

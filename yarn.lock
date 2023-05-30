@@ -1444,6 +1444,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@onewelcome/react-native-sdk@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@onewelcome/react-native-sdk/-/react-native-sdk-1.0.0.tgz#3780bac05591e4099ad4c50e43e315db8ae478df"
+  integrity sha512-6Y8Xq+kGIN1CcqerymVV52ZcbIKA9tf/2RYijkN0l8640zT630BLV4FWiC+O7+EEGy4LLFbymbFPfhwc4HfvGg==
+
 "@react-native-async-storage/async-storage@^1.17.11":
   version "1.17.11"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.17.11.tgz#7ec329c1b9f610e344602e806b04d7c928a2341d"
@@ -5638,10 +5643,6 @@ onetime@^5.1.0, onetime@^5.1.2:
   integrity sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==
   dependencies:
     mimic-fn "^2.1.0"
-
-"onewelcome-react-native-sdk@https://github.com/onewelcome/sdk-react-native#develop":
-  version "0.6.0"
-  resolved "https://github.com/onewelcome/sdk-react-native#5fbedebd00be6b8e58c70569e7d0dcec5e641e8b"
 
 open@^6.2.0:
   version "6.4.0"

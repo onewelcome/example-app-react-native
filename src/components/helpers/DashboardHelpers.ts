@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import OneWelcomeSdk from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk from '@onewelcome/react-native-sdk';
 
 const logout = async (onLogoutSuccess?: () => void) => {
   try {

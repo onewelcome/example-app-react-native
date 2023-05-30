@@ -24,10 +24,10 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "@expo/react-native-action-sheet": "^4.0.1",
+    "@onewelcome/react-native-sdk": "^1.0.0",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-navigation/native": "^6.1.5",
     "@react-navigation/native-stack": "^6.9.11",
-    "onewelcome-react-native-sdk": "https://github.com/onewelcome/sdk-react-native#develop",
     "promise-any-polyfill": "^1.0.1",
     "react": "18.2.0",
     "react-native": "0.71.3",
