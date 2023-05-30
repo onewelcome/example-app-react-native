@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, Modal, Text, TextInput} from 'react-native';
 import AppColors from '../../constants/AppColors';
-import OneWelcomeSdk, {Events} from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Events} from '@onewelcome/react-native-sdk';
 import {cancelRegistration} from '../../helpers/RegistrationHelper';
 import {Button} from 'react-native-paper';
 

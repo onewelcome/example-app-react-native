@@ -1,7 +1,7 @@
 import {useContext} from 'react';
 import {AuthActionTypes} from '../providers/auth.actions';
 import {AuthContext} from '../providers/auth.provider';
-import {SDKError} from 'onewelcome-react-native-sdk';
+import {SDKError} from '@onewelcome/react-native-sdk';
 
 export const useErrorHandling = () => {
   const {dispatch} = useContext(AuthContext);

@@ -10,7 +10,7 @@ import {
 import {isBiometricAuthenticatorRegistered} from '../../../helpers/BiometricHelper';
 
 import {useActionSheet} from '@expo/react-native-action-sheet';
-import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Types} from '@onewelcome/react-native-sdk';
 import AppColors from '../../../constants/AppColors';
 import {Button} from 'react-native-paper';
 import {useErrorHandling} from '../../../../helpers/useErrorHandling';

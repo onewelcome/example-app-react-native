@@ -1,4 +1,4 @@
-import OneWelcomeSdk, {Types} from 'onewelcome-react-native-sdk';
+import OneWelcomeSdk, {Types} from '@onewelcome/react-native-sdk';
 
 const isBiometricAuthenticatorRegistered = async (): Promise<boolean> => {
   const profile = await OneWelcomeSdk.getAuthenticatedUserProfile();
